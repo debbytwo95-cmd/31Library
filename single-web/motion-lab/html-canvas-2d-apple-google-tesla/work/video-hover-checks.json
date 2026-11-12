@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "checks": [
+    "local cursor painting including empty background",
+    "short-lived cursor trail",
+    "stable bright anchor",
+    "connected-region merge and split",
+    "no timed random target changes",
+    "grid-snapped tracker edges",
+    "aligned vertical strands without spatial zoom or recoil",
+    "thicker clipped locked strands",
+    "entry noise on each visit",
+    "pause",
+    "DPR=2",
+    "existing brand colors"
+  ],
+  "mode": "offline Canvas command verification using real SVG luminance rasterization"
+}

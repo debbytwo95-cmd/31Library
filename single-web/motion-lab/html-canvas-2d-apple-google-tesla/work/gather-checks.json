@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "syntax",
+    "one-time first-entry gathering",
+    "monotonic convergence",
+    "exact return to fixed columns",
+    "no spring or velocity state",
+    "no pointer repulsion",
+    "no gathering replay on re-entry",
+    "live flow after convergence",
+    "larger strokes inside lock",
+    "inset clipping for every magnified stroke",
+    "original interior cleared",
+    "pause",
+    "source dialog",
+    "DPR=2",
+    "brand detection colors"
+  ],
+  "status": "passed",
+  "mode": "offline Canvas command verification using real SVG luminance rasters"
+}

@@ -1,0 +1,34 @@
+{
+  "syntax": "valid",
+  "images": 0,
+  "externalDependencies": 0,
+  "rasterCount": 3,
+  "renderedCards": 3,
+  "regions": [
+    {
+      "brand": "Apple",
+      "count": 3
+    },
+    {
+      "brand": "Google",
+      "count": 3
+    },
+    {
+      "brand": "Tesla",
+      "count": 3
+    }
+  ],
+  "checks": [
+    "real SVG raster sampling",
+    "finite drawing coordinates",
+    "idle flow",
+    "3 non-overlapping bright grid boxes per brand",
+    "tracker reacquisition",
+    "pointer scattering",
+    "spring settling",
+    "pause",
+    "source modal",
+    "DPR=2"
+  ],
+  "note": "Canvas drawing commands verified offline with SVG rasterization; browser UI preview unavailable."
+}

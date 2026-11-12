@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "checks": [
+    "entry scatter impulse",
+    "visible localized displacement",
+    "elastic overshoot",
+    "automatic return while pointer is stationary",
+    "spring settling after leave",
+    "repeat entry and pointer movement",
+    "bounded finite motion after rapid movement",
+    "pause respects reduced-motion behavior",
+    "balanced canvas clipping",
+    "scanning code removed",
+    "no discarded playground gesture controls"
+  ],
+  "mode": "offline spring physics and Canvas command verification with real SVG raster sampling"
+}

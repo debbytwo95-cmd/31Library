@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f3ef">
+<title>Signal Studies — Grok / Claude / ChatGPT</title>
+<style>
+  :root { color-scheme: light; --paper:#f4f3ef; --ink:#22241f; --muted:#85867e; }
+  * { box-sizing:border-box; }
+  body { margin:0; overflow-x:clip; background:var(--paper); color:var(--ink); font-family:Arial,"Helvetica Neue",sans-serif; -webkit-font-smoothing:antialiased; }
+  button { font:inherit; }
+  button:focus-visible, a:focus-visible { outline:2px solid #3979ff; outline-offset:6px; }
+  .page { max-width:1536px; margin:auto; padding:35px 56px 28px; }
+  .masthead { display:flex; justify-content:space-between; align-items:center; padding-bottom:23px; border-bottom:1px solid #d7d8d0; }
+  .wordmark { font-size:13px; font-weight:700; letter-spacing:-.3px; display:flex; align-items:center; gap:10px; }
+  .mark { display:flex; align-items:center; gap:3px; height:17px; }
+  .mark i { display:block; width:2px; height:9px; background:currentColor; }
+  .mark i:nth-child(2), .mark i:nth-child(4) { height:14px; }
+  .mark i:nth-child(3) { height:19px; }
+  .mono { font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; font-size:10px; font-weight:400; letter-spacing:1.2px; }
+  .edition { color:#77796f; }
+  .intro { display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin:49px 0 34px; }
+  .eyebrow { margin:0 0 15px; color:#77796f; font-size:10px; letter-spacing:1.9px; }
+  h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(44px,4.5vw,68px); line-height:1.02; font-weight:400; letter-spacing:-3.1px; margin:0; }
+  h1 em { color:#8b8c82; font-weight:400; }
+  .intro-note { font-size:12px; color:#77796f; line-height:1.8; margin:0 0 4px; max-width:270px; }
+  .intro-note span { color:#393d33; }
+  .cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+  .card { position:relative; overflow:hidden; isolation:isolate; aspect-ratio:3/4; min-height:0; border-radius:9px; background:var(--bg); color:var(--fg); outline:none; }
+  .card:focus-visible { box-shadow:0 0 0 3px var(--paper),0 0 0 5px #3980ff; }
+  .grok { --bg:linear-gradient(155deg,#111316 0%,#20252b 100%); --fg:#f6f7f8; --sub:#a2aab4; --rule:#454c55; }
+  .claude { --bg:linear-gradient(165deg,#8a432f 0%,#ba6d4c 58%,#cf8a64 100%); --fg:#fff7ef; --sub:#f3c7a8; --rule:#d49a79; }
+  .chatgpt { --bg:linear-gradient(160deg,#10392f 0%,#145345 60%,#1b6a56 100%); --fg:#effff5; --sub:#add7c8; --rule:#478371; }
+  .art { display:block; position:absolute; inset:0; width:100%; height:100%; touch-action:pan-y; }
+  .card-top { position:absolute; top:27px; left:27px; right:26px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+  .brand { display:flex; align-items:center; gap:10px; font-size:16px; font-weight:600; letter-spacing:-.4px; }
+  .brand-icon { width:22px; height:24px; }
+  .card-number { font-size:10px; color:var(--sub); letter-spacing:1px; }
+  .card-bottom { position:absolute; bottom:26px; left:27px; right:26px; pointer-events:none; }
+  .tagline { font-size:21px; line-height:1.15; font-weight:400; letter-spacing:-.75px; margin:0 0 20px; }
+  .source { appearance:none; border:0; border-top:1px solid var(--rule); width:100%; padding:15px 0 0; background:none; color:var(--fg); display:flex; justify-content:space-between; align-items:center; font-size:11px; cursor:pointer; pointer-events:auto; text-align:left; }
+  .source .arrow { font-size:17px; line-height:12px; transition:transform .25s; }
+  .source:hover .arrow { transform:translateX(4px); }
+  .source small { color:var(--sub); font-family:Consolas,monospace; font-size:9px; margin-left:auto; margin-right:14px; }
+  .footer { display:flex; justify-content:space-between; gap:20px; align-items:center; padding-top:22px; }
+  .status { display:flex; align-items:center; gap:8px; color:#6d7267; font-size:9px; letter-spacing:1px; }
+  .status-dot { width:5px; height:5px; border-radius:50%; background:#70836a; box-shadow:0 0 0 3px #70836a14; }
+  .legend { color:#8b8e83; font-size:9px; letter-spacing:.7px; }
+  .motion { background:none; border:0; padding:4px 0; color:#70756a; cursor:pointer; font-family:Consolas,monospace; font-size:10px; }
+  .motion:hover { color:#22241f; }
+  dialog { width:min(650px,calc(100% - 32px)); padding:32px; color:var(--ink); background:var(--paper); border:1px solid #d3d7cb; border-radius:12px; box-shadow:0 25px 100px #0003; }
+  dialog::backdrop { background:#11192788; backdrop-filter:blur(6px); }
+  .dialog-top { display:flex; justify-content:space-between; align-items:center; }
+  .dialog-top h2 { margin:0; font-family:Georgia,serif; font-size:30px; font-weight:400; letter-spacing:-1px; }
+  .close { border:1px solid #ccd0c4; border-radius:50%; background:transparent; width:30px; height:30px; cursor:pointer; font-size:19px; }
+  .explanation { font-size:13px; color:#6c7264; line-height:1.8; margin:22px 0; }
+  pre { white-space:pre-wrap; word-break:break-all; background:#e7e9e1; border-radius:5px; padding:18px; max-height:260px; overflow:auto; font-size:11px; line-height:1.7; color:#525b47; }
+  .dialog-foot { margin:20px 0 0; color:#7e8575; font-size:10px; line-height:1.8; }
+  @media (min-width:1500px) { .page { padding-top:45px; } .intro { margin-top:62px; } }
+  @media (max-width:1050px) { .page { padding:26px 26px; } .cards { gap:12px; } .card { min-height:0; } .card-top { left:20px; right:20px; } .card-bottom { left:20px; right:20px; } .tagline { font-size:19px; } .intro-note { max-width:235px; font-size:11px; } }
+  @media (max-width:720px) { .page { padding:23px 20px; } .edition { font-size:8px; letter-spacing:.5px; } .intro { margin:34px 0 26px; display:block; } h1 { font-size:49px; letter-spacing:-2.3px; } .intro-note { margin-top:20px; max-width:none; font-size:12px; } .cards { grid-template-columns:1fr; gap:18px; max-width:480px; margin:auto; } .card { min-height:0; aspect-ratio:3/4; } .card-top { left:27px; right:27px; } .card-bottom { left:27px; right:27px; } .tagline { font-size:23px; } .footer { flex-wrap:wrap; } .legend { order:3; width:100%; line-height:1.7; } }
+  .headline-line { display:block; }
+
+  /* One-shot entrance. Backwards fill restores the normal, untransformed layout
+     after completion. Reduced-motion users see the final state immediately. */
+  @media (prefers-reduced-motion:no-preference) {
+    .masthead { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) .04s backwards; }
+    .eyebrow { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) .12s backwards; }
+    .headline-line { animation:entrance-title .85s cubic-bezier(.22,1,.36,1) .18s backwards; }
+    .headline-line:nth-child(2) { animation-delay:.29s; }
+    .intro-note { animation:entrance-soft .75s cubic-bezier(.22,1,.36,1) .32s backwards; }
+    .card { --enter-delay:.60s; animation:entrance-card .9s cubic-bezier(.22,1,.36,1) var(--enter-delay) backwards; }
+    .card:nth-child(2) { --enter-delay:.47s; }
+    .card:nth-child(3) { --enter-delay:.34s; }
+    .card .art { animation:entrance-signal 1.15s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .1s) backwards; }
+    .card-top { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .12s) backwards; }
+    .card-bottom { animation:entrance-soft .7s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .26s) backwards; }
+    .footer { animation:entrance-soft .7s cubic-bezier(.22,1,.36,1) .95s backwards; }
+  }
+  @keyframes entrance-soft {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes entrance-title {
+    from { opacity:0; transform:translateY(23px); filter:blur(3px); }
+    to { opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+  @keyframes entrance-card {
+    from { opacity:0; transform:translateX(48px); }
+    to { opacity:1; transform:translateX(0); }
+  }
+  @keyframes entrance-signal {
+    from { opacity:0; clip-path:inset(0 0 100% 0); }
+    to { opacity:1; clip-path:inset(0 0 0 0); }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <div class="wordmark"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>FORM &amp; FREQUENCY</div>
+    <span class="mono edition">INTERACTIVE STUDIES &nbsp; / &nbsp; VOL. 001</span>
+  </header>
+  <section class="intro" aria-label="Introduction">
+    <div><p class="mono eyebrow">THREE ICONS. ONE VISUAL LANGUAGE.</p><h1><span class="headline-line">Familiar forms.</span> <em class="headline-line">Different frequency.</em></h1></div>
+    <p class="intro-note">An exploration of identity, reduced to lines.<br><span>Move closer. Disturb the familiar.</span></p>
+  </section>
+  <section class="cards" aria-label="Interactive brand studies">
+    <article class="card grok" tabindex="0" data-brand="grok" aria-label="Grok，每次进入触发流动噪声，检测框随鼠标锁定并局部放大">
+      <canvas class="art" aria-label="由竖线绘制的 Grok Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>Grok</div><span class="mono card-number">01 / GROK</span></header>
+      <div class="card-bottom"><h2 class="tagline">A different angle.</h2><button class="source" data-source="grok"><span>Reveal the source</span><small>PATH / 01</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+    <article class="card claude" tabindex="0" data-brand="claude" aria-label="Claude，每次进入触发流动噪声，检测框随鼠标锁定并局部放大">
+      <canvas class="art" aria-label="由竖线绘制的 Claude Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>Claude</div><span class="mono card-number">02 / CLAUDE</span></header>
+      <div class="card-bottom"><h2 class="tagline">Room for thought.</h2><button class="source" data-source="claude"><span>Reveal the source</span><small>PATH / 02</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+    <article class="card chatgpt" tabindex="0" data-brand="chatgpt" aria-label="ChatGPT，每次进入触发流动噪声，检测框随鼠标锁定并局部放大">
+      <canvas class="art" aria-label="由竖线绘制的 ChatGPT Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>ChatGPT</div><span class="mono card-number">03 / GPT</span></header>
+      <div class="card-bottom"><h2 class="tagline">Start a conversation.</h2><button class="source" data-source="chatgpt"><span>Reveal the source</span><small>PATH / 03</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span class="mono status"><span class="status-dot"></span>LIVE EXPERIMENT &nbsp;/&nbsp; CANVAS 2D</span>
+    <span class="mono legend">56 STRANDS &nbsp;·&nbsp; 4 WEIGHTS &nbsp;·&nbsp; HOVER TO INTERACT</span>
+    <button class="motion" aria-pressed="false">Ⅱ Pause motion</button>
+  </footer>
+</main>
+<dialog aria-labelledby="source-title">
+  <div class="dialog-top"><h2 id="source-title">The source.</h2><button class="close" aria-label="关闭源代码">×</button></div>
+  <p class="explanation">SVG 路径只在初始化时栅格化一次，采样为 56 × 112 的亮度表。Grok 的斜切环、Claude 的放射线和 ChatGPT 的镂空结形，均保留各自的轮廓与负形。屏幕上的大小 Logo 都由竖线组成。</p>
+  <pre><code id="source-code"></code></pre>
+  <p class="mono dialog-foot">PATH → LUMINANCE GRID → FLOW NOISE → FOUR LINE WEIGHTS<br>无需图片、字体下载或外部依赖。按 Esc 关闭。</p>
+</dialog>
+<script>
+(() => {
+  'use strict';
+  const COLS = 56, ROWS = 112, SX = 6, SY = 4;
+  // Vector outlines: Lobe Icons (MIT), https://github.com/lobehub/lobe-icons
+  const BRANDS = {
+  "grok": {
+    "name": "Grok",
+    "color": "#e4e8ec",
+    "icon": "#ffffff",
+    "highlight": "#ffffff",
+    "detection": "#168fff",
+    "detectionText": "#ffffff",
+    "opacity": 0.69,
+    "scale": 1.055,
+    "top": 0.035,
+    "offset": 0,
+    "minDensity": 0.36,
+    "path": "M9.27 15.29l7.978-5.897c.391-.29.95-.177 1.137.272.98 2.369.542 5.215-1.41 7.169-1.951 1.954-4.667 2.382-7.149 1.406l-2.711 1.257c3.889 2.661 8.611 2.003 11.562-.953 2.341-2.344 3.066-5.539 2.388-8.42l.006.007c-.983-4.232.242-5.924 2.75-9.383.06-.082.12-.164.179-.248l-3.301 3.305v-.01L9.267 15.292M7.623 16.723c-2.792-2.67-2.31-6.801.071-9.184 1.761-1.763 4.647-2.483 7.166-1.425l2.705-1.25a7.808 7.808 0 00-1.829-1A8.975 8.975 0 005.984 5.83c-2.533 2.536-3.33 6.436-1.962 9.764 1.022 2.487-.653 4.246-2.34 6.022-.599.63-1.199 1.259-1.682 1.925l7.62-6.815",
+    "fillRule": "evenodd"
+  },
+  "claude": {
+    "name": "Claude",
+    "color": "#ffdfc9",
+    "icon": "#fff4e8",
+    "highlight": "#fff5ec",
+    "detection": "#ffdf00",
+    "detectionText": "#422419",
+    "opacity": 0.71,
+    "scale": 1.015,
+    "top": 0.035,
+    "offset": 0,
+    "minDensity": 0.3,
+    "path": "M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z",
+    "fillRule": "evenodd"
+  },
+  "chatgpt": {
+    "name": "ChatGPT",
+    "color": "#b9ebdc",
+    "icon": "#f3fff8",
+    "highlight": "#f3fff8",
+    "detection": "#ffffff",
+    "detectionText": "#143e34",
+    "opacity": 0.72,
+    "scale": 1.045,
+    "top": 0.035,
+    "offset": 0,
+    "minDensity": 0.34,
+    "path": "M9.205 8.658v-2.26c0-.19.072-.333.238-.428l4.543-2.616c.619-.357 1.356-.523 2.117-.523 2.854 0 4.662 2.212 4.662 4.566 0 .167 0 .357-.024.547l-4.71-2.759a.797.797 0 00-.856 0l-5.97 3.473zm10.609 8.8V12.06c0-.333-.143-.57-.429-.737l-5.97-3.473 1.95-1.118a.433.433 0 01.476 0l4.543 2.617c1.309.76 2.189 2.378 2.189 3.948 0 1.808-1.07 3.473-2.76 4.163zM7.802 12.703l-1.95-1.142c-.167-.095-.239-.238-.239-.428V5.899c0-2.545 1.95-4.472 4.591-4.472 1 0 1.927.333 2.712.928L8.23 5.067c-.285.166-.428.404-.428.737v6.898zM12 15.128l-2.795-1.57v-3.33L12 8.658l2.795 1.57v3.33L12 15.128zm1.796 7.23c-1 0-1.927-.332-2.712-.927l4.686-2.712c.285-.166.428-.404.428-.737v-6.898l1.974 1.142c.167.095.238.238.238.428v5.233c0 2.545-1.974 4.472-4.614 4.472zm-5.637-5.303l-4.544-2.617c-1.308-.761-2.188-2.378-2.188-3.948A4.482 4.482 0 014.21 6.327v5.423c0 .333.143.571.428.738l5.947 3.449-1.95 1.118a.432.432 0 01-.476 0zm-.262 3.9c-2.688 0-4.662-2.021-4.662-4.519 0-.19.024-.38.047-.57l4.686 2.71c.286.167.571.167.856 0l5.97-3.448v2.26c0 .19-.07.333-.237.428l-4.543 2.616c-.619.357-1.356.523-2.117.523zm5.899 2.83a5.947 5.947 0 005.827-4.756C22.287 18.339 24 15.84 24 13.296c0-1.665-.713-3.282-1.998-4.448.119-.5.19-.999.19-1.498 0-3.401-2.759-5.947-5.946-5.947-.642 0-1.26.095-1.88.31A5.962 5.962 0 0010.205 0a5.947 5.947 0 00-5.827 4.757C1.713 5.447 0 7.945 0 10.49c0 1.666.713 3.283 1.998 4.448-.119.5-.19 1-.19 1.499 0 3.401 2.759 5.946 5.946 5.946.642 0 1.26-.095 1.88-.309a5.96 5.96 0 004.162 1.713z",
+    "fillRule": "evenodd"
+  }
+};
+
+  // One temporary raster per brand; only the averaged luminance survives.
+  // Rectangular 6 × 4 sample cells preserve the card's 3:4 aspect ratio.
+  function samplePath(brand) {
+    const raster=document.createElement('canvas');
+    raster.width=COLS*SX; raster.height=ROWS*SY;
+    const ctx=raster.getContext('2d',{willReadFrequently:true});
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,raster.width,raster.height);
+    const size=raster.width*brand.scale;
+    ctx.translate((raster.width-size)/2+brand.offset*raster.width,brand.top*raster.height);
+    ctx.scale(size/24,size/24); ctx.fillStyle='#fff';ctx.fill(new Path2D(brand.path),brand.fillRule);
+    const pixels=ctx.getImageData(0,0,raster.width,raster.height).data;
+    const table=new Float32Array(COLS*ROWS);
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) {
+      let sum=0;
+      for(let sy=0;sy<SY;sy++) for(let sx=0;sx<SX;sx++) {
+        const i=((y*SY+sy)*raster.width+x*SX+sx)*4;
+        sum+=.2126*pixels[i]+.7152*pixels[i+1]+.0722*pixels[i+2];
+      }
+      table[y*COLS+x]=sum/(SX*SY*255);
+    }
+    raster.width=0;raster.height=0;
+    return table;
+  }
+
+  function hash(x,y) {
+    let n=Math.imul(x,374761393)+Math.imul(y,668265263);
+    n=Math.imul(n^(n>>>13),1274126177);
+    return ((n^(n>>>16))>>>0)/4294967295;
+  }
+  function noise(x,y) {
+    const ix=Math.floor(x),iy=Math.floor(y);let fx=x-ix,fy=y-iy;
+    fx=fx*fx*(3-2*fx);fy=fy*fy*(3-2*fy);
+    const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
+    return a+(b-a)*fx+(c-a)*fy+(a-b-c+d)*fx*fy;
+  }
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+  const media=matchMedia('(prefers-reduced-motion: reduce)');
+  let paused=media.matches,motionTime=0,previous=0,pageVisible=!document.hidden;
+  const motionButton=document.querySelector('.motion');
+  function updateMotionButton() {
+    motionButton.textContent=paused?'▷ Resume motion':'Ⅱ Pause motion';
+    motionButton.setAttribute('aria-pressed',String(paused));
+  }
+  updateMotionButton();
+  motionButton.addEventListener('click',()=>{paused=!paused;updateMotionButton();});
+  media.addEventListener('change',e=>{paused=e.matches;updateMotionButton();});
+
+  // Summed-area data makes changing detection windows independent of raster pixels.
+  function makeIntegral(table) {
+    const stride=COLS+1,out=new Float32Array(stride*(ROWS+1));
+    for(let y=1;y<=ROWS;y++) for(let x=1;x<=COLS;x++)
+      out[y*stride+x]=table[(y-1)*COLS+x-1]+out[y*stride+x-1]+out[(y-1)*stride+x]-out[(y-1)*stride+x-1];
+    return out;
+  }
+  function windowMean(integral,x,y,w,h) {
+    const s=COLS+1;
+    return (integral[(y+h)*s+x+w]-integral[y*s+x+w]-integral[(y+h)*s+x]+integral[y*s+x])/(w*h);
+  }
+
+  class Study {
+    constructor(card,index) {
+      this.card=card;this.index=index;this.brand=BRANDS[card.dataset.brand];
+      this.canvas=card.querySelector('.art');this.ctx=this.canvas.getContext('2d');
+      this.icon=card.querySelector('.brand-icon');
+      this.table=samplePath(this.brand);this.integral=makeIntegral(this.table);
+      this.pointer={x:-1000,y:-1000,inside:false};this.focused=false;
+      this.entryDuration=1.15;this.entryAge=this.entryDuration;this.entryCount=0;
+      this.heat=new Float32Array(COLS*ROWS);this.visited=new Uint8Array(COLS*ROWS);
+      this.queue=new Int32Array(COLS*ROWS);this.lastPaint=null;
+      this.anchor=this.findAnchor();
+      this.frameBuckets=[[],[],[],[]];this.weights=[];
+      this.reveal=0;this.scanAge=0;this.regions=[];
+      this.width=0;this.height=0;this.dpr=0;
+      card.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')this.move(e);});
+      card.addEventListener('pointermove',e=>this.move(e));
+      card.addEventListener('pointerdown',e=>this.move(e));
+      card.addEventListener('pointerleave',()=>this.leave());
+      card.addEventListener('pointerup',e=>{if(e.pointerType==='touch')this.leave();});
+      card.addEventListener('pointercancel',()=>this.leave());
+      card.addEventListener('focusin',()=>{this.focused=true;this.updateLock();});
+      card.addEventListener('focusout',e=>{if(!card.contains(e.relatedTarget))this.focused=false;});
+      this.resize();
+    }
+    move(e) {
+      const rect=this.card.getBoundingClientRect();
+      const entering=!this.pointer.inside;
+      const x=clamp(e.clientX-rect.left,0,this.width),y=clamp(e.clientY-rect.top,0,this.height);
+      if(entering){this.entryCount++;this.entryAge=paused?this.entryDuration:0;this.lastPaint=null;this.scanAge=0;}
+      this.pointer={x,y,inside:true};
+      if(paused)this.heat.fill(0);
+      const from=this.lastPaint||{x,y};
+      const steps=Math.max(1,Math.min(40,Math.ceil(Math.hypot(x-from.x,y-from.y)/(this.cw*2))));
+      for(let i=1;i<=steps;i++)this.stamp(from.x+(x-from.x)*i/steps,from.y+(y-from.y)*i/steps);
+      this.lastPaint={x,y};
+      this.updateLock();
+    }
+    leave() {this.pointer.inside=false;this.lastPaint=null;}
+    stamp(px,py) {
+      const rx=this.width*.145,ry=this.height*.105;
+      const left=clamp(Math.floor((px-rx)/this.cw),0,COLS-1),right=clamp(Math.ceil((px+rx)/this.cw),0,COLS-1);
+      const top=clamp(Math.floor((py-ry)/this.ch),0,ROWS-1),bottom=clamp(Math.ceil((py+ry)/this.ch),0,ROWS-1);
+      for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
+        const dx=((x+.5)*this.cw-px)/rx,dy=((y+.5)*this.ch-py)/ry;
+        const falloff=Math.max(0,1-dx*dx-dy*dy),i=y*COLS+x;
+        this.heat[i]=Math.max(this.heat[i],falloff*falloff);
+      }
+    }
+    updateLock() {
+      // Detect connected cursor-painted regions, not a timed sequence of ROIs.
+      this.visited.fill(0);const components=[];
+      for(let seed=0;seed<this.heat.length;seed++){
+        if(this.visited[seed]||this.heat[seed]<.22)continue;
+        let head=0,tail=1,count=0,peak=0,minX=COLS,minY=ROWS,maxX=0,maxY=0;
+        this.queue[0]=seed;this.visited[seed]=1;
+        while(head<tail){
+          const i=this.queue[head++],x=i%COLS,y=Math.floor(i/COLS);
+          minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);
+          peak=Math.max(peak,this.heat[i]);count++;
+          for(const neighbor of [x>0?i-1:-1,x<COLS-1?i+1:-1,y>0?i-COLS:-1,y<ROWS-1?i+COLS:-1]){
+            if(neighbor<0||this.visited[neighbor]||this.heat[neighbor]<.22)continue;
+            this.visited[neighbor]=1;this.queue[tail++]=neighbor;
+          }
+        }
+        if(count<4)continue;
+        const x=Math.max(0,minX-1),y=Math.max(0,minY-1);
+        components.push({x,y,w:Math.min(COLS,maxX+2)-x,h:Math.min(ROWS,maxY+2)-y,kind:'pointer',score:peak+count*.001});
+      }
+      components.sort((a,b)=>b.score-a.score);
+      const boxes=[{...this.anchor},...components.slice(0,2)];
+      // Adjacent activity combines into a larger rectangle, and separates again
+      // as the moving cursor's short tail fades. All edges remain on the grid.
+      let merged=true;
+      while(merged){
+        merged=false;
+        outer:for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
+          const a=boxes[i],b=boxes[j];
+          const ix=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
+          const iy=Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y);
+          if(ix<=0||iy<=0)continue;
+          const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y);
+          boxes[i]={x,y,w:Math.max(a.x+a.w,b.x+b.w)-x,h:Math.max(a.y+a.h,b.y+b.h)-y,kind:a.kind==='anchor'||b.kind==='anchor'?'anchor':'pointer'};
+          boxes.splice(j,1);merged=true;break outer;
+        }
+      }
+      this.regions=boxes.sort((a,b)=>(a.kind==='anchor'?-1:1)-(b.kind==='anchor'?-1:1)||a.y-b.y);
+    }
+    resize() {
+      const rect=this.card.getBoundingClientRect();
+      this.width=rect.width;this.height=rect.height;this.dpr=window.devicePixelRatio||1;
+      this.canvas.width=Math.round(this.width*this.dpr);this.canvas.height=Math.round(this.height*this.dpr);
+      this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+      this.cw=this.width/COLS;this.ch=this.height/ROWS;
+      this.drawIcon();
+    }
+    drawIcon() {
+      const w=22,h=24,ctx=this.icon.getContext('2d');
+      this.icon.width=Math.round(w*this.dpr);this.icon.height=Math.round(h*this.dpr);
+      ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,w,h);
+      let minX=COLS,maxX=0,minY=ROWS,maxY=0;
+      for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(this.table[y*COLS+x]>.15){
+        minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+      }
+      const scale=Math.min((w-1)/((maxX-minX+1)*SX),(h-1)/((maxY-minY+1)*SY));
+      const ox=(w-(maxX-minX+1)*SX*scale)/2,oy=(h-(maxY-minY+1)*SY*scale)/2;
+      ctx.strokeStyle=this.brand.icon;ctx.lineWidth=Math.max(.6,this.width*.0014);ctx.lineCap='butt';ctx.beginPath();
+      for(let x=minX;x<=maxX;x+=2)for(let y=minY;y<=maxY;y++)if(this.table[y*COLS+x]>.3){
+        const px=ox+(x-minX+.5)*SX*scale,py=oy+(y-minY)*SY*scale;
+        ctx.moveTo(px,py);ctx.lineTo(px,py+SY*scale+.12);
+      }
+      ctx.stroke();
+    }
+    findAnchor() {
+      let best=null;
+      // A stable bright feature remains identified while the cursor paints
+      // independent moving regions, as in the reference clip.
+      for(let y=3;y<ROWS-18;y+=3)for(let x=2;x<COLS-12;x+=2){
+        const w=7,h=10;
+        const mean=windowMean(this.integral,x,y,w,h);
+        const score=mean*.9+(1-y/ROWS)*.1;
+        if(!best||score>best.score)best={x,y,w,h,score,kind:'anchor'};
+      }
+      return best;
+    }
+    draw(time,dt) {
+      const ctx=this.ctx,p=this.pointer,cw=this.cw,ch=this.ch;
+      ctx.clearRect(0,0,this.width,this.height);
+      const active=p.inside||this.focused;
+      this.reveal+=(Number(active)-this.reveal)*(1-Math.exp(-dt*(active?13:9)));
+      if(!paused){
+        this.entryAge=Math.min(this.entryDuration,this.entryAge+dt);
+        if(active)this.scanAge+=dt;
+        const decay=Math.exp(-dt*4.5);
+        for(let i=0;i<this.heat.length;i++)this.heat[i]=this.heat[i]<.001?0:this.heat[i]*decay;
+      }
+      if(p.inside)this.stamp(p.x,p.y);
+      if(active||this.reveal>.008)this.updateLock();
+      // Every entry sends a brief downward noise flow through the width field.
+      // Strand positions stay fixed; there is no spring or spatial recoil.
+      const progress=this.entryAge/this.entryDuration;
+      const entryFlow=Math.sin(Math.PI*progress)*Math.exp(-progress*1.6);
+      const weights=[.055,.13,.25,.43].map(w=>cw*w),buckets=[[],[],[],[]];
+      for(let x=0;x<COLS;x++)for(let y=0;y<ROWS;y++){
+        const i=y*COLS+x,base=this.table[i];
+        const bx=(x+.5)*cw,by=(y+.5)*ch;
+        // Subtracting time advects the noise down the card. Short, dense pulses
+        // thicken individual nodes; the quieter field retains a thin spine.
+        const flow=noise(x*.16+this.index*17,y*.125-time*.5);
+        const detail=noise(x*1.37+29,y*.48-time*.8);
+        const node=clamp((detail-.5)*2.8,0,1);
+        const enteringNoise=entryFlow>.001?noise(x*.31+this.entryCount*4+this.index*11,y*.15-this.entryAge*4.7):.5;
+        const painted=this.heat[i]*(.44+detail*.22+node*.12);
+        const brightness=clamp(base*(.12+flow*.18+node*.69+(enteringNoise-.5)*entryFlow*1.25)+painted,0,1);
+        const level=brightness<.20?0:brightness<.39?1:brightness<.62?2:3;
+        if(base<.012&&brightness<.09)continue;
+        const px=bx,py=by;
+        // Tiny overlaps keep stems intact, while heavier nodes are short and
+        // rounded. Width is always one of exactly four discrete values.
+        const half=ch*(level===0?.53:level===1?.49:.44);
+        buckets[level].push(px,py-half,py+half);
+      }
+      this.frameBuckets=buckets;this.weights=weights;
+      ctx.strokeStyle=this.brand.color;
+      for(let level=0;level<4;level++){
+        ctx.globalAlpha=this.brand.opacity*(level===0?.62:level===1?.8:1);
+        ctx.lineWidth=weights[level];ctx.lineCap=level<2?'butt':'round';ctx.beginPath();
+        const points=buckets[level];
+        for(let i=0;i<points.length;i+=3){ctx.moveTo(points[i],points[i+1]);ctx.lineTo(points[i],points[i+2]);}
+        ctx.stroke();
+      }
+      ctx.globalAlpha=1;this.drawRain(time);
+      if(this.reveal>.008)this.drawDetections();
+    }
+    drawRain(time) {
+      const ctx=this.ctx;ctx.strokeStyle=this.brand.color;ctx.lineWidth=this.cw*.055;ctx.lineCap='butt';
+      for(let i=0;i<18;i++){
+        const x=(Math.floor(hash(i,this.index+31)*COLS)+.5)*this.cw;
+        const y=((hash(i+21,this.index)*1.2+time*(.025+hash(i,9)*.028))%1.2-.1)*this.height;
+        const length=(.012+hash(i,52)*.04)*this.height;
+        ctx.globalAlpha=(.07+hash(i+9,this.index)*.12)*.65;
+        ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+length);ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+    }
+    drawDetections() {
+      const ctx=this.ctx,accent=this.brand.detection;
+      const acquire=paused?1:1-Math.pow(1-clamp(this.scanAge/.16,0,1),3);
+      const boxes=this.regions.map(b=>{
+        return {x:b.x*this.cw,y:b.y*this.ch,w:b.w*this.cw,h:b.h*this.ch,b};
+      });
+      ctx.save();ctx.globalAlpha=this.reveal*.8;ctx.strokeStyle=accent;ctx.lineWidth=.65;ctx.lineCap='butt';
+      ctx.beginPath();
+      for(let i=1;i<boxes.length;i++){
+        const a=boxes[i-1],b=boxes[i];
+        const ax=a.x+a.w/2,ay=a.y+a.h/2,bx=b.x+b.w/2,by=b.y+b.h/2;
+        const dx=bx-ax,dy=by-ay;
+        const ta=Math.min(a.w/2/(Math.abs(dx)||1e-9),a.h/2/(Math.abs(dy)||1e-9));
+        const tb=Math.min(b.w/2/(Math.abs(dx)||1e-9),b.h/2/(Math.abs(dy)||1e-9));
+        ctx.moveTo(ax+dx*ta,ay+dy*ta);ctx.lineTo(bx-dx*tb,by-dy*tb);
+      }
+      ctx.stroke();ctx.globalAlpha=this.reveal;
+      const font=Math.max(7,this.width*.015),labelH=font+3;
+      ctx.font=`${font}px Consolas, monospace`;
+      for(const box of boxes){
+        const {x,y,w,h,b}=box;
+        // Enhance the same aligned strands, instead of shifting a zoomed copy.
+        // The inset clip contains enlarged nodes, including their round caps.
+        if(w>3&&h>3){
+          ctx.save();ctx.beginPath();ctx.rect(x+1,y+1,w-2,h-2);ctx.clip();
+          ctx.clearRect(x+1,y+1,w-2,h-2);
+          const boost=1+.65*acquire;
+          const drawInterior=(lengthBoost,lineBoost,color,alpha)=>{
+            if(alpha<.001)return;
+            ctx.strokeStyle=color;
+            for(let level=0;level<4;level++){
+              ctx.globalAlpha=alpha*(level===0?.62:level===1?.8:1);
+              ctx.lineWidth=this.weights[level]*lineBoost;
+              ctx.lineCap=level<2?'butt':'round';ctx.beginPath();
+              const points=this.frameBuckets[level],pad=ctx.lineWidth/2;
+              for(let i=0;i<points.length;i+=3){
+                const px=points[i],mid=(points[i+1]+points[i+2])/2;
+                const half=(points[i+2]-points[i+1])/2*lengthBoost;
+                const y1=mid-half,y2=mid+half;
+                if(px+pad<x||px-pad>x+w||y2+pad<y||y1-pad>y+h)continue;
+                ctx.moveTo(px,y1);ctx.lineTo(px,y2);
+              }
+              ctx.stroke();
+            }
+          };
+          drawInterior(1,1,this.brand.color,this.brand.opacity*(1-this.reveal));
+          drawInterior(1+.15*acquire,boost,this.brand.highlight,.88*this.reveal);
+          ctx.restore();
+        }
+        ctx.strokeStyle=accent;ctx.lineWidth=.7;ctx.strokeRect(x,y,w,h);
+        ctx.fillStyle=accent;
+        for(const [cx,cy]of[[x,y],[x+w,y],[x,y+h],[x+w,y+h]])ctx.fillRect(cx-1,cy-1,2,2);
+        const label=`${Math.round(b.x*this.cw)}, ${Math.round(b.y*this.ch)}`;
+        const labelW=ctx.measureText(label).width+5;
+        ctx.fillRect(x,y,labelW,labelH);
+        ctx.fillStyle=this.brand.detectionText;ctx.textBaseline='top';ctx.fillText(label,x+2,y+1);
+      }
+      ctx.restore();
+    }
+  }
+
+  const studies=Array.from(document.querySelectorAll('.card'),(card,i)=>new Study(card,i));
+  const observer=new ResizeObserver(entries=>{
+    for(const entry of entries){const study=studies.find(s=>s.card===entry.target);if(study)study.resize();}
+  });
+  studies.forEach(s=>observer.observe(s.card));
+  document.addEventListener('visibilitychange',()=>{pageVisible=!document.hidden;previous=0;});
+  window.addEventListener('blur',()=>studies.forEach(s=>s.pointer.inside=false));
+  function frame(now) {
+    const dt=previous?Math.min((now-previous)/1000,1/30):1/60;previous=now;
+    if(pageVisible){
+      if(!paused)motionTime+=dt;
+      for(const study of studies){
+        if(study.dpr!==(window.devicePixelRatio||1))study.resize();
+        study.draw(motionTime,dt);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const dialog=document.querySelector('dialog');
+  document.querySelectorAll('[data-source]').forEach(button=>button.addEventListener('click',()=>{
+    const brand=BRANDS[button.dataset.source];
+    document.querySelector('#source-title').textContent=brand.name+' / The source.';
+    document.querySelector('#source-code').textContent=`<svg viewBox="0 0 24 24">\n  <path fill="white" fill-rule="${brand.fillRule}" d="${brand.path}" />\n</svg>`;
+    dialog.showModal();studies.forEach(s=>s.pointer.inside=false);
+  }));
+  dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',e=>{
+    const r=dialog.getBoundingClientRect();
+    if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))dialog.close();
+  });
+})();
+</script>
+</body>
+</html>

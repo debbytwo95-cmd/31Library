@@ -1,0 +1,62 @@
+const fs = require('node:fs/promises');
+const assert = require('node:assert/strict');
+const root = 'C:/Users/admin/Documents/Codex/2026-10-22/html-canvas-2d-apple-google-tesla';
+(async()=>{
+  const targets=await(await fetch('http://127.0.0.1:9333/json')).json();
+  const ws=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl);
+  await new Promise(resolve=>ws.addEventListener('open',resolve,{once:true}));
+  let seq=0;const pending=new Map(),errors=[];
+  ws.addEventListener('message',event=>{
+    const data=JSON.parse(event.data);
+    if(data.id){const p=pending.get(data.id);pending.delete(data.id);if(data.error)p.reject(data.error);else p.resolve(data.result);}
+    if(data.method==='Runtime.exceptionThrown')errors.push(data.params.exceptionDetails.text);
+  });
+  const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));});
+  const evaluate=async(expression)=>{
+    const r=await send('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});
+    if(r.exceptionDetails)throw new Error(JSON.stringify(r.exceptionDetails));
+    return r.result.value;
+  };
+  const settle=ms=>evaluate(`new Promise(r=>setTimeout(r,${ms}))`);
+  const screenshot=async name=>{
+    const result=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true});
+    await fs.writeFile(`${root}/work/${name}.png`,Buffer.from(result.data,'base64'));
+  };
+  await send('Page.enable');await send('Runtime.enable');
+  await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+  await send('Page.navigate',{url:'file:///'+root+'/outputs/brand-signals.html'});
+  await settle(1300);
+  const desktop=await evaluate(`({title:document.title,overflow:document.documentElement.scrollWidth>innerWidth,cards:[...document.querySelectorAll('.card')].map(c=>({brand:c.dataset.brand,w:c.clientWidth,h:c.clientHeight,canvasW:c.querySelector('canvas').width,canvasH:c.querySelector('canvas').height})),images:document.images.length,external:[...document.querySelectorAll('[src],link[rel="stylesheet"]')].length})`);
+  assert.equal(desktop.overflow,false);assert.equal(desktop.images,0);assert.equal(desktop.external,0);assert.equal(desktop.cards.length,3);
+  await screenshot('desktop');
+  const before=await evaluate(`document.querySelector('.art').toDataURL()`);
+  await settle(500);
+  const after=await evaluate(`document.querySelector('.art').toDataURL()`);
+  assert.notEqual(before,after,'idle flow must animate');
+  const rect=await evaluate(`(()=>{const r=document.querySelector('.card').getBoundingClientRect();return {x:r.x+r.width*.5,y:r.y+r.height*.45}})()`);
+  await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:rect.x,y:rect.y});
+  await settle(700);await screenshot('hover');
+  const blue=await evaluate(`(()=>{const c=document.querySelector('.art'),p=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let n=0;for(let i=0;i<p.length;i+=4)if(p[i]<100&&p[i+1]>110&&p[i+1]<190&&p[i+2]>220&&p[i+3]>100)n++;return n;})()`);
+  assert.ok(blue>30,'hover should draw blue detection boxes');
+  await evaluate(`document.querySelector('[data-source="google"]').click()`);
+  assert.equal(await evaluate(`document.querySelector('dialog').open&&document.querySelector('#source-code').textContent.includes('<path')`),true);
+  await evaluate(`document.querySelector('.close').click()`);
+  assert.equal(await evaluate(`document.querySelector('dialog').open`),false);
+  await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:10,y:10});await evaluate(`document.activeElement.blur()`);
+  await settle(1300);
+  await evaluate(`document.querySelector('.motion').click()`);await settle(200);
+  const pauseBefore=await evaluate(`document.querySelector('.art').toDataURL()`);await settle(200);
+  assert.equal(await evaluate(`document.querySelector('.art').toDataURL()`),pauseBefore,'paused canvas should remain stable');
+  await evaluate(`document.querySelector('.motion').click()`);
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:2,mobile:true});await settle(600);
+  const mobile=await evaluate(`({overflow:document.documentElement.scrollWidth>innerWidth,viewWidth:innerWidth,canvas:[...document.querySelectorAll('.art')].map(c=>({width:c.width,css:c.getBoundingClientRect().width})),cards:[...document.querySelectorAll('.card')].map(c=>{const r=c.getBoundingClientRect();return{x:r.x,y:r.y}})})`);
+  assert.equal(mobile.overflow,false);assert.ok(mobile.cards[1].y>mobile.cards[0].y);assert.equal(mobile.canvas[0].width,Math.round(mobile.canvas[0].css*2));
+  await screenshot('mobile');
+  await send('Emulation.setDeviceMetricsOverride',{width:320,height:800,deviceScaleFactor:1,mobile:true});await settle(250);
+  assert.equal(await evaluate(`document.documentElement.scrollWidth>innerWidth`),false,'320px should not overflow');
+  await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:2,mobile:false});await settle(250);
+  assert.equal(await evaluate(`document.querySelector('.art').width===Math.round(document.querySelector('.art').getBoundingClientRect().width*2)`),true);
+  assert.deepEqual(errors,[]);
+  console.log(JSON.stringify({desktop,mobile,hoverBluePixels:blue,checks:'idle animation; hover detection; source modal; pause/resume; mobile stacking; 320px overflow; DPR=2; no script errors',errors},null,2));
+  ws.close();
+})().catch(error=>{console.error(error);process.exitCode=1;});

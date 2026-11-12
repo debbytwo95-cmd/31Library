@@ -1,0 +1,24 @@
+  Context.prototype.arc=function(x,y,r,start,end){for(let i=0;i<=24;i++){const a=start+(end-start)*i/24;i===0?this.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r):this.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);}};
+  let clearIndex=0;const originalClear=Context.prototype.clearRect;
+  Context.prototype.clearRect=function(x,y,w,h){
+    const previous=this.nodes.join('');originalClear.call(this,x,y,w,h);
+    if(capture&&this.clipRect){const id='mask'+(++clearIndex);this.nodes=[`<defs><mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="540" height="720"><rect width="540" height="720" fill="white"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="black"/></mask></defs><g mask="url(#${id})">${previous}</g>`];}
+  };
+  const event=(i,x,y)=>({clientX:56+i*448.667+x,clientY:320+y,pointerId:i+1,pointerType:'mouse',button:0});
+  advance(0,1);
+  studies[0].down(event(0,200,290));studies[0].press.elapsed=.1;studies[0].up(event(0,200,290));studies[0].updateGestures(.18);
+  studies[1].down(event(1,230,290));studies[1].updateGestures(1.05);
+  studies[2].move(event(2,260,280));studies[2].updateGestures(.75);studies[2].leave();
+  capture=true;advance(1,1);capture=false;
+  const colors=[['#111316','#20252b'],['#8a432f','#cf8a64'],['#10392f','#1b6a56']];
+  const captions=['A different angle.','Room for thought.','Start a conversation.'];
+  let defs='',body='';
+  const width=430.667,height=574.223;
+  for(let i=0;i<3;i++){
+    const brand=Object.values(brands)[i];
+    defs+=`<linearGradient id="bg${i}" x2=".3" y2="1"><stop stop-color="${colors[i][0]}"/><stop offset="1" stop-color="${colors[i][1]}"/></linearGradient><clipPath id="card${i}"><rect width="${width}" height="${height}" rx="9"/></clipPath>`;
+    body+=`<svg x="${56+i*448.667}" y="320" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><g clip-path="url(#card${i})"><rect width="100%" height="100%" fill="url(#bg${i})"/>${cards[i].art.ctx.nodes.join('')}<g transform="translate(27,27)">${cards[i].icon.ctx.nodes.join('')}</g><text x="59" y="45" font-family="Arial" font-size="16" font-weight="600" fill="${brand.icon}">${brand.name}</text><text x="${width-26}" y="43" text-anchor="end" font-family="Consolas" font-size="10" fill="${brand.icon}" opacity=".6">0${i+1} / ${brand.name.toUpperCase()}</text><text x="${width-26}" y="70" text-anchor="end" font-family="Consolas" font-size="8" fill="${brand.icon}" opacity=".7">${escape(cards[i].status.textContent)}</text><text x="27" y="${height-82}" font-family="Arial" font-size="21" letter-spacing="-.75" fill="${brand.icon}">${captions[i]}</text><path d="M27 ${height-55}H${width-26}" stroke="${brand.icon}" opacity=".25"/><text x="27" y="${height-27}" font-family="Arial" font-size="11" fill="${brand.icon}">Reveal the source</text><text x="${width-65}" y="${height-27}" font-family="Consolas" font-size="9" text-anchor="end" fill="${brand.icon}" opacity=".6">PATH / 0${i+1}</text><text x="${width-27}" y="${height-25}" font-family="Arial" font-size="17" text-anchor="end" fill="${brand.icon}">→</text></g></svg>`;
+  }
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="980"><defs>${defs}</defs><rect width="100%" height="100%" fill="#f4f3ef"/><g fill="#22241f"><text x="56" y="52" font-family="Arial" font-size="13" font-weight="700">▥ FORM &amp; FREQUENCY</text><text x="1384" y="52" text-anchor="end" font-family="Consolas" font-size="10" fill="#77796f">INTERACTIVE STUDIES / VOL. 002</text><path d="M56 78H1384" stroke="#d7d8d0"/><text x="56" y="138" font-family="Consolas" font-size="10" letter-spacing="1.9" fill="#77796f">THREE ICONS. ONE VISUAL LANGUAGE.</text><text x="56" y="214" font-family="Georgia" font-size="65" letter-spacing="-3.1">Familiar forms.</text><text x="56" y="280" font-family="Georgia" font-style="italic" font-size="65" letter-spacing="-3.1" fill="#8b8c82">Different frequency.</text><text x="1112" y="255" font-family="Arial" font-size="12" fill="#77796f">Click to send a signal. Hold to charge.</text><text x="1112" y="277" font-family="Arial" font-size="12" fill="#393d33">Rest to lock a region. Esc to release.</text></g>${body}<text x="56" y="928" font-family="Consolas" font-size="9" letter-spacing="1" fill="#6d7267">● SIGNAL PLAYGROUND / CANVAS 2D</text><text x="720" y="928" text-anchor="middle" font-family="Consolas" font-size="9" fill="#8b8e83">CLICK / RIPPLE · HOLD / CHARGE · REST / LOCK</text><text x="1265" y="928" text-anchor="end" font-family="Consolas" font-size="10" fill="#70756a">Reset locks</text><text x="1384" y="928" text-anchor="end" font-family="Consolas" font-size="10" fill="#70756a">Ⅱ Pause motion</text></svg>`;
+  await sharp(Buffer.from(svg)).png().toFile('work/playground-preview.png');console.log('Offline preview saved: click, charge, lock states.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>光带流动 · uiuxarih 复刻</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="studio-header"><a class="study" href="./index.html"><span class="status-dot"></span> LIGHT STUDY <span>/ 001</span></a><span>uiuxarih · 光效流动研究</span><button id="compare" aria-pressed="false">对照原视频 ↗</button></header>
+  <main>
+    <section class="preview" aria-label="光效复刻预览">
+      <div class="stage">
+        <canvas id="light" aria-label="橙白色弧形光带，细线连续交织流动"></canvas>
+        <div class="footer-content">
+          <div class="newsletter">
+            <div class="brand-row"><strong class="brand"><span>ϟ</span> ZELLIFY</strong><div class="socials"><span>𝕏</span><span>f</span><span>in</span></div></div>
+            <h2>Newsletter</h2>
+            <form id="newsletter"><label class="sr-only" for="email">Your email address</label><input id="email" type="email" placeholder="Your email address" required><button>Subscribe</button></form>
+            <p id="form-note" aria-live="polite">Get latest product news and behind the scenes updates.</p>
+          </div>
+          <div class="link-column"><h3>Account</h3><span>Linked Accounts</span><span>Budget & Analytics</span><span>Mobile Cards</span><span>Overdrafts</span><span>Loans</span></div>
+          <div class="link-column"><h3>Wealth</h3><span>Saving Pots</span><span>Credit Builder</span><span>Credit Boost</span><span>Stocks & Shares</span><span>Cryptocurrency</span></div>
+          <div class="link-column"><h3>Payment</h3><span>Money Transfer</span><span>Subscriptions</span><span>Group Bills</span><span>Overdrafts</span><span>Credit Passport</span></div>
+          <div class="link-column"><h3>Extras</h3><span>Discovery</span><span>Marketplace</span><span>Donations</span><span>Phone Insurance</span><span>Travel Insurance</span></div>
+        </div>
+        <div class="footer-bottom"><span>🌐　 Stockholm, Sweden　 © 2025 ZF Solutions AB. All Rights Reserved.</span><span>Terms & Conditions　　 Privacy Policy　　 Cookie Policy</span></div>
+      </div>
+      <div class="reference" hidden><video src="uiuxarih.mp4" muted loop controls playsinline preload="metadata"></video><span>REFERENCE / 原视频 · 10.32s</span></div>
+    </section>
+    <section class="controls" aria-label="光效参数">
+      <div class="transport"><button id="play" aria-label="暂停动画">Ⅱ</button><div><strong>Arc flow</strong><span id="state">实时渲染 · Canvas 2D</span></div></div>
+      <label for="speed">流速 <output id="speed-value">1.00×</output><input id="speed" type="range" min="0.1" max="2.5" step="0.05" value="1"></label>
+      <label for="weave">交织 <output id="weave-value">65%</output><input id="weave" type="range" min="0" max="1" step="0.01" value="0.65"></label>
+      <label for="glow">辉光 <output id="glow-value">100%</output><input id="glow" type="range" min="0" max="1.7" step="0.01" value="1"></label>
+      <div class="actions"><button id="layers" aria-pressed="false">拆解光轨</button><button id="reset" aria-label="恢复默认参数">↺</button></div>
+    </section>
+    <div class="caption"><span><i></i> 弧线骨架 + 相位波动 + 三层辉光</span><span>纯代码绘制 · 无贴图 / 无外部依赖</span></div>
+    <details class="notes"><summary>这段光效是怎么做的？ <span>＋</span></summary><div><p>画面里保持稳定的是向上拱起的弧形轮廓。每条细光轨在弧线上叠加不同相位的波动，两端的波动更大，所以会出现编织感；中心线条更密集，叠加后接近白色过曝。</p><p>这里先将曲线绘入离屏画布，再分别以大范围红色柔光、小范围橙色辉光和清晰的暖白细线叠加。沿曲线移动的亮度波让光像电流一样流动。点击「拆解光轨」可关闭辉光，直接查看曲线运动。</p><p>这是根据视频画面建立的近似模型，原作者也可能采用了三维曲线、Shader 或后期合成；仅凭视频无法确定具体制作工具。</p></div></details>
+  </main>
+  <script src="light.js"></script>
+</body>
+</html>
+

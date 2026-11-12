@@ -1,0 +1,9 @@
+{
+  "name": "analytics-3d-heatmap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Analytics dashboard with a three.js 3D / grid heatmap drawer",
+  "scripts": {
+    "dev": "npx serve . -l 5173"
+  }
+}

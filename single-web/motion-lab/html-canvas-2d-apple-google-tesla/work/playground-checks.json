@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "checks": [
+    "short click creates single wave",
+    "long hold charges and emits stronger radial/downward effects",
+    "event timestamps handle slow frames",
+    "dragging does not create click wave",
+    "source controls excluded",
+    "hover dwell pins a region",
+    "pin survives leaving and moving elsewhere",
+    "outside click releases pin",
+    "Escape and reset button clear locks",
+    "cancellation and blur release gesture",
+    "keyboard Enter sends wave",
+    "grid-aligned strands and balanced clipping",
+    "brand colors preserved"
+  ],
+  "mode": "offline event-state and Canvas verification with real SVG raster sampling"
+}

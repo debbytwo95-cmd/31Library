@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#eeeeee">
+  <meta name="description" content="Connected Earth 头部点阵地球效果复刻：透明粒子大陆、缓慢自转、录音标记与环绕景深卡片。">
+  <title>Connected Earth · Globe Study</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./assets/three.module.js","three/addons/controls/OrbitControls.js":"./assets/OrbitControls.js"}}</script>
+</head>
+<body>
+  <header>
+    <div class="brand"><span>Connected Earth <span aria-hidden="true">✳</span></span><p>Language separates us.<br>Sound connects us.</p></div>
+    <nav aria-label="效果控制">
+      <button id="focus" aria-pressed="false">仅看地球 <span>↗</span></button>
+      <button id="pause" aria-pressed="false">暂停旋转 <span>Ⅱ</span></button>
+      <button id="restart">重新播放 <span>↻</span></button>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" aria-label="点阵地球与环绕卡片">
+      <div class="orbit" id="orbit" aria-label="地点卡片"></div>
+      <div class="glass" aria-hidden="true"></div>
+      <div class="globe-position"><div class="globe-appear"><div id="globe" aria-label="可拖动旋转的三维点阵地球"><div id="markers"></div></div></div></div>
+      <div class="caption" id="caption" aria-live="polite"></div>
+      <h1>Earth, Recorded</h1>
+      <div class="fade" aria-hidden="true"></div>
+    </section>
+    <footer><span>DRAG TO EXPLORE · HOVER TO CONNECT</span><a href="https://www.connected.earth/" target="_blank" rel="noreferrer">参考：connected.earth ↗</a><span>地球视觉复刻 / 地点为演示数据</span></footer>
+  </main>
+  <div id="error" role="alert" hidden>地球加载失败，请使用支持 WebGL 的现代浏览器刷新页面。</div>
+  <script type="module" src="./globe.js"></script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f3ef">
+<title>Spring Signals — TikTok / X / Instagram</title>
+<style>
+  :root { color-scheme: light; --paper:#f4f3ef; --ink:#22241f; --muted:#85867e; }
+  * { box-sizing:border-box; }
+  body { margin:0; overflow-x:clip; background:var(--paper); color:var(--ink); font-family:Arial,"Helvetica Neue",sans-serif; -webkit-font-smoothing:antialiased; }
+  button { font:inherit; }
+  button:focus-visible, a:focus-visible { outline:2px solid #3979ff; outline-offset:6px; }
+  .page { max-width:1536px; margin:auto; padding:35px 56px 28px; }
+  .masthead { display:flex; justify-content:space-between; align-items:center; padding-bottom:23px; border-bottom:1px solid #d7d8d0; }
+  .wordmark { font-size:13px; font-weight:700; letter-spacing:-.3px; display:flex; align-items:center; gap:10px; }
+  .mark { display:flex; align-items:center; gap:3px; height:17px; }
+  .mark i { display:block; width:2px; height:9px; background:currentColor; }
+  .mark i:nth-child(2), .mark i:nth-child(4) { height:14px; }
+  .mark i:nth-child(3) { height:19px; }
+  .mono { font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; font-size:10px; font-weight:400; letter-spacing:1.2px; }
+  .edition { color:#77796f; }
+  .intro { display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin:49px 0 34px; }
+  .eyebrow { margin:0 0 15px; color:#77796f; font-size:10px; letter-spacing:1.9px; }
+  h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(44px,4.5vw,68px); line-height:1.02; font-weight:400; letter-spacing:-3.1px; margin:0; }
+  h1 em { color:#8b8c82; font-weight:400; }
+  .intro-note { font-size:12px; color:#77796f; line-height:1.8; margin:0 0 4px; max-width:270px; }
+  .intro-note span { color:#393d33; }
+  .cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+  .card { position:relative; overflow:hidden; isolation:isolate; aspect-ratio:3/4; min-height:0; border-radius:9px; background:var(--bg); color:var(--fg); outline:none; }
+  .card:focus-visible { box-shadow:0 0 0 3px var(--paper),0 0 0 5px #3980ff; }
+  .tiktok { --bg:linear-gradient(155deg,#080b0e 0%,#101418 100%); --fg:#f7f9fa; --sub:#a9bac0; --rule:#3d474d; }
+  .x { --bg:linear-gradient(155deg,#fafafa 0%,#e7e7e7 100%); --fg:#111111; --sub:#747474; --rule:#bdbdbd; }
+  .instagram { --bg:radial-gradient(circle at 8% 105%,#ffda79 0%,#f99b49 22%,#ef4866 46%,transparent 68%),linear-gradient(145deg,#5356da 0%,#9b39b8 42%,#d83184 78%,#ef4866 100%); --fg:#fff9f2; --sub:#ffe1e5; --rule:#ffffff66; }
+  .art { display:block; position:absolute; inset:0; width:100%; height:100%; touch-action:pan-y; }
+  .card-top { position:absolute; top:27px; left:27px; right:26px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+  .brand { display:flex; align-items:center; gap:10px; font-size:16px; font-weight:600; letter-spacing:-.4px; }
+  .brand-icon { width:22px; height:24px; }
+  .card-number { font-size:10px; color:var(--sub); letter-spacing:1px; }
+  .card-bottom { position:absolute; bottom:26px; left:27px; right:26px; pointer-events:none; }
+  .tagline { font-size:21px; line-height:1.15; font-weight:400; letter-spacing:-.75px; margin:0 0 20px; }
+  .source { appearance:none; border:0; border-top:1px solid var(--rule); width:100%; padding:15px 0 0; background:none; color:var(--fg); display:flex; justify-content:space-between; align-items:center; font-size:11px; cursor:pointer; pointer-events:auto; text-align:left; }
+  .source .arrow { font-size:17px; line-height:12px; transition:transform .25s; }
+  .source:hover .arrow { transform:translateX(4px); }
+  .source small { color:var(--sub); font-family:Consolas,monospace; font-size:9px; margin-left:auto; margin-right:14px; }
+  .footer { display:flex; justify-content:space-between; gap:20px; align-items:center; padding-top:22px; }
+  .status { display:flex; align-items:center; gap:8px; color:#6d7267; font-size:9px; letter-spacing:1px; }
+  .status-dot { width:5px; height:5px; border-radius:50%; background:#70836a; box-shadow:0 0 0 3px #70836a14; }
+  .legend { color:#8b8e83; font-size:9px; letter-spacing:.7px; }
+  .motion { background:none; border:0; padding:4px 0; color:#70756a; cursor:pointer; font-family:Consolas,monospace; font-size:10px; }
+  .motion:hover { color:#22241f; }
+  dialog { width:min(650px,calc(100% - 32px)); padding:32px; color:var(--ink); background:var(--paper); border:1px solid #d3d7cb; border-radius:12px; box-shadow:0 25px 100px #0003; }
+  dialog::backdrop { background:#11192788; backdrop-filter:blur(6px); }
+  .dialog-top { display:flex; justify-content:space-between; align-items:center; }
+  .dialog-top h2 { margin:0; font-family:Georgia,serif; font-size:30px; font-weight:400; letter-spacing:-1px; }
+  .close { border:1px solid #ccd0c4; border-radius:50%; background:transparent; width:30px; height:30px; cursor:pointer; font-size:19px; }
+  .explanation { font-size:13px; color:#6c7264; line-height:1.8; margin:22px 0; }
+  pre { white-space:pre-wrap; word-break:break-all; background:#e7e9e1; border-radius:5px; padding:18px; max-height:260px; overflow:auto; font-size:11px; line-height:1.7; color:#525b47; }
+  .dialog-foot { margin:20px 0 0; color:#7e8575; font-size:10px; line-height:1.8; }
+  @media (min-width:1500px) { .page { padding-top:45px; } .intro { margin-top:62px; } }
+  @media (max-width:1050px) { .page { padding:26px 26px; } .cards { gap:12px; } .card { min-height:0; } .card-top { left:20px; right:20px; } .card-bottom { left:20px; right:20px; } .tagline { font-size:19px; } .intro-note { max-width:235px; font-size:11px; } }
+  @media (max-width:720px) { .page { padding:23px 20px; } .edition { font-size:8px; letter-spacing:.5px; } .intro { margin:34px 0 26px; display:block; } h1 { font-size:49px; letter-spacing:-2.3px; } .intro-note { margin-top:20px; max-width:none; font-size:12px; } .cards { grid-template-columns:1fr; gap:18px; max-width:480px; margin:auto; } .card { min-height:0; aspect-ratio:3/4; } .card-top { left:27px; right:27px; } .card-bottom { left:27px; right:27px; } .tagline { font-size:23px; } .footer { flex-wrap:wrap; } .legend { order:3; width:100%; line-height:1.7; } }
+  .headline-line { display:block; }
+
+  /* One-shot entrance. Backwards fill restores the normal, untransformed layout
+     after completion. Reduced-motion users see the final state immediately. */
+  @media (prefers-reduced-motion:no-preference) {
+    .masthead { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) .04s backwards; }
+    .eyebrow { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) .12s backwards; }
+    .headline-line { animation:entrance-title .85s cubic-bezier(.22,1,.36,1) .18s backwards; }
+    .headline-line:nth-child(2) { animation-delay:.29s; }
+    .intro-note { animation:entrance-soft .75s cubic-bezier(.22,1,.36,1) .32s backwards; }
+    .card { --enter-delay:.60s; animation:entrance-card .9s cubic-bezier(.22,1,.36,1) var(--enter-delay) backwards; }
+    .card:nth-child(2) { --enter-delay:.47s; }
+    .card:nth-child(3) { --enter-delay:.34s; }
+    .card .art { animation:entrance-signal 1.15s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .1s) backwards; }
+    .card-top { animation:entrance-soft .65s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .12s) backwards; }
+    .card-bottom { animation:entrance-soft .7s cubic-bezier(.22,1,.36,1) calc(var(--enter-delay) + .26s) backwards; }
+    .footer { animation:entrance-soft .7s cubic-bezier(.22,1,.36,1) .95s backwards; }
+  }
+  @keyframes entrance-soft {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes entrance-title {
+    from { opacity:0; transform:translateY(23px); filter:blur(3px); }
+    to { opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+  @keyframes entrance-card {
+    from { opacity:0; transform:translateX(48px); }
+    to { opacity:1; transform:translateX(0); }
+  }
+  @keyframes entrance-signal {
+    from { opacity:0; clip-path:inset(0 0 100% 0); }
+    to { opacity:1; clip-path:inset(0 0 0 0); }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <div class="wordmark"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>FORM &amp; FREQUENCY</div>
+    <span class="mono edition">INTERACTIVE STUDIES &nbsp; / &nbsp; VOL. 001</span>
+  </header>
+  <section class="intro" aria-label="Introduction">
+    <div><p class="mono eyebrow">THREE ICONS. ONE VISUAL LANGUAGE.</p><h1><span class="headline-line">Familiar forms.</span> <em class="headline-line">Different frequency.</em></h1></div>
+    <p class="intro-note">Move closer. Watch the signal scatter.<br><span>Pause and let the lines settle.</span></p>
+  </section>
+  <section class="cards" aria-label="Interactive brand studies">
+    <article class="card tiktok" tabindex="0" data-brand="tiktok" aria-label="TikTok，鼠标进入时附近竖线散开，随后弹回原位">
+      <canvas class="art" aria-label="由竖线绘制的 TikTok Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>TikTok</div><span class="mono card-number">01 / TIKTOK</span></header>
+      <div class="card-bottom"><h2 class="tagline">Make every beat move.</h2><button class="source" data-source="tiktok"><span>Reveal the source</span><small>PATH / 01</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+    <article class="card x" tabindex="0" data-brand="x" aria-label="X，鼠标进入时附近竖线散开，随后弹回原位">
+      <canvas class="art" aria-label="由竖线绘制的 X Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>X</div><span class="mono card-number">02 / X</span></header>
+      <div class="card-bottom"><h2 class="tagline">What’s happening?</h2><button class="source" data-source="x"><span>Reveal the source</span><small>PATH / 02</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+    <article class="card instagram" tabindex="0" data-brand="instagram" aria-label="Instagram，鼠标进入时附近竖线散开，随后弹回原位">
+      <canvas class="art" aria-label="由竖线绘制的 Instagram Logo"></canvas>
+      <header class="card-top"><div class="brand"><canvas class="brand-icon" aria-hidden="true"></canvas>Instagram</div><span class="mono card-number">03 / INSTAGRAM</span></header>
+      <div class="card-bottom"><h2 class="tagline">Capture the everyday.</h2><button class="source" data-source="instagram"><span>Reveal the source</span><small>PATH / 03</small><span class="arrow" aria-hidden="true">→</span></button></div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span class="mono status"><span class="status-dot"></span>LIVE EXPERIMENT &nbsp;/&nbsp; CANVAS 2D</span>
+    <span class="mono legend">HOVER / SCATTER &nbsp;·&nbsp; REST / RETURN</span>
+    <button class="motion" aria-pressed="false">Ⅱ Pause motion</button>
+  </footer>
+</main>
+<dialog aria-labelledby="source-title">
+  <div class="dialog-top"><h2 id="source-title">The source.</h2><button class="close" aria-label="关闭源代码">×</button></div>
+  <p class="explanation">SVG 路径只在初始化时栅格化一次，采样为 56 × 112 的亮度表。TikTok 的音符、X 的交叉字形和 Instagram 的相机轮廓，均由竖线呈现。TikTok 的青红叠色同样由竖线分层绘制。</p>
+  <pre><code id="source-code"></code></pre>
+  <p class="mono dialog-foot">PATH → LUMINANCE GRID → FLOW NOISE → FOUR LINE WEIGHTS<br>无需图片、字体下载或外部依赖。按 Esc 关闭。</p>
+</dialog>
+<script>
+(() => {
+  'use strict';
+  const COLS = 56, ROWS = 112, SX = 6, SY = 4;
+  // Vector outlines: Simple Icons, https://github.com/simple-icons/simple-icons
+  const BRANDS = {
+  "tiktok": {
+    "name": "TikTok",
+    "color": "#f7f9fa",
+    "icon": "#ffffff",
+    "opacity": 0.78,
+    "scale": 1.035,
+    "top": 0.035,
+    "offset": 0,
+    "layers": [
+      {
+        "color": "#25F4EE",
+        "dx": -0.17,
+        "dy": -0.18,
+        "opacity": 0.95,
+        "width": 1
+      },
+      {
+        "color": "#FE2C55",
+        "dx": 0.17,
+        "dy": 0.18,
+        "opacity": 0.95,
+        "width": 1
+      },
+      {
+        "color": "#ffffff",
+        "dx": 0,
+        "dy": 0,
+        "opacity": 0.9,
+        "width": 0.7
+      }
+    ],
+    "path": "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z",
+    "fillRule": "nonzero"
+  },
+  "x": {
+    "name": "X",
+    "color": "#111111",
+    "icon": "#111111",
+    "opacity": 0.79,
+    "scale": 1.01,
+    "top": 0.04,
+    "offset": 0,
+    "path": "M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z",
+    "fillRule": "nonzero"
+  },
+  "instagram": {
+    "name": "Instagram",
+    "color": "#fff6eb",
+    "icon": "#ffffff",
+    "opacity": 0.84,
+    "scale": 0.98,
+    "top": 0.035,
+    "offset": 0,
+    "path": "M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077",
+    "fillRule": "nonzero"
+  }
+};
+
+  // One temporary raster per brand; only the averaged luminance survives.
+  // Rectangular 6 × 4 sample cells preserve the card's 3:4 aspect ratio.
+  function samplePath(brand) {
+    const raster=document.createElement('canvas');
+    raster.width=COLS*SX; raster.height=ROWS*SY;
+    const ctx=raster.getContext('2d',{willReadFrequently:true});
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,raster.width,raster.height);
+    const size=raster.width*brand.scale;
+    ctx.translate((raster.width-size)/2+brand.offset*raster.width,brand.top*raster.height);
+    ctx.scale(size/24,size/24); ctx.fillStyle='#fff';ctx.fill(new Path2D(brand.path),brand.fillRule);
+    const pixels=ctx.getImageData(0,0,raster.width,raster.height).data;
+    const table=new Float32Array(COLS*ROWS);
+    for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) {
+      let sum=0;
+      for(let sy=0;sy<SY;sy++) for(let sx=0;sx<SX;sx++) {
+        const i=((y*SY+sy)*raster.width+x*SX+sx)*4;
+        sum+=.2126*pixels[i]+.7152*pixels[i+1]+.0722*pixels[i+2];
+      }
+      table[y*COLS+x]=sum/(SX*SY*255);
+    }
+    raster.width=0;raster.height=0;
+    return table;
+  }
+
+  function hash(x,y) {
+    let n=Math.imul(x,374761393)+Math.imul(y,668265263);
+    n=Math.imul(n^(n>>>13),1274126177);
+    return ((n^(n>>>16))>>>0)/4294967295;
+  }
+  function noise(x,y) {
+    const ix=Math.floor(x),iy=Math.floor(y);let fx=x-ix,fy=y-iy;
+    fx=fx*fx*(3-2*fx);fy=fy*fy*(3-2*fy);
+    const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
+    return a+(b-a)*fx+(c-a)*fy+(a-b-c+d)*fx*fy;
+  }
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+  const media=matchMedia('(prefers-reduced-motion: reduce)');
+  let paused=media.matches,motionTime=0,previous=0,pageVisible=!document.hidden;
+  const motionButton=document.querySelector('.motion');
+  function updateMotionButton() {
+    motionButton.textContent=paused?'▷ Resume motion':'Ⅱ Pause motion';
+    motionButton.setAttribute('aria-pressed',String(paused));
+  }
+  updateMotionButton();
+  motionButton.addEventListener('click',()=>{paused=!paused;updateMotionButton();});
+  media.addEventListener('change',e=>{paused=e.matches;updateMotionButton();});
+
+  class Study {
+    constructor(card,index) {
+      this.card=card;this.index=index;this.brand=BRANDS[card.dataset.brand];
+      this.canvas=card.querySelector('.art');this.ctx=this.canvas.getContext('2d');
+      this.icon=card.querySelector('.brand-icon');
+      this.table=samplePath(this.brand);
+      this.pointer={x:-1000,y:-1000,inside:false};
+      this.dx=new Float32Array(COLS*ROWS);this.dy=new Float32Array(COLS*ROWS);
+      this.vx=new Float32Array(COLS*ROWS);this.vy=new Float32Array(COLS*ROWS);
+      this.lastKickPoint=null;
+      this.entryDuration=1.15;this.entryAge=this.entryDuration;this.entryCount=0;
+      this.frameBuckets=[[],[],[],[]];
+      this.width=0;this.height=0;this.dpr=0;
+      card.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')this.move(e);});
+      card.addEventListener('pointermove',e=>this.move(e));
+      card.addEventListener('pointerdown',e=>this.move(e));
+      card.addEventListener('pointerleave',()=>this.leave());
+      card.addEventListener('pointerup',e=>{if(e.pointerType==='touch')this.leave();});
+      card.addEventListener('pointercancel',()=>this.leave());
+      this.resize();
+    }
+    move(e) {
+      const rect=this.card.getBoundingClientRect();
+      const entering=!this.pointer.inside;
+      const x=clamp(e.clientX-rect.left,0,this.width),y=clamp(e.clientY-rect.top,0,this.height);
+      if(entering){this.entryCount++;this.entryAge=paused?this.entryDuration:0;}
+      this.pointer={x,y,inside:true};
+      if(!e.target?.closest?.('button')&&(entering||!this.lastKickPoint||Math.hypot(x-this.lastKickPoint.x,y-this.lastKickPoint.y)>8)){
+        this.kick(x,y,entering?1:.48);this.lastKickPoint={x,y};
+      }
+    }
+    leave() {this.pointer.inside=false;this.lastKickPoint=null;}
+    kick(px,py,strength=1) {
+      if(paused)return;
+      const radius=Math.min(130,this.width*.26),speed=radius*7.2*strength;
+      for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+        const i=y*COLS+x;if(this.table[i]<.012)continue;
+        let rx=(x+.5)*this.cw+this.dx[i]-px,ry=(y+.5)*this.ch+this.dy[i]-py;
+        let distance=Math.hypot(rx,ry);
+        if(distance>=radius)continue;
+        if(distance<.1){const a=hash(x,y+this.index)*Math.PI*2;rx=Math.cos(a);ry=Math.sin(a);distance=1;}
+        const force=Math.pow(1-distance/radius,2)*speed;
+        this.vx[i]=clamp(this.vx[i]+rx/distance*force,-radius*12,radius*12);
+        this.vy[i]=clamp(this.vy[i]+ry/distance*force*.48,-radius*6,radius*6);
+      }
+    }
+    updateSpring(dt) {
+      if(paused)return;
+      // A brief impulse, followed by an underdamped return to the original
+      // grid. No sustained mouse force: the lines settle even while hovering.
+      const steps=Math.max(1,Math.ceil(dt/(1/120))),h=dt/steps;
+      const stiffness=289,friction=11.2,limit=Math.min(130,this.width*.26);
+      for(let step=0;step<steps;step++)for(let i=0;i<this.dx.length;i++){
+        let x=this.dx[i],y=this.dy[i],vx=this.vx[i],vy=this.vy[i];
+        if(x===0&&y===0&&vx===0&&vy===0)continue;
+        vx+=(-stiffness*x-friction*vx)*h;vy+=(-stiffness*y-friction*vy)*h;
+        x+=vx*h;y+=vy*h;
+        if(Math.abs(x)>limit*.85){x=Math.sign(x)*limit*.85;vx*=.3;}
+        if(Math.abs(y)>limit*.5){y=Math.sign(y)*limit*.5;vy*=.3;}
+        if(Math.abs(x)<.015&&Math.abs(y)<.015&&Math.abs(vx)<.08&&Math.abs(vy)<.08)x=y=vx=vy=0;
+        this.dx[i]=x;this.dy[i]=y;this.vx[i]=vx;this.vy[i]=vy;
+      }
+    }
+
+    resize() {
+      const rect=this.card.getBoundingClientRect();
+      this.width=rect.width;this.height=rect.height;this.dpr=window.devicePixelRatio||1;
+      this.canvas.width=Math.round(this.width*this.dpr);this.canvas.height=Math.round(this.height*this.dpr);
+      this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+      this.cw=this.width/COLS;this.ch=this.height/ROWS;
+      this.drawIcon();
+    }
+    drawIcon() {
+      const w=22,h=24,ctx=this.icon.getContext('2d');
+      this.icon.width=Math.round(w*this.dpr);this.icon.height=Math.round(h*this.dpr);
+      ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,w,h);
+      let minX=COLS,maxX=0,minY=ROWS,maxY=0;
+      for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(this.table[y*COLS+x]>.15){
+        minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+      }
+      const scale=Math.min((w-1)/((maxX-minX+1)*SX),(h-1)/((maxY-minY+1)*SY));
+      const ox=(w-(maxX-minX+1)*SX*scale)/2,oy=(h-(maxY-minY+1)*SY*scale)/2;
+      const points=[];
+      for(let x=minX;x<=maxX;x+=2)for(let y=minY;y<=maxY;y++)if(this.table[y*COLS+x]>.3){
+        const px=ox+(x-minX+.5)*SX*scale,py=oy+(y-minY)*SY*scale;
+        points.push(px,py,py+SY*scale+.12);
+      }
+      const layers=this.brand.layers||[{color:this.brand.icon,dx:0,dy:0,opacity:1,width:1}];
+      for(const layer of layers){
+        ctx.strokeStyle=layer.color;ctx.globalAlpha=layer.opacity;
+        ctx.lineWidth=Math.max(.6,this.width*.0014)*layer.width;ctx.lineCap='butt';ctx.beginPath();
+        const dx=Math.sign(layer.dx)*.45,dy=Math.sign(layer.dy)*.45;
+        for(let i=0;i<points.length;i+=3){ctx.moveTo(points[i]+dx,points[i+1]+dy);ctx.lineTo(points[i]+dx,points[i+2]+dy);}
+        ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+    }
+    draw(time,dt) {
+      const ctx=this.ctx,cw=this.cw,ch=this.ch;
+      ctx.clearRect(0,0,this.width,this.height);
+      if(!paused)this.entryAge=Math.min(this.entryDuration,this.entryAge+dt);
+      this.updateSpring(dt);
+      // Every entry sends a brief downward noise flow through the width field.
+      // Width noise continues independently while spring offsets scatter and settle.
+      const progress=this.entryAge/this.entryDuration;
+      const entryFlow=Math.sin(Math.PI*progress)*Math.exp(-progress*1.6);
+      const weights=[.055,.13,.25,.43].map(w=>cw*w),buckets=[[],[],[],[]];
+      for(let x=0;x<COLS;x++)for(let y=0;y<ROWS;y++){
+        const i=y*COLS+x,base=this.table[i];
+        const bx=(x+.5)*cw,by=(y+.5)*ch;
+        // Subtracting time advects the noise down the card. Short, dense pulses
+        // thicken individual nodes; the quieter field retains a thin spine.
+        const flow=noise(x*.16+this.index*17,y*.125-time*.5);
+        const detail=noise(x*1.37+29,y*.48-time*.8);
+        const node=clamp((detail-.5)*2.8,0,1);
+        const enteringNoise=entryFlow>.001?noise(x*.31+this.entryCount*4+this.index*11,y*.15-this.entryAge*4.7):.5;
+        const brightness=clamp(base*(.12+flow*.18+node*.69+(enteringNoise-.5)*entryFlow*1.25),0,1);
+        const level=brightness<.20?0:brightness<.39?1:brightness<.62?2:3;
+        if(base<.012&&brightness<.09)continue;
+        const px=bx+this.dx[i],py=by+this.dy[i];
+        // Tiny overlaps keep stems intact, while heavier nodes are short and
+        // rounded. Width is always one of exactly four discrete values.
+        const half=ch*(level===0?.53:level===1?.49:.44);
+        buckets[level].push(px,py-half,py+half);
+      }
+      this.frameBuckets=buckets;
+      // Each color layer shares the same four-weight field and spring offsets.
+      const layers=this.brand.layers||[{color:this.brand.color,dx:0,dy:0,opacity:1,width:1}];
+      for(const layer of layers){
+        ctx.strokeStyle=layer.color;
+        const dx=layer.dx*cw,dy=layer.dy*ch;
+        for(let level=0;level<4;level++){
+          ctx.globalAlpha=this.brand.opacity*layer.opacity*(level===0?.62:level===1?.8:1);
+          ctx.lineWidth=weights[level]*layer.width;ctx.lineCap=level<2?'butt':'round';ctx.beginPath();
+          const points=buckets[level];
+          for(let i=0;i<points.length;i+=3){ctx.moveTo(points[i]+dx,points[i+1]+dy);ctx.lineTo(points[i]+dx,points[i+2]+dy);}
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha=1;this.drawRain(time);
+    }
+    drawRain(time) {
+      const ctx=this.ctx;ctx.strokeStyle=this.brand.color;ctx.lineWidth=this.cw*.055;ctx.lineCap='butt';
+      for(let i=0;i<18;i++){
+        if(this.brand.layers)ctx.strokeStyle=this.brand.layers[i%2].color;
+        const x=(Math.floor(hash(i,this.index+31)*COLS)+.5)*this.cw;
+        const y=((hash(i+21,this.index)*1.2+time*(.025+hash(i,9)*.028))%1.2-.1)*this.height;
+        const length=(.012+hash(i,52)*.04)*this.height;
+        ctx.globalAlpha=(.07+hash(i+9,this.index)*.12)*.65;
+        ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+length);ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+    }
+
+  }
+
+  const studies=Array.from(document.querySelectorAll('.card'),(card,i)=>new Study(card,i));
+  const observer=new ResizeObserver(entries=>{
+    for(const entry of entries){const study=studies.find(s=>s.card===entry.target);if(study)study.resize();}
+  });
+  studies.forEach(s=>observer.observe(s.card));
+  document.addEventListener('visibilitychange',()=>{pageVisible=!document.hidden;previous=0;});
+  window.addEventListener('blur',()=>studies.forEach(s=>s.pointer.inside=false));
+  function frame(now) {
+    const dt=previous?Math.min((now-previous)/1000,1/30):1/60;previous=now;
+    if(pageVisible){
+      if(!paused)motionTime+=dt;
+      for(const study of studies){
+        if(study.dpr!==(window.devicePixelRatio||1))study.resize();
+        study.draw(motionTime,dt);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const dialog=document.querySelector('dialog');
+  document.querySelectorAll('[data-source]').forEach(button=>button.addEventListener('click',()=>{
+    const brand=BRANDS[button.dataset.source];
+    document.querySelector('#source-title').textContent=brand.name+' / The source.';
+    document.querySelector('#source-code').textContent=`<svg viewBox="0 0 24 24">\n  <path fill="white" fill-rule="${brand.fillRule}" d="${brand.path}" />\n</svg>`;
+    dialog.showModal();studies.forEach(s=>s.pointer.inside=false);
+  }));
+  dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',e=>{
+    const r=dialog.getBoundingClientRect();
+    if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))dialog.close();
+  });
+})();
+</script>
+</body>
+</html>
