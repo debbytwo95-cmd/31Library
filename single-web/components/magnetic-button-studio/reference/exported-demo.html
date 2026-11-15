@@ -1,0 +1,86 @@
+<!doctype html>
+<!-- Magnetic Button · based on DesignBookmark
+     https://designbookmark.com/motion#db-magnetic-button -->
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Magnetic Button</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #191c18; font-family: system-ui, sans-serif; }
+  .field { position: fixed; inset: 0; }
+  .mag { position: absolute; left: 50%; top: 50%; width: 173px; height: 57px;
+    margin: -28.5px 0 0 -86.5px; border: 0; border-radius: 99px;
+    background: #d6f66b; color: #21281b; font: 600 14px system-ui;
+    cursor: pointer; will-change: transform; touch-action: manipulation; }
+  .label { display: inline-flex; gap: 14px; align-items: center; will-change: transform; }
+  .mag:focus-visible { outline: 2px solid #799b23; outline-offset: 7px; }
+  .cursor { position: absolute; left: 0; top: 0; width: 10px; height: 10px;
+    margin: -5px; border-radius: 50%; background: #e3e9db; pointer-events: none; opacity: 0; }
+</style>
+<div class="field">
+  <button class="mag"><span class="label">Get started <span aria-hidden="true">↗</span></span></button>
+  <span class="cursor" aria-hidden="true"></span>
+</div>
+<script>
+  const config = {
+    "radius": 130,
+    "strength": 0.32,
+    "stiffness": 170,
+    "damping": 13,
+    "autoplay": true
+  };
+  const field = document.querySelector('.field');
+  const button = document.querySelector('.mag');
+  const label = document.querySelector('.label');
+  const cursor = document.querySelector('.cursor');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const spring = (x, k, c) => ({ x, v: 0, t: x, k, c });
+  const bx = spring(0, config.stiffness, config.damping);
+  const by = spring(0, config.stiffness, config.damping);
+  const lx = spring(0, config.stiffness * 220/170, config.damping * 15/13);
+  const ly = spring(0, config.stiffness * 220/170, config.damping * 15/13);
+  const scale = spring(1, 400, 18);
+  const fade = spring(0, 200, 26);
+  const springs = [bx, by, lx, ly, scale, fade];
+  let pointer = null, lastMove = -100, time = 0, last = performance.now(), down = false;
+  field.addEventListener('pointermove', e => {
+    const r = field.getBoundingClientRect();
+    pointer = { x: e.clientX-r.left, y: e.clientY-r.top }; lastMove = time;
+  });
+  field.addEventListener('pointerleave', () => { pointer = null; down = false; });
+  button.addEventListener('pointerdown', e => { down = true; button.setPointerCapture(e.pointerId); });
+  const release = () => { if (down) scale.v = reduced ? 0 : 3; down = false; };
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(name => button.addEventListener(name, release));
+  window.addEventListener('blur', () => { down = false; pointer = null; });
+  function frame(now) {
+    const dt = Math.min((now-last)/1000, 1/30); last = now; time += dt;
+    const cx = field.clientWidth/2, cy = field.clientHeight/2;
+    let x = cx, y = cy, active = false;
+    const ghost = config.autoplay && !reduced && (!pointer || time-lastMove > 2.5);
+    if (ghost) {
+      const t = time % 7;
+      if (t < 1.4) { x=cx-150+t/1.4*110; y=cy+50-t/1.4*40; }
+      else if (t < 5) { const a=(t-1.4)/3.6*Math.PI*2+Math.PI; x=cx+Math.cos(a)*46; y=cy+Math.sin(a)*18+4; }
+      else { const k=(t-5)/2; x=cx-46+k*230; y=cy+4+k*60; }
+      active = true;
+    } else if (pointer) { x=pointer.x; y=pointer.y; active=true; }
+    fade.t = ghost ? .65 : 0;
+    const dx=x-cx, dy=y-cy, d=Math.hypot(dx,dy);
+    const pull = active && d < config.radius ? 1-d/config.radius*.35 : 0;
+    bx.t=dx*config.strength*pull; by.t=dy*config.strength*.38/.32*pull;
+    lx.t=dx*config.strength*.14/.32*pull; ly.t=dy*config.strength*.18/.32*pull;
+    scale.t=down ? .94 : 1+(reduced ? 0 : .06*pull);
+    for (let i=0; i<4; i++) for (const s of springs) {
+      const damping = reduced ? Math.max(s.c, 2*Math.sqrt(s.k)) : s.c;
+      s.v += (-s.k*(s.x-s.t)-damping*s.v)*dt/4; s.x += s.v*dt/4;
+    }
+    button.style.transform=`translate(${bx.x}px,${by.x}px) scale(${scale.x})`;
+    label.style.transform=`translate(${lx.x}px,${ly.x}px)`;
+    cursor.style.opacity=Math.max(0,Math.min(1,fade.x));
+    cursor.style.transform=`translate(${x}px,${y}px)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</html>
