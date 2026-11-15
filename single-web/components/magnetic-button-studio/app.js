@@ -4,22 +4,21 @@
   const $ = id => document.getElementById(id);
   const defaults = { radius: 130, strength: 32, stiffness: 170, damping: 13 };
   const presets = { default: defaults, soft: { radius: 170, strength: 38, stiffness: 100, damping: 10 }, snappy: { radius: 110, strength: 25, stiffness: 340, damping: 25 } };
-  const config = { ...defaults, autoplay: true, showRadius: false, slow: false };
+  const config = { ...defaults, showRadius: false, slow: false };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { config.autoplay = false; $('autoplay').checked = false; }
-  const field = $('field'), mag = $('mag'), label = $('mag-label'), cursor = $('ghost-cursor');
+  const field = $('field'), mag = $('mag'), label = $('mag-label');
   const S = (x, k, c) => ({ x, v: 0, t: x, k, c });
-  const springs = [S(0,170,13), S(0,170,13), S(0,220,15), S(0,220,15), S(1,400,18), S(0,200,26)];
-  const [bx, by, lx, ly, scale, opacity] = springs;
+  const springs = [S(0,170,13), S(0,170,13), S(0,220,15), S(0,220,15), S(1,400,18)];
+  const [bx, by, lx, ly, scale] = springs;
   const step = (s, dt) => { const c = reduce ? Math.max(s.c, 2*Math.sqrt(s.k)) : s.c; s.v += (-s.k*(s.x-s.t)-c*s.v)*dt; s.x += s.v*dt; };
-  let pointer = null, lastMove = -100, simTime = 0, lastTime = performance.now(), pressed = false;
-  let gx = 0, gy = 0, inView = true, pageVisible = !document.hidden, codeVisible = false;
+  let pointer = null, lastTime = performance.now(), pressed = false;
+  let inView = true, pageVisible = !document.hidden, codeVisible = false;
   let fieldWidth = field.clientWidth, fieldHeight = field.clientHeight;
   const observer = new ResizeObserver(() => { fieldWidth = field.clientWidth; fieldHeight = field.clientHeight; });
   observer.observe(field);
   new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; }).observe(field);
   document.addEventListener('visibilitychange', () => { pageVisible = !document.hidden; lastTime = performance.now(); });
-  field.addEventListener('pointermove', e => { const rect = field.getBoundingClientRect(); pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top }; lastMove = simTime; });
+  field.addEventListener('pointermove', e => { const rect = field.getBoundingClientRect(); pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top }; });
   field.addEventListener('pointerleave', () => { pointer = null; pressed = false; });
   mag.addEventListener('pointerdown', e => { pressed = true; mag.setPointerCapture(e.pointerId); });
   const release = () => { if (pressed) { scale.v = reduce ? 0 : 3; pressed = false; } };
@@ -41,20 +40,9 @@
     const dt = Math.min((now-lastTime)/1000, 1/30) * (config.slow ? .25 : 1);
     lastTime = now;
     if (inView && pageVisible && !codeVisible) {
-      simTime += dt;
       const cx = fieldWidth/2, cy = fieldHeight/2;
-      const ghost = config.autoplay && (pointer === null || simTime-lastMove > 2.5);
-      let active = false;
-      if (ghost) {
-        const t = simTime % 7;
-        if (t < 1.4) { gx = cx-150+t/1.4*110; gy = cy+50-t/1.4*40; }
-        else if (t < 5) { const a = (t-1.4)/3.6*Math.PI*2+Math.PI; gx = cx+Math.cos(a)*46; gy = cy+Math.sin(a)*18+4; }
-        else { const k=(t-5)/2; gx=cx-46+k*230; gy=cy+4+k*60; }
-        active = true; opacity.t = .8;
-      } else {
-        opacity.t = 0;
-        if (pointer) { gx=pointer.x; gy=pointer.y; active=true; }
-      }
+      const active = pointer !== null;
+      const gx = pointer?.x ?? cx, gy = pointer?.y ?? cy;
       const dx=gx-cx, dy=gy-cy, distance=Math.hypot(dx,dy);
       const pull = active && distance < config.radius ? 1-distance/config.radius*.35 : 0;
       const strength=config.strength/100;
@@ -64,8 +52,6 @@
       for(let i=0;i<4;i++) springs.forEach(s=>step(s,dt/4));
       mag.style.transform=`translate(${bx.x.toFixed(2)}px,${by.x.toFixed(2)}px) scale(${scale.x.toFixed(4)})`;
       label.style.transform=`translate(${lx.x.toFixed(2)}px,${ly.x.toFixed(2)}px)`;
-      cursor.style.opacity=Math.max(0,Math.min(1,opacity.x)).toFixed(3);
-      cursor.style.transform=`translate(${gx.toFixed(2)}px,${gy.toFixed(2)}px)`;
     }
     requestAnimationFrame(animate);
   }
@@ -88,15 +74,14 @@
   }
   Object.keys(defaults).forEach(key=>$(key).addEventListener('input',event=>{config[key]=Number(event.target.value);updateControls();}));
   document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{Object.assign(config,presets[button.dataset.preset]);updateControls();}));
-  $('autoplay').addEventListener('change',e=>{config.autoplay=e.target.checked;if(codeVisible)renderCode();});
   $('show-radius').addEventListener('change',e=>{config.showRadius=e.target.checked;$('attraction-ring').classList.toggle('visible',config.showRadius);});
   $('slow-control').addEventListener('click',()=>{config.slow=!config.slow;$('slow-control').setAttribute('aria-pressed',String(config.slow));$('speed-label').textContent=config.slow?'0.25×':'1×';});
   $('reset').addEventListener('click',()=>{
-    Object.assign(config,defaults,{autoplay:!reduce,showRadius:false,slow:false});
-    $('autoplay').checked=config.autoplay;$('show-radius').checked=false;
+    Object.assign(config,defaults,{showRadius:false,slow:false});
+    $('show-radius').checked=false;
     $('attraction-ring').classList.remove('visible');
     $('slow-control').setAttribute('aria-pressed','false');$('speed-label').textContent='1×';
-    pointer=null;simTime=0;pressed=false;springs.forEach((s,i)=>{s.x=s.t=i===4?1:0;s.v=0;});
+    pointer=null;pressed=false;springs.forEach((s,i)=>{s.x=s.t=i===4?1:0;s.v=0;});
     updateControls();notify('已恢复默认参数');
   });
   document.querySelectorAll('[data-stage-theme]').forEach(button=>button.addEventListener('click',()=>setStageTheme(button.dataset.stageTheme)));
@@ -143,19 +128,15 @@
     cursor: pointer; will-change: transform; touch-action: manipulation; }
   .label { display: inline-flex; gap: 8px; align-items: center; will-change: transform; }
   .mag:focus-visible { outline: 2px solid ${light?'#0e0f11':'#ffffff'}; outline-offset: 7px; }
-  .cursor { position: absolute; left: 0; top: 0; width: 10px; height: 10px;
-    margin: -5px; border-radius: 50%; background: ${light?'#17181a':'#ffffff'}; pointer-events: none; opacity: 0; }
 </style>
 <div class="field">
   <button class="mag"><span class="label">Get started <span aria-hidden="true">↗</span></span></button>
-  <span class="cursor" aria-hidden="true"></span>
 </div>
 <script>
-  const config = ${JSON.stringify({radius:config.radius,strength:config.strength/100,stiffness:config.stiffness,damping:config.damping,autoplay:config.autoplay},null,2).replace(/\n/g,'\n  ')};
+  const config = ${JSON.stringify({radius:config.radius,strength:config.strength/100,stiffness:config.stiffness,damping:config.damping},null,2).replace(/\n/g,'\n  ')};
   const field = document.querySelector('.field');
   const button = document.querySelector('.mag');
   const label = document.querySelector('.label');
-  const cursor = document.querySelector('.cursor');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const spring = (x, k, c) => ({ x, v: 0, t: x, k, c });
   const bx = spring(0, config.stiffness, config.damping);
@@ -163,12 +144,11 @@
   const lx = spring(0, config.stiffness * 220/170, config.damping * 15/13);
   const ly = spring(0, config.stiffness * 220/170, config.damping * 15/13);
   const scale = spring(1, 400, 18);
-  const fade = spring(0, 200, 26);
-  const springs = [bx, by, lx, ly, scale, fade];
-  let pointer = null, lastMove = -100, time = 0, last = performance.now(), down = false;
+  const springs = [bx, by, lx, ly, scale];
+  let pointer = null, last = performance.now(), down = false;
   field.addEventListener('pointermove', e => {
     const r = field.getBoundingClientRect();
-    pointer = { x: e.clientX-r.left, y: e.clientY-r.top }; lastMove = time;
+    pointer = { x: e.clientX-r.left, y: e.clientY-r.top };
   });
   field.addEventListener('pointerleave', () => { pointer = null; down = false; });
   button.addEventListener('pointerdown', e => { down = true; button.setPointerCapture(e.pointerId); });
@@ -176,18 +156,9 @@
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(name => button.addEventListener(name, release));
   window.addEventListener('blur', () => { down = false; pointer = null; });
   function frame(now) {
-    const dt = Math.min((now-last)/1000, 1/30); last = now; time += dt;
+    const dt = Math.min((now-last)/1000, 1/30); last = now;
     const cx = field.clientWidth/2, cy = field.clientHeight/2;
-    let x = cx, y = cy, active = false;
-    const ghost = config.autoplay && !reduced && (!pointer || time-lastMove > 2.5);
-    if (ghost) {
-      const t = time % 7;
-      if (t < 1.4) { x=cx-150+t/1.4*110; y=cy+50-t/1.4*40; }
-      else if (t < 5) { const a=(t-1.4)/3.6*Math.PI*2+Math.PI; x=cx+Math.cos(a)*46; y=cy+Math.sin(a)*18+4; }
-      else { const k=(t-5)/2; x=cx-46+k*230; y=cy+4+k*60; }
-      active = true;
-    } else if (pointer) { x=pointer.x; y=pointer.y; active=true; }
-    fade.t = ghost ? .65 : 0;
+    const x = pointer?.x ?? cx, y = pointer?.y ?? cy, active = pointer !== null;
     const dx=x-cx, dy=y-cy, d=Math.hypot(dx,dy);
     const pull = active && d < config.radius ? 1-d/config.radius*.35 : 0;
     bx.t=dx*config.strength*pull; by.t=dy*config.strength*.38/.32*pull;
@@ -199,8 +170,6 @@
     }
     button.style.transform=\`translate(\${bx.x}px,\${by.x}px) scale(\${scale.x})\`;
     label.style.transform=\`translate(\${lx.x}px,\${ly.x}px)\`;
-    cursor.style.opacity=Math.max(0,Math.min(1,fade.x));
-    cursor.style.transform=\`translate(\${x}px,\${y}px)\`;
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

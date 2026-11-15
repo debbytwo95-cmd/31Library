@@ -1816,3 +1816,4 @@ input[type=range]::-moz-range-thumb {
         animation: none
     }
 }
+@media(max-width:759px){.settings>.toggle-row{grid-column:1/-1}}
