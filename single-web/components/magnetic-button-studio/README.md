@@ -14,3 +14,5 @@
 源站：https://magnetic-button-studio.candybull5.chatgpt.site
 
 GitHub Pages 发布后预期路径：https://debbytwo95-cmd.github.io/31Library/single-web/components/magnetic-button-studio/index.html
+
+- 支持圆角实时调节（0–28px），复制代码与下载文件同步当前圆角；弹簧预设不改变圆角，重置恢复 28px。

@@ -1,0 +1,12 @@
+@import url("button.css");
+.stage[data-theme=light]{--stage-bg:#f7f7f8}
+.field{display:grid;place-items:center}
+.settings{gap:0;min-height:513px;height:auto;padding-bottom:20px}
+.settings-intro{margin-bottom:16px}.preset-group{margin-bottom:22px}.range-control{margin-bottom:23px}.range-labels{font-size:11px}.corner-control{margin-bottom:20px}
+.settings-foot{margin-top:17px;padding-top:0}
+.easing-control{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:500}
+.easing-control select{font:400 12px var(--font);padding:7px 25px 7px 10px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:7px;max-width:150px}
+.site-header{gap:18px}.site-search{margin-left:auto}#page-theme{width:32px;height:32px;flex-shrink:0}
+.stage-themes{width:67px;height:37px}.stage-themes button{min-width:0;display:grid;place-items:center;padding:0}
+.principle-art{display:none}.principles{height:auto;min-height:232px}.guide{margin-top:12px}
+@media(max-width:759px){.site-navigation{width:100%}.site-search{width:calc(100% - 52px);margin:0 0 14px}#page-theme{margin-bottom:14px}.settings .corner-control{grid-column:auto}.easing-control{grid-column:1/-1}.settings-foot{margin-top:22px}.intro h1{font-size:clamp(32px,8.2vw,55px)}}

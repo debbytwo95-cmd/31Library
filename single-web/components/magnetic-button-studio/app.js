@@ -4,7 +4,9 @@
   const $ = id => document.getElementById(id);
   const defaults = { radius: 130, strength: 32, stiffness: 170, damping: 13 };
   const presets = { default: defaults, soft: { radius: 170, strength: 38, stiffness: 100, damping: 10 }, snappy: { radius: 110, strength: 25, stiffness: 340, damping: 25 } };
-  const config = { ...defaults, showRadius: false, slow: false };
+  const defaultCornerRadius = 28;
+  const controlKeys = [...Object.keys(defaults), 'cornerRadius'];
+  const config = { ...defaults, cornerRadius: defaultCornerRadius, showRadius: false, slow: false };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const field = $('field'), mag = $('mag'), label = $('mag-label');
   const S = (x, k, c) => ({ x, v: 0, t: x, k, c });
@@ -57,11 +59,13 @@
   }
   requestAnimationFrame(animate);
   function updateControls() {
-    for(const key of Object.keys(defaults)) {
+    for(const key of controlKeys) {
       const input=$(key); input.value=config[key];
       input.style.setProperty('--progress',`${(config[key]-Number(input.min))/(Number(input.max)-Number(input.min))*100}%`);
-      $(key+'-output').innerHTML=`${config[key]}${key==='radius'?'<span>px</span>':key==='strength'?'<span>%</span>':''}`;
+      $(key+'-output').innerHTML=`${config[key]}${key==='radius'||key==='cornerRadius'?'<span>px</span>':key==='strength'?'<span>%</span>':''}`;
     }
+    mag.style.borderRadius=config.cornerRadius+'px';
+    $('click-ripple').style.borderRadius=(config.cornerRadius+1)+'px';
     bx.k=by.k=config.stiffness; bx.c=by.c=config.damping;
     lx.k=ly.k=config.stiffness*(220/170); lx.c=ly.c=config.damping*(15/13);
     $('attraction-ring').style.width=$('attraction-ring').style.height=config.radius*2+'px';
@@ -72,12 +76,12 @@
     });
     if(codeVisible) renderCode();
   }
-  Object.keys(defaults).forEach(key=>$(key).addEventListener('input',event=>{config[key]=Number(event.target.value);updateControls();}));
+  controlKeys.forEach(key=>$(key).addEventListener('input',event=>{config[key]=Number(event.target.value);updateControls();}));
   document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{Object.assign(config,presets[button.dataset.preset]);updateControls();}));
   $('show-radius').addEventListener('change',e=>{config.showRadius=e.target.checked;$('attraction-ring').classList.toggle('visible',config.showRadius);});
   $('slow-control').addEventListener('click',()=>{config.slow=!config.slow;$('slow-control').setAttribute('aria-pressed',String(config.slow));$('speed-label').textContent=config.slow?'0.25×':'1×';});
   $('reset').addEventListener('click',()=>{
-    Object.assign(config,defaults,{showRadius:false,slow:false});
+    Object.assign(config,defaults,{cornerRadius:defaultCornerRadius,showRadius:false,slow:false});
     $('show-radius').checked=false;
     $('attraction-ring').classList.remove('visible');
     $('slow-control').setAttribute('aria-pressed','false');$('speed-label').textContent='1×';
@@ -123,7 +127,7 @@
   body { margin: 0; background: ${light?'#f7f7f6':'#171717'}; font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif; }
   .field { position: fixed; inset: 0; }
   .mag { position: absolute; left: 50%; top: 50%; width: 168px; height: 56px;
-    margin: -28px 0 0 -84px; border: 0; border-radius: 999px;
+    margin: -28px 0 0 -84px; border: 0; border-radius: ${config.cornerRadius}px;
     background: ${light?'#0e0f11':'#ffffff'}; color: ${light?'#f4f3f1':'#000000'}; font: 600 16px Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
     cursor: pointer; will-change: transform; touch-action: manipulation; }
   .label { display: inline-flex; gap: 8px; align-items: center; will-change: transform; }

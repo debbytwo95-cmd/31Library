@@ -12,6 +12,17 @@ const pages = [
 ];
 const buttonComponents = [
   {
+    "href": "./single-web/components/icon-button-studio/index.html",
+    "title": "Icon Button · 扩散箭头按钮",
+    "tag": "悬停 hover",
+    "tags": [
+      "悬停 hover",
+      "按压 press"
+    ],
+    "keywords": "图标 圆形 扩散 箭头 按钮 icon button hover fill circle",
+    "iconButton": true
+  },
+  {
     "href": "./single-web/components/magnetic-button-studio/index.html",
     "title": "Magnetic Button · 磁吸按钮",
     "tag": "悬停 hover",
@@ -104,4 +115,20 @@ function render(){
  window.addEventListener('pointercancel',()=>{if(preview){pointer=null;pressed=false;wake();}});
  window.addEventListener('blur',clear);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});
+})();
+
+// Icon Button covers respond only to real hover, focus and press input.
+(() => {
+ const find = target => target instanceof Element ? target.closest('.icon-button-preview') : null;
+ const set = (preview, active) => preview?.querySelector('.icon-cta')?.classList.toggle('is-active', active);
+ grid.addEventListener('pointerover', event => { if(event.pointerType !== 'touch') set(find(event.target), true); });
+ grid.addEventListener('pointerout', event => { const preview=find(event.target);if(preview && !preview.contains(event.relatedTarget)) set(preview,false); });
+ grid.addEventListener('pointerdown', event => set(find(event.target),true));
+ const clear = () => grid.querySelectorAll('.icon-button-preview .icon-cta').forEach(button => button.classList.remove('is-active'));
+ window.addEventListener('pointerup', event => {if(event.pointerType==='touch') clear();});
+ window.addEventListener('pointercancel',clear);
+ window.addEventListener('blur',clear);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();});
+ grid.addEventListener('focusin',event=>set(event.target.closest('.card')?.querySelector('.icon-button-preview'),true));
+ grid.addEventListener('focusout',event=>set(event.target.closest('.card')?.querySelector('.icon-button-preview'),false));
 })();

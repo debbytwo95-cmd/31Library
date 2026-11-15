@@ -1,3 +1,4 @@
+@import url("../single-web/components/icon-button-studio/button.css");
 /* Layout and tokens from Figma frame 187:967. */
 :root {
     --canvas: #f7f7f8;
@@ -518,3 +519,7 @@ a.nav-item {
     will-change: transform;
 }
 .magnetic-preview-label>span { font-size: 19px; font-weight: 400; }
+
+/* Light component body only; interaction follows real input. */
+.icon-button-preview{position:relative;overflow:hidden;background:#f7f7f8}
+.icon-button-preview .icon-cta{pointer-events:none}

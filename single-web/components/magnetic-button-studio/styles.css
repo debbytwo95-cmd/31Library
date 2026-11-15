@@ -1817,3 +1817,6 @@ input[type=range]::-moz-range-thumb {
     }
 }
 @media(max-width:759px){.settings>.toggle-row{grid-column:1/-1}}
+
+.settings{height:auto;min-height:513px}.corner-control{margin-bottom:0}
+@media(max-width:759px){.settings{min-height:0}.corner-control{grid-column:1/-1}}
