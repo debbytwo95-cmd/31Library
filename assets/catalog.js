@@ -25,7 +25,7 @@ const buttonComponents = [
 ];
 const grid=document.querySelector('#grid'), heading=document.querySelector('h1'),description=document.querySelector('#description'),search=document.querySelector('#search'),sidebar=document.querySelector('#categories'),chips=document.querySelector('#chips');
 let section='components',category='buttons',filter='全部';
-const componentCategories=[['buttons','按钮',buttonComponents.length+6],['text','文字',0]];
+const componentCategories=[['buttons','按钮',buttonComponents.length],['text','文字',0]];
 function render(){
  document.querySelectorAll('[data-section]').forEach(b=>{const active=b.dataset.section===section;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active)});
  const lab=section==='lab',blocks=section==='blocks';
@@ -37,9 +37,9 @@ function render(){
  const tags=lab?['全部','Canvas','3D','光效']:['全部','悬停 hover','按压 press','拖拽 drag','滑动 swipe','输入 type'];
  chips.innerHTML=tags.map(t=>'<button class="chip '+(t===filter?'active':'')+'" aria-pressed="'+(t===filter)+'">'+t+'</button>').join('');
  const q=search.value.trim().toLowerCase();
- let items=lab?pages.map(p=>({...p,tag:p.href.includes('heatmap')||p.href.includes('earth')?'3D':p.href.includes('fluid-glow')?'光效':'Canvas'})):!blocks&&category==='buttons'?[...buttonComponents,...Array.from({length:6},(_,i)=>({title:i===1?'Jiggly Button':'按钮 Button',placeholder:true,tag:i===1?'按压 press':'悬停 hover',index:i}))]:[];
+ let items=lab?pages.map(p=>({...p,tag:p.href.includes('heatmap')||p.href.includes('earth')?'3D':p.href.includes('fluid-glow')?'光效':'Canvas'})):!blocks&&category==='buttons'?buttonComponents:[];
  items=items.filter(p=>(!q||(p.title+' '+(p.href||'')+' '+p.tag+' '+(p.keywords||'')).toLowerCase().includes(q))&&(filter==='全部'||p.tag===filter||(p.tags||[]).includes(filter)||(filter==='按压 press'&&p.placeholder)));
- description.textContent=lab?items.length+' 个条目 · 点击卡片打开完整网页':blocks||category==='text'?'条目即将加入':items.length+' 个条目 · '+items.filter(p=>p.href).length+' 个可打开组件，'+items.filter(p=>p.placeholder).length+' 个预览占位';
+ description.textContent=lab?items.length+' 个条目 · 点击卡片打开完整网页':blocks||category==='text'?'条目即将加入':items.length+' 个条目 · 点击卡片打开组件详情';
  grid.innerHTML=items.map(p=>{const tag=p.placeholder?'article':'a';return '<'+tag+' class="card" '+(p.href?'href="'+p.href+'"':'')+'><div class="preview '+(p.magnetic?'magnetic-preview':'')+'">'+(p.magnetic?'<span class="magnetic-button-preview"><span class="magnetic-preview-label">Get started <span aria-hidden="true">↗</span></span></span>':p.placeholder?'<span class="demo-button '+(p.index===1?'dark':'')+'">'+(p.index===1?'Join the waitlist':'开始使用 <span>→</span>')+'</span>':'<span class="lab-placeholder">'+p.tag+'<small>预览占位</small></span>')+'</div><div class="card-info"><h2>'+p.title+'</h2><p>'+(p.magnetic?'鼠标交互 · hover / press':p.placeholder?'操作 · '+(p.index===1?'press':'press / hover'):p.tag+' · '+(p.archive?'历史版本':'动效实验'))+'</p></div></'+tag+'>'}).join('');
  if(!items.length)grid.innerHTML='<div class="empty">'+(q?'没有找到匹配的条目，试试其他关键词。':'这里的内容正在整理中。')+'</div>';
 }
