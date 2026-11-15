@@ -326,10 +326,6 @@ aside {
     font-weight: 400
 }
 
-a.card:hover {
-    box-shadow: inset 0 0 0 1px #c8c8d0
-}
-
 footer {
     display: flex;
     justify-content: space-between;
@@ -491,27 +487,34 @@ a.nav-item {
     justify-content: center
 }
 
-/* Magnetic Button component index preview. */
+/* Magnetic Button component index preview: light playground cover. */
 .magnetic-preview {
-    background: #171717
+    position: relative;
+    overflow: hidden;
+    background: #f7f7f6;
+    color: #3c3b37;
 }
-
 .magnetic-button-preview {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     min-width: 150px;
     height: 50px;
     padding: 0 20px;
     border-radius: 999px;
-    background: #fff;
-    color: #000;
+    background: #0e0f11;
+    color: #f4f3f1;
     font-size: 14px;
-    font-weight: 600
+    font-weight: 600;
+    will-change: transform;
 }
-
-.magnetic-button-preview>span {
-    font-size: 19px;
-    font-weight: 400
+.magnetic-preview-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    will-change: transform;
 }
+.magnetic-preview-label>span { font-size: 19px; font-weight: 400; }
