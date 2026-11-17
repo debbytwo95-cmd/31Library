@@ -1,0 +1,123 @@
+@import url("fonts.css");
+
+:root {
+    --library-font: Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --library-code: Cousine, Consolas, monospace;
+    --library-canvas: #f7f7f8;
+    --library-primary: #18181c;
+    --library-secondary: #5c5c66;
+    --library-describe: #7b7b82;
+    --library-border: #e2e2e6;
+    --font: var(--library-font);
+    --mono: var(--library-font);
+    font-synthesis: none;
+    color-scheme: light;
+}
+
+body { font-family: var(--library-font); }
+:root:has(.main-shell) {
+    --page: #fff;
+    --card: #f7f7f8;
+    --surface: #fff;
+    --text: #18181c;
+    --secondary: #5c5c66;
+    --muted: #5c5c66;
+    --describe: #7b7b82;
+    --line: #e2e2e6;
+    --subtle: #eeeef0;
+    --track: #e2e2e6;
+}
+pre, code, pre *, code * { font-family: var(--library-code); }
+output, input[type=number] { font-family: Inter, sans-serif; font-weight: 600; }
+.range-control output { font: 600 13px/15px Inter, sans-serif; }
+.code-panel pre, .code-panel code { font-family: var(--library-code); }
+.code-heading, .code-bottom, .principle-top, .section-index, .attraction-ring span { font-family: var(--library-font); }
+
+.library-header, .library-header * { box-sizing: border-box; }
+header.library-header {
+    position: relative;
+    inset: auto;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    height: 58px;
+    padding: 0 60px;
+    border-bottom: 1px solid #efefef;
+    background: #fff;
+    color: var(--library-primary);
+    font: 400 14px/1.25 var(--library-font);
+    pointer-events: auto;
+}
+.library-header a { color: inherit; text-decoration: none; }
+.library-header-left { display: flex; align-items: center; gap: 40px; min-width: 0; }
+.library-header .library-logo { font: 600 18px/22px Inter, sans-serif; white-space: nowrap; }
+.library-header nav.library-nav {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    height: 58px;
+    animation: none;
+}
+.library-nav .library-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 58px;
+    padding: 0 14px;
+    border-bottom: 1px solid transparent;
+    color: var(--library-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+}
+.library-nav .library-nav-item.active { border-bottom-color: var(--library-primary); color: var(--library-primary); }
+.library-nav .library-nav-item:hover { color: var(--library-primary); }
+.library-header .library-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    width: 332px;
+    margin: 0;
+    padding: 0 12px;
+    border: 1px solid var(--library-border);
+    border-radius: 10px;
+    background: white;
+}
+.library-search img { display: block; width: 16px; height: 16px; flex: none; }
+.library-search input {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    color: var(--library-primary);
+    font: 400 14px/1.25 var(--library-font);
+}
+.library-search input::placeholder { color: var(--library-describe); }
+.library-search kbd { color: #9999a4; font: 400 13px Inter, sans-serif; white-space: nowrap; }
+.library-search:focus-within { outline: 2px solid var(--library-primary); outline-offset: 3px; }
+.library-header a:focus-visible { outline: 2px solid var(--library-primary); outline-offset: -4px; }
+
+/* Keep the existing small-screen accommodation; final responsive rules are pending. */
+@media (max-width: 1100px) {
+    header.library-header { padding-inline: 28px; }
+    .library-header .library-search { width: 270px; }
+}
+@media (max-width: 700px) {
+    header.library-header { padding-inline: 20px; gap: 12px; }
+    .library-header-left { gap: 12px; }
+    .library-nav .library-nav-item { padding-inline: 8px; }
+    .library-header .library-search { width: 40px; flex: none; padding-inline: 11px; }
+    .library-search input { position: absolute; width: 1px; opacity: 0; }
+    .library-search kbd { display: none; }
+    .library-header .library-search:focus-within { position: absolute; left: 20px; right: 20px; width: auto; }
+    .library-search:focus-within input { position: static; width: 100%; opacity: 1; }
+}

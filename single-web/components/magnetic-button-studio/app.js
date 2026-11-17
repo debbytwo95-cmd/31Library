@@ -100,7 +100,7 @@
     $('page-theme').setAttribute('aria-label',theme==='dark'?'切换为浅色页面':'切换为深色页面');
     try{localStorage.setItem('motion-page-theme',theme);}catch{}
   }
-  try{setPageTheme(localStorage.getItem('motion-page-theme')==='dark'?'dark':'light');}catch{setPageTheme('light');}
+  setPageTheme('light');
   $('page-theme').addEventListener('click',()=>setPageTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
   function setTab(code) {
     codeVisible=code;

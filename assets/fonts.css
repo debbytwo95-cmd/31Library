@@ -1,0 +1,36 @@
+/* Latin uses only Inter Regular / Semibold; Chinese uses Noto Sans SC. */
+@font-face {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../single-web/components/magnetic-button-studio/assets/fonts/inter-400.ttf") format("truetype");
+}
+@font-face {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500 700;
+    font-display: swap;
+    src: url("../single-web/components/magnetic-button-studio/assets/fonts/inter-600.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Noto Sans SC";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("fonts/noto-sans-sc-variable.ttf") format("truetype");
+}
+@font-face {
+    font-family: Cousine;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../single-web/components/magnetic-button-studio/assets/fonts/cousine-400.ttf") format("truetype");
+}
+@font-face {
+    font-family: Cousine;
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../single-web/components/magnetic-button-studio/assets/fonts/cousine-700.ttf") format("truetype");
+}

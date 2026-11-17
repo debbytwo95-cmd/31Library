@@ -1,0 +1,57 @@
+/* Embedded covers run the detail page's real component and default parameters. */
+html[data-cover]:not([data-cover-kind=lab]) body { margin: 0; overflow: hidden; min-height: 0; }
+html[data-cover]:not([data-cover-kind=lab]) body > :not(.main-shell):not(.icon-library),
+html[data-cover]:not([data-cover-kind=lab]) .main-shell > :not(main),
+html[data-cover]:not([data-cover-kind=lab]) main > :not(.workspace),
+html[data-cover]:not([data-cover-kind=lab]) .workspace > :not(.demo-column),
+html[data-cover]:not([data-cover-kind=lab]) .demo-column > :not(.stage),
+html[data-cover]:not([data-cover-kind=lab]) .stage > :not(.field),
+html[data-cover]:not([data-cover-kind=lab]) .center-mark,
+html[data-cover]:not([data-cover-kind=lab]) .attraction-ring { display: none !important; }
+html[data-cover]:not([data-cover-kind=lab]) .main-shell,
+html[data-cover]:not([data-cover-kind=lab]) main,
+html[data-cover]:not([data-cover-kind=lab]) .workspace,
+html[data-cover]:not([data-cover-kind=lab]) .demo-column {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    aspect-ratio: auto;
+}
+html[data-cover]:not([data-cover-kind=lab]) .stage {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: calc(var(--cover-component-height, 64px) + 160px);
+    min-height: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: #f7f7f8;
+}
+html[data-cover]:not([data-cover-kind=lab]) .field { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Lab covers keep only the effect, with no workbench or explanatory overlays. */
+html[data-cover-kind=lab] body { margin: 0; overflow: hidden; }
+html[data-cover-kind=lab] body > :not(main),
+html[data-cover-kind=lab] main > :not(.preview):not(.hero),
+html[data-cover-kind=lab] .footer-content,
+html[data-cover-kind=lab] .footer-bottom,
+html[data-cover-kind=lab] .reference,
+html[data-cover-kind=lab] .orbit,
+html[data-cover-kind=lab] .hero h1,
+html[data-cover-kind=lab] .fade,
+html[data-cover-kind=lab] .glass,
+html[data-cover-kind=lab] .caption { display: none !important; }
+html[data-cover-kind=lab] main,
+html[data-cover-kind=lab] .preview { display: block; width: 100%; max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; }
+html[data-cover-kind=lab] .preview { height: auto; aspect-ratio: 2 / 1; }
+html[data-cover-kind=lab] .preview .stage { position: relative; width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; border: 0; border-radius: 0; }
+html[data-cover-kind=lab] #light { position: absolute; inset: 0; width: 100%; height: 100%; }
+html[data-cover-kind=lab] body { --center: 50%; --size: 82vw; --linen: #f7f7f8; }
+html[data-cover-kind=lab] .hero { height: 100vw; max-height: 420px; min-height: 240px; }
+html[data-cover-kind=lab] .globe-position { max-width: 345px; max-height: 345px; }

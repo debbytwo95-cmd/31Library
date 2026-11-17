@@ -55,7 +55,7 @@
   }
   setColor(defaultColor);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let playing = !reduced, skeleton = false, time = 0, last = 0, scale = 1;
+  let playing = false, skeleton = false, time = 0, last = 0, scale = 1;
 
   function resize() {
     const box = canvas.getBoundingClientRect();
@@ -226,6 +226,12 @@
     document.querySelector('#state').textContent = playing ? '实时渲染 · Canvas 2D' : '已暂停 · Canvas 2D';
   }
   updatePlay();
+  if (document.documentElement.hasAttribute('data-cover')) {
+    const preview = document.querySelector('.preview');
+    preview.addEventListener('pointerenter', () => { playing = !reduced; updatePlay(); });
+    preview.addEventListener('pointerleave', () => { playing = false; time = 0; updatePlay(); });
+    window.addEventListener('blur', () => { playing = false; time = 0; updatePlay(); });
+  }
   playButton.onclick = () => { playing = !playing; updatePlay(); };
   for (const name of ['speed', 'weave', 'glow', 'curvature']) {
     document.querySelector('#' + name).oninput = event => {

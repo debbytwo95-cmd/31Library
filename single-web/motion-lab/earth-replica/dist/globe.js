@@ -28,7 +28,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0x00
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(config.fov,1,.1,1000);
 camera.position.set(0,0,config.cameraDistance);
 const controls=new OrbitControls(camera,renderer.domElement);
-Object.assign(controls,{enableDamping:true,dampingFactor:.05,enableZoom:false,enablePan:false,minDistance:12,maxDistance:30,autoRotate:!reduced.matches,autoRotateSpeed:config.introSpeed});
+Object.assign(controls,{enableDamping:true,dampingFactor:.05,enableZoom:false,enablePan:false,minDistance:12,maxDistance:30,autoRotate:false,autoRotateSpeed:config.introSpeed});
 controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.ROTATE};
 function makePoints(vertices,size,opacity){const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));const material=new THREE.PointsMaterial({color:config.color,size,transparent:true,opacity,sizeAttenuation:true,depthTest:true,depthWrite:false});const mesh=new THREE.Points(geometry,material);scene.add(mesh);return mesh;}
 const sea=[];
@@ -39,7 +39,7 @@ image.onload=()=>{const canvas=document.createElement('canvas');canvas.width=204
 image.onerror=()=>{document.querySelector('#error').hidden=false;};
 image.src=new URL('./assets/earth.jpg',import.meta.url).href;
 const arcs=new THREE.Group();scene.add(arcs);
-let selected=null,hovered=null,focusTarget=null,paused=reduced.matches,dragging=false,start=performance.now(),last=start,ringAngle=0,scrollSpeed=1,ringHover=null;
+let selected=null,hovered=null,focusTarget=null,paused=true,dragging=false,start=performance.now(),last=start,ringAngle=0,scrollSpeed=1,ringHover=null;
 const markerNodes=places.map(p=>{const node=document.createElement('button');node.className='marker';node.setAttribute('aria-label',`${p.country} · ${p.title}`);node.innerHTML='<span></span>';node.firstChild.style.background=gradient(p.index,places.length);node.addEventListener('pointerenter',()=>{hovered=p;showCaption(p);});node.addEventListener('pointerleave',()=>{hovered=null;showCaption(selected);});node.addEventListener('click',()=>select(p));overlay.append(node);return {node,position:point(p.lat,p.lon),place:p};});
 function clearArcs(){for(const line of [...arcs.children]){arcs.remove(line);line.geometry.dispose();line.material.dispose();}}
 function showCaption(p){caption.textContent=p?`${p.title}. ${p.country}.`:'';caption.classList.toggle('visible',!!p);}
@@ -52,13 +52,13 @@ const observer=new ResizeObserver(resize);observer.observe(globe);resize();
 controls.addEventListener('start',()=>{dragging=true;focusTarget=null;});controls.addEventListener('end',()=>{dragging=false;});
 window.addEventListener('scroll',()=>{scrollSpeed=Math.min(6,1+window.scrollY/600);},{passive:true});
 const pauseButton=document.querySelector('#pause');
-function updatePause(){pauseButton.setAttribute('aria-pressed',String(paused));pauseButton.innerHTML=paused?'继续旋转 <span>▷</span>':'暂停旋转 <span>Ⅱ</span>';}
+function updatePause(){pauseButton.setAttribute('aria-pressed',String(paused));pauseButton.innerHTML=paused?'开始旋转 <span>▷</span>':'暂停旋转 <span>Ⅱ</span>';}
 pauseButton.addEventListener('click',()=>{paused=!paused;updatePause();});updatePause();
 document.querySelector('#focus').addEventListener('click',e=>{const on=document.body.classList.toggle('focus-mode');e.currentTarget.setAttribute('aria-pressed',String(on));e.currentTarget.innerHTML=on?'完整效果 <span>↙</span>':'仅看地球 <span>↗</span>';resize();});
-document.querySelector('#restart').addEventListener('click',()=>{camera.position.set(0,0,18);controls.target.set(0,0,0);focusTarget=null;selected=null;ringHover=null;ringAngle=0;start=performance.now();clearArcs();markerNodes.forEach(m=>m.node.classList.remove('selected'));showCaption(null);document.querySelector('.globe-appear').getAnimations().forEach(a=>{a.currentTime=0;a.play();});document.querySelector('h1').getAnimations().forEach(a=>{a.currentTime=0;a.play();});controls.update();});
+document.querySelector('#restart').addEventListener('click',()=>{paused=false;updatePause();camera.position.set(0,0,18);controls.target.set(0,0,0);focusTarget=null;selected=null;ringHover=null;ringAngle=0;start=performance.now();clearArcs();markerNodes.forEach(m=>m.node.classList.remove('selected'));showCaption(null);document.querySelector('.globe-appear').getAnimations().forEach(a=>{a.currentTime=0;a.play();});document.querySelector('h1').getAnimations().forEach(a=>{a.currentTime=0;a.play();});controls.update();});
 window.globeStudy={config,landPoints:0,markerCount:places.length,getState:()=>({paused,ringAngle,camera:camera.position.toArray(),selected:selected?.country||null})};
 const projected=new THREE.Vector3(),viewDirection=new THREE.Vector3(),normal=new THREE.Vector3();
-function frame(now){requestAnimationFrame(frame);const delta=Math.min((now-last)/1000,.05);last=now;const elapsed=now-start;
+function frame(now){requestAnimationFrame(frame);const delta=Math.min((now-last)/1000,.05);last=now;const elapsed=paused?100000:now-start;
  const progress=Math.min(1,elapsed/config.introMs),ease=1-(1-progress)**3;
  controls.autoRotateSpeed=config.introSpeed+(config.idleSpeed-config.introSpeed)*ease;
  controls.autoRotate=!paused&&!dragging&&!focusTarget;
