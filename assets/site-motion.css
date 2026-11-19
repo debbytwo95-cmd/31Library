@@ -1,0 +1,55 @@
+/* Site chrome only. Component previews and reusable exports own their motion. */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
+
+    html:not([data-cover]) .library-header { view-transition-name: library-header; }
+    html:not([data-cover])::view-transition-group(root) { animation-duration: 280ms; }
+    html:not([data-cover])::view-transition-old(root) {
+        animation: library-page-leave 160ms ease-out both;
+    }
+    html:not([data-cover])::view-transition-new(root) {
+        animation: library-page-arrive 280ms cubic-bezier(.22, 1, .36, 1) both;
+    }
+    html:not([data-cover])::view-transition-group(library-header) { animation-duration: 180ms; }
+
+    html:not([data-cover]):not([data-library-motion-settled]) :is(
+        .library-header,
+        .main > aside,
+        .content > .title,
+        .content > .chips,
+        .content > .grid,
+        .main-shell > .topbar,
+        .main-shell main > .intro,
+        .main-shell main > .workspace,
+        .main-shell main > .principles,
+        .main-shell main > .integration-notes,
+        .main-shell main > .guide,
+        body > footer
+    ) {
+        animation: library-surface-arrive 380ms cubic-bezier(.22, 1, .36, 1) backwards;
+    }
+    html:not([data-cover]):not([data-library-motion-settled]) .library-header {
+        animation-name: library-chrome-arrive;
+        animation-duration: 280ms;
+    }
+    .content > .title, .main-shell main > .intro { animation-delay: 30ms; }
+    .content > .chips { animation-delay: 60ms; }
+    .content > .grid, .main-shell main > .workspace { animation-delay: 90ms; }
+    .main-shell main > :is(.principles, .integration-notes, .guide), body > footer { animation-delay: 130ms; }
+}
+
+@keyframes library-surface-arrive {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes library-chrome-arrive {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes library-page-leave {
+    to { opacity: 0; }
+}
+@keyframes library-page-arrive {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}

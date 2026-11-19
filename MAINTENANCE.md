@@ -23,9 +23,11 @@
 ```powershell
 npm --prefix single-web/components/magnetic-button-studio run check
 npm --prefix single-web/components/icon-button-studio run check
+npm --prefix single-web/components/curve-fill-button-studio run check
 node scripts/check.mjs
 node scripts/runtime.test.cjs
 node scripts/delivery.test.cjs
+node scripts/curve-fill.test.cjs
 ```
 
 启动 `node scripts/serve.mjs` 后，运行 `node scripts/check.mjs http://127.0.0.1:4173/31Library/`。核对真实地址及资源状态，避免依赖域名根路径。

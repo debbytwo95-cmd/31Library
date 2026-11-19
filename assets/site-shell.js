@@ -8,7 +8,7 @@
     const section = catalog && ['components', 'blocks', 'lab'].includes(requested) ? requested : script.dataset.section || 'components';
     if (cover) {
         const stage = document.getElementById('preview-panel') || document.querySelector('.preview, .hero');
-        const button = stage.querySelector('#mag, #icon-cta');
+        const button = stage.querySelector('#mag, #icon-cta, #curve-cta');
         const report = () => {
             if (button) stage.style.setProperty('--cover-component-height', `${button.offsetHeight}px`);
             parent.postMessage({ type: 'library:cover-size', height: stage.offsetHeight }, location.origin);

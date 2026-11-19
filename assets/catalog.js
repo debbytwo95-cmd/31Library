@@ -20,7 +20,7 @@ function save() {
   history.replaceState(null, '', url);
   try { sessionStorage.setItem(storageKey, JSON.stringify({ section, url: url.href, scroll: scrollY })); } catch {}
 }
-function render() {
+function render(animate = false) {
   const lab = section === 'lab';
   const sectionItems = entries.filter(item => item.section === section);
   const categories = section === 'components' ? [['buttons', '按钮'], ['text', '文字']] : [['all', lab ? '全部实验' : '全部区块']];
@@ -64,13 +64,14 @@ function render() {
   });
   if (!items.length) { const empty = document.createElement('div'); empty.className = 'empty'; empty.textContent = q || filter !== 'all' ? '没有找到匹配的条目，试试其他关键词或筛选。' : '这里的内容正在整理中。'; grid.append(empty); }
   save();
+  window.LibraryMotion?.updateCatalog(animate === true);
 }
 document.querySelector('.library-nav').addEventListener('click', event => {
   const link = event.target.closest('.library-nav-item'); if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-  event.preventDefault(); section = new URL(link.href).searchParams.get('section'); category = section === 'components' ? 'buttons' : 'all'; filter = 'all'; search.value = ''; render();
+  event.preventDefault(); section = new URL(link.href).searchParams.get('section'); category = section === 'components' ? 'buttons' : 'all'; filter = 'all'; search.value = ''; render(true);
 });
-sidebar.addEventListener('click', event => { const button = event.target.closest('[data-category]'); if (button) { category = button.dataset.category; filter = 'all'; render(); } });
-chips.addEventListener('click', event => { const button = event.target.closest('[data-filter]'); if (button) { filter = button.dataset.filter; render(); } });
+sidebar.addEventListener('click', event => { const button = event.target.closest('[data-category]'); if (button) { category = button.dataset.category; filter = 'all'; render(true); } });
+chips.addEventListener('click', event => { const button = event.target.closest('[data-filter]'); if (button) { filter = button.dataset.filter; render(true); } });
 search.addEventListener('input', render);
 search.addEventListener('keydown', event => { if (event.key === 'Escape') { search.value = ''; render(); search.blur(); } });
 window.addEventListener('pagehide', save);
