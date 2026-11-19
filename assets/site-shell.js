@@ -16,7 +16,9 @@
         new ResizeObserver(report).observe(button || stage);
         document.fonts.ready.then(report);
         report();
-        button?.addEventListener('click', () => parent.postMessage({ type: 'library:cover-open' }, location.origin));
+        stage.addEventListener('click', event => {
+            if (event.target.closest('button')) parent.postMessage({ type: 'library:cover-open' }, location.origin);
+        });
         document.addEventListener('pointerleave', () => button?.blur());
         return;
     }
@@ -60,7 +62,7 @@
         }
     }
     document.querySelectorAll('.breadcrumbs a').forEach(link => {
-        if (link.textContent.trim() === '组件' || link.textContent.trim() === '按钮') {
+        if (['组件', '按钮', '实验室', '区块'].includes(link.textContent.trim())) {
             const url = new URL(saved?.section === section && saved.url ? saved.url : sectionURL(section), location.href);
             if (url.origin === location.origin) { url.searchParams.set('restore', '1'); link.href = url.href; }
         }

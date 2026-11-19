@@ -1,313 +1,58 @@
-/* No textures: every light strand is an animated parametric curve. */
+/* Parameters and delivery for the shared light-band renderer. */
 (() => {
-  'use strict';
-  const canvas = document.querySelector('#light');
-  const ctx = canvas.getContext('2d', { alpha: false });
-  const core = document.createElement('canvas');
-  const ink = core.getContext('2d');
-  const W = 1440, H = W * 1268 / 2560;
-  const params = { speed: 1, weave: .65, glow: 1, spacing: 3.35, thickness: 2.1, curvature: 1, 'offset-x': 0, 'offset-y': 0 };
-  let widthMode = 'thin';
-  // Generate once per shuffle, never per frame, so each strand keeps its width.
-  let widthWeights = Array.from({ length: 18 }, () => .25 + Math.random() * 1.75);
-  function strandWidth(index) {
-    return params.thickness * (widthMode === 'random' ? widthWeights[index] : 1);
-  }
-  const defaultColor = '#ff5c37';
-  function toHsl(hex) {
-    const rgb = hex.match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16) / 255);
-    const [r, g, b] = rgb, max = Math.max(...rgb), min = Math.min(...rgb);
-    const delta = max - min, lightness = (max + min) / 2;
-    let hue = 0;
-    if (delta) {
-      if (max === r) hue = ((g - b) / delta + 6) % 6;
-      else if (max === g) hue = (b - r) / delta + 2;
-      else hue = (r - g) / delta + 4;
+  const $ = id => document.getElementById(id);
+  const defaults = { speed: 1, weave: .65, glow: 1, spacing: 3.35, thickness: 2.1, curvature: 1, 'offset-x': 0, 'offset-y': 0 };
+  const effect = mountFluidGlow($('light'));
+  let playing = false, delivery;
+  const initial = effect.getConfig();
+  function sync() {
+    const config = effect.getConfig();
+    for (const [key, value] of Object.entries(config.params)) {
+      $(key).value = value;
+      $(key).style.setProperty('--progress', 100 * (value - Number($(key).min)) / (Number($(key).max) - Number($(key).min)) + '%');
+      $(key + '-value').value = key === 'speed' ? value.toFixed(2) + '×' : ['weave','glow','curvature'].includes(key) ? Math.round(value * 100) + '%' : value.toFixed(key.startsWith('offset') ? 0 : 2) + ' px';
     }
-    return [hue * 60, delta ? delta / (1 - Math.abs(2 * lightness - 1)) : 0, lightness];
+    $('color').value = config.color; $('color-value').value = config.color.toUpperCase();
+    document.querySelectorAll('[data-color]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.color === config.color.toLowerCase())));
+    document.querySelectorAll('[data-width-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.widthMode === config.widthMode)));
+    $('shuffle-widths').hidden = config.widthMode !== 'random';
+    $('layers').setAttribute('aria-pressed', String(config.skeleton)); $('layers').textContent = config.skeleton ? '恢复辉光' : '拆解光轨';
+    $('play').textContent = playing ? '暂停光效' : '播放光效'; $('play').setAttribute('aria-pressed', String(playing));
+    $('state').textContent = playing ? '实时渲染 · Canvas 2D' : '已暂停 · Canvas 2D';
+    delivery?.refresh();
   }
-  // Shift the original palette as a family, preserving its hot, near-white core.
-  const anchor = toHsl(defaultColor);
-  let palette;
-  function setColor(hex) {
-    const chosen = toHsl(hex);
-    const tint = (source, alpha = 1) => {
-      const [h, s, l] = toHsl(source);
-      const hue = (h + chosen[0] - anchor[0] + 360) % 360;
-      const lightness = Math.max(0, Math.min(1, l + (chosen[2] - anchor[2]) * .35));
-      return `hsla(${hue},${s * chosen[1] * 100}%,${lightness * 100}%,${alpha})`;
-    };
-    palette = {
-      heat: alpha => tint('#ffeece', alpha),
-      ghost: alpha => tint('#7d4536', alpha),
-      strand: alpha => tint('#ffdbb1', alpha),
-      packet: alpha => tint('#fff5d8', alpha),
-      haze: [tint('#733c2d', .13), tint('#644034', .09)],
-      bloom: ['#ef3c22', '#ff5c37', '#ff9b64'].map(color => tint(color)),
-      dust: alpha => tint('#ffb077', alpha),
-      wireHue: chosen[0]
-    };
-    document.querySelector('#color').value = hex;
-    document.querySelector('#color-value').value = hex.toUpperCase();
-    document.querySelectorAll('[data-color]').forEach(button => {
-      button.setAttribute('aria-pressed', String(button.dataset.color === hex.toLowerCase()));
-    });
+  for (const key of Object.keys(defaults)) $(key).addEventListener('input', event => { effect.update({ params: { [key]: Number(event.target.value) } }); sync(); });
+  $('color').addEventListener('input', event => { effect.update({ color: event.target.value }); sync(); });
+  document.querySelectorAll('[data-color]').forEach(button => button.addEventListener('click', () => { effect.update({ color: button.dataset.color }); sync(); }));
+  $('play').addEventListener('click', () => { playing = !playing; effect.play(playing); sync(); });
+  $('layers').addEventListener('click', () => { effect.update({ skeleton: !effect.getConfig().skeleton }); sync(); });
+  $('center-flow').addEventListener('click', () => { effect.update({ params: { 'offset-x': 0, 'offset-y': 0 } }); sync(); });
+  $('shuffle-widths').addEventListener('click', () => { effect.update({ widthWeights: Array.from({length:18},()=>.25+Math.random()*1.75) }); sync(); });
+  document.querySelectorAll('[data-width-mode]').forEach(button => button.addEventListener('click', () => {
+    const widthMode = button.dataset.widthMode; effect.update({ widthMode, params: { thickness: {thick:5,thin:2.1,random:3}[widthMode] } }); sync();
+  }));
+  $('reset').addEventListener('click', () => { playing = false; effect.reset(); effect.update(initial); sync(); });
+  const cover = document.documentElement.hasAttribute('data-cover');
+  if (cover) {
+    const preview = $('preview-panel');
+    preview.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') effect.play(true); });
+    preview.addEventListener('pointerleave', () => effect.reset());
+    window.addEventListener('blur', () => effect.reset());
   }
-  setColor(defaultColor);
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let playing = false, skeleton = false, time = 0, last = 0, scale = 1;
-
-  function resize() {
-    const box = canvas.getBoundingClientRect();
-    const dpr = Math.min(devicePixelRatio || 1, 1.75);
-    canvas.width = Math.round(box.width * dpr);
-    canvas.height = Math.round(box.height * dpr);
-    scale = canvas.width / W;
-    core.width = canvas.width;
-    core.height = canvas.height;
-  }
-  new ResizeObserver(resize).observe(canvas);
-  resize();
-
-  function arcBend(u, coefficient = 88) {
-    return coefficient * params.curvature * u * u;
-  }
-
-  // An arched carrier + traveling waves. The edge envelope preserves a calm center.
-  function point(u, strand, t) {
-    const edge = Math.pow(Math.abs(u), 1.8);
-    const phase = t * 1.7 - u * 9 + strand * .72;
-    const envelope = (3 + 28 * edge) * params.weave;
-    return [W * (.5 + .6 * u),
-      188 + arcBend(u) + (strand - 8.5) * params.spacing + 1.675
-      + Math.sin(phase) * envelope
-      + Math.sin(phase * .54 + strand * .6) * envelope * .21];
-  }
-
-  function drawStrands(t) {
-    ink.setTransform(1, 0, 0, 1, 0, 0);
-    ink.clearRect(0, 0, core.width, core.height);
-    ink.setTransform(scale, 0, 0, scale, params['offset-x'] * scale, params['offset-y'] * scale);
-    ink.globalCompositeOperation = 'lighter';
-    ink.lineCap = 'round';
-    // Overlapping filaments merge into a hot, continuous core in the middle.
-    if (!skeleton) {
-      const heat = ink.createLinearGradient(0, 0, W, 0);
-      for (const [stop, alpha] of [[0, 0], [.15, .15], [.32, .95], [.5, 1], [.68, .95], [.85, .15], [1, 0]]) {
-        heat.addColorStop(stop, palette.heat(alpha));
-      }
-      ink.strokeStyle = heat;
-      ink.lineWidth = 12 * params.thickness / 2.1;
-      ink.filter = `blur(${3 * scale}px)`;
-      ink.beginPath();
-      for (let k = 0; k <= 180; k++) {
-        const u = -1.1 + k / 180 * 2.2;
-        const x = W * (.5 + .6 * u), y = 190 + arcBend(u);
-        k ? ink.lineTo(x, y) : ink.moveTo(x, y);
-      }
-      ink.stroke();
-      ink.filter = 'none';
+  delivery = mountLabWorkbench({
+    id: 'fluid-glow', title: 'Fluid Glow',
+    async bundle() {
+      const snapshot = effect.getConfig();
+      return {
+        html: '<div class="library-fluid-glow"><canvas aria-label="弧形光带"></canvas><button type="button" aria-pressed="false">播放光效</button></div>',
+        css: '.library-fluid-glow{position:relative;overflow:hidden;background:#030303;border-radius:20px}.library-fluid-glow canvas{display:block;width:100%;aspect-ratio:2560/1268}.library-fluid-glow button{position:absolute;right:20px;bottom:20px;padding:8px 16px;border:1px solid #777;border-radius:999px;background:#18181c;color:#fff;cursor:pointer}.library-fluid-glow button:focus-visible{outline:2px solid #fff;outline-offset:4px}',
+        js: '(() => {\nconst mount = ' + mountFluidGlow.toString() + ';\ndocument.querySelectorAll(".library-fluid-glow").forEach(root=>{root.libraryComponent?.destroy();const effect=mount(root.querySelector("canvas"),'+JSON.stringify(snapshot)+');let playing=false;const button=root.querySelector("button");const click=()=>{playing=!playing;effect.play(playing);button.textContent=playing?"暂停光效":"播放光效";button.setAttribute("aria-pressed",String(playing));};button.addEventListener("click",click);root.libraryComponent={...effect,reset(){playing=false;effect.reset();button.textContent="播放光效";button.setAttribute("aria-pressed","false");},destroy(){button.removeEventListener("click",click);effect.destroy();}};});\n})();'
+      };
+    },
+    prompt() {
+      const config = effect.getConfig();
+      return '实现 Fluid Glow · 流体光效。原生 Canvas 2D，无第三方依赖、贴图或网络资源。18 根参数曲线形成向上拱起的光带，沿弧线叠加相位波动，离屏画布合成三层辉光与移动亮度脉冲。设计坐标 1440×713.25，按容器等比缩放。当前参数：流速 '+config.params.speed+'×，交织 '+config.params.weave*100+'%，辉光 '+config.params.glow*100+'%，光线间距 '+config.params.spacing+' px，基础粗细 '+config.params.thickness+' px，弯曲度 '+config.params.curvature*100+'%，水平位移 '+config.params['offset-x']+' px，垂直位移 '+config.params['offset-y']+' px，颜色 '+config.color+'，粗细模式 '+config.widthMode+'，拆解光轨 '+config.skeleton+'。随机宽度权重 '+JSON.stringify(config.widthWeights)+'。初始静止，点击播放后才运动；调整参数实时重绘，不自动播放。重置暂停并恢复静态；prefers-reduced-motion 降低运动速度。按钮支持鼠标、触屏及键盘 Enter/空格；样式限定容器，多实例独立，移除前调用 root.libraryComponent.destroy()。不包含站点导航、调参面板或虚拟光标，精确效果以组件代码为准。';
     }
-    // A faint dome of residual streaks, visible above the main light band.
-    if (!skeleton) {
-      for (let j = 0; j < 12; j++) {
-        ink.beginPath();
-        for (let k = 0; k <= 120; k++) {
-          const u = -1.1 + k / 120 * 2.2;
-          const x = W * (.5 + .6 * u);
-          const y = 40 + j * 9 + arcBend(u, 125) + Math.sin(u * 6 + t * .45 + j) * 2;
-          k ? ink.lineTo(x, y) : ink.moveTo(x, y);
-        }
-        ink.strokeStyle = palette.ghost(.013 + j * .0015);
-        ink.lineWidth = 2;
-        ink.stroke();
-      }
-    }
-    for (let i = 0; i < 18; i++) {
-      const gradient = ink.createLinearGradient(0, 0, W, 0);
-      const color = alpha => skeleton ? `hsla(${palette.wireHue + i * 4},95%,70%,${alpha})` : palette.strand(alpha);
-      gradient.addColorStop(0, color(.07));
-      gradient.addColorStop(.12, color(.52));
-      gradient.addColorStop(.35, color(.92));
-      gradient.addColorStop(.65, color(.92));
-      gradient.addColorStop(.88, color(.52));
-      gradient.addColorStop(1, color(.07));
-      ink.strokeStyle = gradient;
-      ink.lineWidth = strandWidth(i);
-      ink.beginPath();
-      for (let k = 0; k <= 220; k++) {
-        const [x, y] = point(-1.08 + k / 220 * 2.16, i, t);
-        k ? ink.lineTo(x, y) : ink.moveTo(x, y);
-      }
-      ink.stroke();
-      // Short luminous packets travel across the otherwise continuous strands.
-      if (!skeleton) {
-        for (let packet = 0; packet < 2; packet++) {
-          const head = ((t * .12 + i * .073 + packet * .5) % 1) * 2.4 - 1.2;
-          for (let n = 0; n < 12; n++) {
-            const u = head - n * .013;
-            if (Math.abs(u) > 1.1) continue;
-            const a = point(u, i, t), b = point(u - .014, i, t);
-            const intensity = (1 - n / 12) * .6;
-            ink.strokeStyle = palette.packet(intensity);
-            ink.lineWidth = strandWidth(i);
-            ink.beginPath(); ink.moveTo(...a); ink.lineTo(...b); ink.stroke();
-          }
-        }
-      }
-    }
-  }
-
-  function render(t) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1;
-    ctx.filter = 'none';
-    ctx.fillStyle = '#030303';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    if (!skeleton) {
-      ctx.save();
-      ctx.setTransform(scale, 0, 0, scale * .24, params['offset-x'] * scale, params['offset-y'] * scale);
-      const haze = ctx.createRadialGradient(W / 2, 510, 70, W / 2, 510, 760);
-      haze.addColorStop(0, palette.haze[0]);
-      haze.addColorStop(.66, palette.haze[1]);
-      haze.addColorStop(1, 'rgba(30,20,15,0)');
-      ctx.fillStyle = haze;
-      ctx.fillRect(0, 0, W, H / .24);
-      ctx.restore();
-    }
-    drawStrands(t);
-    ctx.globalCompositeOperation = 'lighter';
-    if (!skeleton && params.glow > 0) {
-      // Wide red bloom, tighter orange bloom, then the unblurred warm-white core.
-      for (const [blur, opacity, color] of [[30, .62, palette.bloom[0]], [11, .9, palette.bloom[1]], [3.5, .95, palette.bloom[2]]]) {
-        ctx.save();
-        ctx.filter = `blur(${blur * scale}px)`;
-        ctx.globalAlpha = opacity * params.glow;
-        // Tint a silhouette using a reusable temporary canvas to retain antialiasing.
-        tintCtx.setTransform(1, 0, 0, 1, 0, 0);
-        tintCtx.globalCompositeOperation = 'source-over';
-        tintCtx.clearRect(0, 0, tint.width, tint.height);
-        tintCtx.drawImage(core, 0, 0);
-        tintCtx.globalCompositeOperation = 'source-in';
-        tintCtx.fillStyle = color;
-        tintCtx.fillRect(0, 0, tint.width, tint.height);
-        for (let bloom = 0; bloom < 3; bloom++) ctx.drawImage(tint, 0, 0);
-        ctx.restore();
-      }
-    }
-    ctx.globalAlpha = 1;
-    ctx.filter = 'none';
-    ctx.drawImage(core, 0, 0);
-    // Subtle drifting dust. Fixed formulas avoid frame-to-frame random flicker.
-    if (!skeleton) {
-      ctx.setTransform(scale, 0, 0, scale, params['offset-x'] * scale, params['offset-y'] * scale);
-      for (let i = 0; i < 17; i++) {
-        const x = (i * 319.7 + t * (4 + i % 3)) % W;
-        const y = 255 + Math.sin(i * 17.1) * 72 + Math.sin(t * .3 + i) * 7;
-        ctx.fillStyle = palette.dust(.07 + .12 * Math.pow(Math.sin(t + i * 8), 8));
-        ctx.fillRect(x, y, i % 4 === 0 ? 2 : 1, 1);
-      }
-    }
-  }
-  const tint = document.createElement('canvas'), tintCtx = tint.getContext('2d');
-  function frame(now) {
-    if (tint.width !== core.width || tint.height !== core.height) { tint.width = core.width; tint.height = core.height; }
-    if (last && playing && !document.hidden) time += Math.min((now - last) / 1000, .05) * params.speed;
-    last = now;
-    render(time);
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-  const playButton = document.querySelector('#play');
-  function updatePlay() {
-    playButton.textContent = playing ? 'Ⅱ' : '▶';
-    playButton.setAttribute('aria-label', playing ? '暂停动画' : '播放动画');
-    document.querySelector('#state').textContent = playing ? '实时渲染 · Canvas 2D' : '已暂停 · Canvas 2D';
-  }
-  updatePlay();
-  if (document.documentElement.hasAttribute('data-cover')) {
-    const preview = document.querySelector('.preview');
-    preview.addEventListener('pointerenter', () => { playing = !reduced; updatePlay(); });
-    preview.addEventListener('pointerleave', () => { playing = false; time = 0; updatePlay(); });
-    window.addEventListener('blur', () => { playing = false; time = 0; updatePlay(); });
-  }
-  playButton.onclick = () => { playing = !playing; updatePlay(); };
-  for (const name of ['speed', 'weave', 'glow', 'curvature']) {
-    document.querySelector('#' + name).oninput = event => {
-      params[name] = Number(event.target.value);
-      document.querySelector('#' + name + '-value').value = name === 'speed' ? params[name].toFixed(2) + '×' : Math.round(params[name] * 100) + '%';
-    };
-  }
-  document.querySelector('#spacing').oninput = event => {
-    params.spacing = Number(event.target.value);
-    document.querySelector('#spacing-value').value = `${params.spacing.toFixed(2)} px`;
-  };
-  for (const axis of ['offset-x', 'offset-y']) {
-    document.querySelector('#' + axis).oninput = event => {
-      params[axis] = Number(event.target.value);
-      document.querySelector('#' + axis + '-value').value = `${params[axis] > 0 ? '+' : ''}${params[axis]} px`;
-      // Drawing transforms apply the same design-space displacement to all effects.
-    };
-  }
-  document.querySelector('#center-flow').onclick = () => {
-    for (const axis of ['offset-x', 'offset-y']) {
-      const input = document.querySelector('#' + axis);
-      input.value = 0;
-      input.dispatchEvent(new Event('input'));
-    }
-  };
-  document.querySelector('#thickness').oninput = event => {
-    params.thickness = Number(event.target.value);
-    document.querySelector('#thickness-value').value = `${params.thickness.toFixed(2)} px`;
-  };
-  function selectWidthMode(mode) {
-    widthMode = mode;
-    document.querySelectorAll('[data-width-mode]').forEach(button => {
-      button.setAttribute('aria-pressed', String(button.dataset.widthMode === mode));
-    });
-    document.querySelector('#shuffle-widths').hidden = mode !== 'random';
-  }
-  document.querySelectorAll('[data-width-mode]').forEach(button => {
-    button.onclick = () => {
-      selectWidthMode(button.dataset.widthMode);
-      const input = document.querySelector('#thickness');
-      input.value = { thick: 5, thin: 2.1, random: 3 }[widthMode];
-      input.dispatchEvent(new Event('input'));
-    };
   });
-  document.querySelector('#shuffle-widths').onclick = () => {
-    widthWeights = widthWeights.map(() => .25 + Math.random() * 1.75);
-  };
-  document.querySelector('#layers').onclick = event => {
-    skeleton = !skeleton;
-    event.currentTarget.setAttribute('aria-pressed', String(skeleton));
-    event.currentTarget.textContent = skeleton ? '恢复辉光' : '拆解光轨';
-  };
-  document.querySelector('#reset').onclick = () => {
-    setColor(defaultColor);
-    selectWidthMode('thin');
-    for (const [key, value] of Object.entries({ speed: 1, weave: .65, glow: 1, spacing: 3.35, thickness: 2.1, curvature: 1, 'offset-x': 0, 'offset-y': 0 })) {
-      const input = document.querySelector('#' + key);
-      input.value = value; input.dispatchEvent(new Event('input'));
-    }
-    time = 0;
-  };
-  document.querySelector('#color').addEventListener('input', event => setColor(event.target.value));
-  document.querySelectorAll('[data-color]').forEach(button => {
-    button.onclick = () => setColor(button.dataset.color);
-  });
-  document.querySelector('#compare').onclick = event => {
-    const reference = document.querySelector('.reference');
-    reference.hidden = !reference.hidden;
-    document.querySelector('.preview').classList.toggle('comparing', !reference.hidden);
-    event.currentTarget.setAttribute('aria-pressed', String(!reference.hidden));
-    const video = reference.querySelector('video');
-    if (!reference.hidden) { if (playing) video.play().catch(() => {}); }
-    else video.pause();
-  };
-  document.querySelector('#newsletter').onsubmit = event => {
-    event.preventDefault();
-    document.querySelector('#form-note').textContent = '演示模式：邮箱未发送或保存。';
-  };
+  sync();
 })();

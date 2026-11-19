@@ -1,40 +1,39 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <link rel="icon" type="image/png" sizes="46x46" href="../../../../assets/favicon.png">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#eeeeee">
-  <meta name="description" content="Connected Earth 头部点阵地球效果复刻：透明粒子大陆、缓慢自转、录音标记与环绕景深卡片。">
-  <title>Connected Earth · Globe Study</title>
-  <link rel="stylesheet" href="./style.css">
-  <script type="importmap">{"imports":{"three":"./assets/three.module.js","three/addons/controls/OrbitControls.js":"./assets/OrbitControls.js"}}</script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Connected Earth — 31Library</title><meta name="description" content="点阵大陆、地点标记与环绕卡片，拖拽地球探索不同的地点。">
+  <link rel="icon" href="../../../../assets/favicon.png">
   <script src="../../../../assets/cover.js" data-kind="lab"></script>
+  <link rel="stylesheet" href="../../../../single-web/components/magnetic-button-studio/styles.css">
+  <link rel="stylesheet" href="effect.css">
   <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/lab-workbench.css">
   <link rel="stylesheet" href="../../../../assets/cover.css">
 </head>
 <body>
-  <header>
-    <div class="brand"><span>Connected Earth <span aria-hidden="true">✳</span></span><p>Language separates us.<br>Sound connects us.</p></div>
-    <nav aria-label="效果控制">
-      <button id="focus" aria-pressed="false">仅看地球 <span>↗</span></button>
-      <button id="pause" aria-pressed="false">暂停旋转 <span>Ⅱ</span></button>
-      <button id="restart">重新播放 <span>↻</span></button>
-    </nav>
-  </header>
-  <main>
-    <section class="hero" aria-label="点阵地球与环绕卡片">
-      <div class="orbit" id="orbit" aria-label="地点卡片"></div>
-      <div class="glass" aria-hidden="true"></div>
-      <div class="globe-position"><div class="globe-appear"><div id="globe" aria-label="可拖动旋转的三维点阵地球"><div id="markers"></div></div></div></div>
-      <div class="caption" id="caption" aria-live="polite"></div>
-      <h1>Earth, Recorded</h1>
-      <div class="fade" aria-hidden="true"></div>
-    </section>
-    <footer><span>DRAG TO EXPLORE · HOVER TO CONNECT</span><a href="https://www.connected.earth/" target="_blank" rel="noreferrer">参考：connected.earth ↗</a><span>地球视觉复刻 / 地点为演示数据</span></footer>
-  </main>
-  <div id="error" role="alert" hidden>地球加载失败，请使用支持 WebGL 的现代浏览器刷新页面。</div>
-  <script type="module" src="./globe.js"></script>
+  <header class="site-header"></header>
+  <div class="main-shell">
+    <header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../../../../index.html?section=lab">实验室</a><span>/</span><strong>Connected Earth</strong></nav></header>
+    <main>
+      <section class="intro"><div class="eyebrow"><span class="tag">技术实现 · Three.js</span></div><div class="title-row"><h1>Connected Earth</h1></div><p class="intro-copy">点阵大陆、地点标记与环绕卡片，拖拽地球探索不同的地点。</p></section>
+      <section class="workspace lab-workspace no-settings" aria-label="Connected Earth 工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1">代码</button></div><button class="toolbar-copy" id="copy-code">复制组件代码</button></div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab"><div class="field"><div class="library-earth"><header><div class="brand"><span>Connected Earth</span><p>Language separates us.<br>Sound connects us.</p></div><nav aria-label="地球交互"><button type="button" data-earth="focus" aria-pressed="false">仅看地球</button><button type="button" data-earth="pause" aria-pressed="true">开始旋转</button><button type="button" data-earth="restart">重置视角</button></nav></header><section class="hero" aria-label="点阵地球与环绕卡片"><div class="orbit" data-earth="orbit" aria-label="地点卡片"></div><div class="glass" aria-hidden="true"></div><div class="globe-position"><div class="library-earth-globe-appear"><div data-earth="globe"><div data-earth="markers"></div></div></div></div><div class="caption" data-earth="caption" aria-live="polite"></div><h1>Earth, Recorded</h1><div class="fade" aria-hidden="true"></div></section><div data-earth="error" role="alert" hidden>地球加载失败，请通过 HTTP 服务在支持 WebGL 的浏览器中打开。</div></div></div></div>
+          <div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading">Connected Earth · HTML / CSS / JavaScript</div><pre><code id="source-code"></code></pre><div class="code-bottom">代码同步当前参数</div></div>
+          <div class="demo-caption">初始静止 · 鼠标或触屏拖拽 · 地球聚焦后可用方向键旋转</div>
+        </div>
+
+      </section>
+      <section class="integration-notes"><h2>原理与使用</h2><p>使用 Three.js、OrbitControls 与本地地图采样生成点阵地球。选择地点标记可观察关联弧线，悬停或聚焦卡片会朝向对应地点。点击“开始旋转”后才连续旋转，“重置视角”恢复默认视角并暂停。</p><p>下载源码包包含 Three.js、OrbitControls、地图、字体与许可文件。解压后在该文件夹运行 <code>node serve.cjs</code>，浏览器打开 <code>http://localhost:8000</code>，需要 Node.js 和支持 WebGL 的浏览器。也可使用任意静态 HTTP 服务。复制组件代码时，先从源码包将 <code>effect.js</code> 和 <code>assets/</code> 放到接入页同级；代码中的导入路径可随项目调整。</p><p>多个完整容器可独立初始化；移除前调用 <code>root.libraryComponent.destroy()</code> 清理事件、动画和 WebGL 资源。默认不自动播放，系统减少动态效果时降低旋转速度并减少缩放；Tab 访问控件，Enter／空格激活，地球方向键旋转。地点是演示数据，不包含音频播放。</p><p>视觉参考：<a href="https://www.connected.earth/" target="_blank" rel="noreferrer">connected.earth</a>。<a href="./assets/THREE-LICENSE.txt">Three.js 许可</a>随源码包提供。</p></section>
+      <section class="guide"><div><h2>带进你的项目</h2><p>复制组件代码接入已有页面，下载示例验证效果；提示词用于辅助改编，精确效果以代码为准。</p></div><button id="download" class="download-button">下载示例</button></section>
+    </main>
+  </div>
+  <footer class="site-footer"><span>31Library · 个人 UI 资源库</span></footer>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="../../../../assets/lab-workbench.js"></script>
+  <script type="module" src="globe.js"></script>
   <script src="../../../../assets/site-shell.js" data-section="lab"></script>
 </body>
 </html>

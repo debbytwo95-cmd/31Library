@@ -9,6 +9,7 @@
   <title>Magnetic Button — 31Library</title>
   <script src="../../../assets/cover.js"></script>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="button.css">
   <link rel="stylesheet" href="../../../assets/site.css">
   <link rel="stylesheet" href="../../../assets/cover.css">
 </head>
@@ -37,19 +38,19 @@
     <header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../index.html">组件</a><span class="slash">/</span><a href="#playground">按钮</a><span class="slash">/</span><strong>Magnetic Button</strong></nav><span class="topbar-note"><span class="tiny-dot"></span> A little motion goes a long way.</span></header>
     <main>
       <section class="intro">
-        <div class="eyebrow"><span>INTERACTION STUDY — 001</span><span class="tag">鼠标交互</span></div>
+        <div class="eyebrow"><span>INTERACTION STUDY — 001</span><span class="tag">鼠标交互 · hover / press</span></div>
         <div class="title-row"><h1>Magnetic Button<span class="title-period">.</span></h1></div>
         <p class="intro-copy">一点引力，让交互更有吸引力。<span>靠近、跟随、轻轻回弹，探索一个有触感的按钮。</span></p>
       </section>
       <section id="playground" class="workspace" aria-label="磁吸按钮交互工作台">
         <div class="demo-column">
-          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="design-icon" src="assets/9f302.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="design-icon" src="assets/ce072.svg" width="16" height="16" alt="">代码</button></div><button class="toolbar-copy" id="copy-code"><img class="design-icon" src="assets/67996.svg" width="16" height="16" alt=""><span>复制代码</span></button></div>
+          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="design-icon" src="assets/9f302.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="design-icon" src="assets/ce072.svg" width="16" height="16" alt="">代码</button></div><button class="toolbar-copy" id="copy-code"><img class="design-icon" src="assets/67996.svg" width="16" height="16" alt=""><span>复制组件代码</span></button></div>
           <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
             <div class="stage-top"><span class="live-label"><span></span> LIVE PLAYGROUND</span><div class="stage-themes" role="group" aria-label="演示区主题"><button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="design-icon" src="assets/0e0b4.svg" width="14" height="14" alt=""></button><button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="design-icon" src="assets/a05de.svg" width="14" height="14" alt=""></button></div></div>
-            <div class="field" id="field"><div class="center-mark" aria-hidden="true"></div><div class="attraction-ring" id="attraction-ring" aria-hidden="true"><span id="radius-label">r = 130px</span></div><button class="mag" id="mag"><span class="mag-label" id="mag-label"><span id="button-text">Get started</span><img class="design-icon" src="assets/1a2f3.svg" width="18" height="18" alt=""></span></button><span class="click-ripple" id="click-ripple" aria-hidden="true"></span></div>
+            <div class="field library-magnetic-field" id="field"><div class="center-mark" aria-hidden="true"></div><div class="attraction-ring" id="attraction-ring" aria-hidden="true"><span id="radius-label">r = 130px</span></div><button class="mag library-magnetic-button" type="button" id="mag"><span class="mag-label library-magnetic-label" id="mag-label"><span id="button-text">Get started</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button><span class="click-ripple library-magnetic-ripple" id="click-ripple" aria-hidden="true"></span></div>
             <div class="stage-bottom"><span><img class="design-icon" src="assets/d8da9.svg" width="13" height="13" alt=""><span id="stage-hint">将鼠标移至按钮附近，感受引力</span></span><button class="slow-control" id="slow-control" aria-pressed="false"><span class="slow-dot"></span><span id="speed-label">1×</span> 播放速度</button></div>
           </div>
-          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading"><span><i></i> magnetic-button.html</span><span>HTML · CSS · JavaScript</span></div><pre><code id="source-code"></code></pre><div class="code-bottom">参数与右侧设置实时同步<span>无依赖 · 单文件</span></div></div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading"><span><i></i> magnetic-button.html</span><span>HTML · CSS · JavaScript</span></div><pre><code id="source-code"></code></pre><div class="code-bottom">参数与右侧设置实时同步<span>原生实现 · 字体内嵌</span></div></div>
           <div class="demo-caption"><span><span class="caption-dot"></span> 原生 JavaScript · 弹簧物理动画</span><span>MOVE A LITTLE. FEEL THE DIFFERENCE.</span></div>
         </div>
         <aside class="settings" aria-label="交互参数">
@@ -69,11 +70,13 @@
         <article><div class="principle-top"><span>02 / FOLLOW</span><img class="principle-art design-icon" src="assets/edea8.svg" width="55" height="30" alt=""></div><h3>跟随，多一点层次</h3><p>按钮与文字以不同幅度追随光标，<br>在平面里，创造细微的空间感。</p></article>
         <article><div class="principle-top"><span>03 / RELEASE</span><img class="principle-art design-icon" src="assets/4cbf7.svg" width="55" height="30" alt=""></div><h3>离开，弹性回到原点</h3><p>弹簧模拟带来柔和的回弹与停顿，<br>每次交互，都有一个轻盈的落点。</p></article>
       </div></section>
-      <section class="guide" id="guide"><div class="guide-icon"><img class="design-icon" src="assets/a611f.svg" width="22" height="22" alt=""></div><div><h2>把这份引力，带进你的作品</h2><p>调整到喜欢的手感，复制代码或下载 HTML，即可在浏览器中独立运行。</p></div><button id="download" class="download-button">下载 HTML<img class="design-icon" src="assets/88122.svg" width="13" height="13" alt=""></button></section>
+      <section class="guide" id="guide"><div class="guide-icon"><img class="design-icon" src="assets/a611f.svg" width="22" height="22" alt=""></div><div><h2>把这份引力，带进你的作品</h2><p>复制组件代码接入已有页面，或下载可直接打开的示例。提示词可用于辅助改编，精确效果以代码为准。</p></div><button id="download" class="download-button">下载示例<img class="design-icon" src="assets/88122.svg" width="13" height="13" alt=""></button></section>
     </main>
   </div>
   <footer class="site-footer"><span>31Library · 个人 UI 资源库 · V1.1</span><span>Explore → Preview → Experiment → Refine → Reuse</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"><svg><use href="#i-check"/></svg><span></span></div>
+  <script src="../../../assets/button-runtime.js"></script>
+  <script src="../../../assets/delivery.js"></script>
   <script src="app.js"></script>
   <script src="../../../assets/site-shell.js" data-section="components"></script>
 </body>

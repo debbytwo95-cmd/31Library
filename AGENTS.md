@@ -22,7 +22,7 @@ npm --prefix single-web/components/icon-button-studio run check
 node single-web/motion-lab/earth-replica/serve.cjs
 ```
 
-`live-server` 用于预览整个资源库，需单独安装。组件工作台命令需要 Node.js，无需安装项目依赖：`dev` 启动本地服务，`check` 检查 `app.js` 和 `shell.js` 的语法。地球实验服务以 `dist/` 为根目录。包含 ES 模块的页面应通过 HTTP 访问。
+`live-server` 用于预览整个资源库，需单独安装；也可运行无需依赖的 `node scripts/serve.mjs`。组件工作台命令需要 Node.js，无需安装项目依赖：`dev` 启动本地服务，`check` 检查项目及共用脚本语法。各本地服务以仓库为根目录，并显示对应项目的入口地址，以便访问共用资源。包含 ES 模块的页面应通过 HTTP 访问。
 
 ## 代码风格与命名规范
 
@@ -32,7 +32,7 @@ node single-web/motion-lab/earth-replica/serve.cjs
 
 ## 测试与验证要求
 
-目前未配置自动化测试框架或覆盖率门槛。运行相关语法检查，并手动验证索引导航、搜索、筛选、响应式布局、指针与键盘交互、参数控制，以及复制或下载的 HTML。修复问题时附上复现与验证步骤。
+目前未配置外部测试框架或覆盖率门槛。运行相关语法检查、`node scripts/check.mjs` 和 `node scripts/runtime.test.cjs`，并手动验证索引导航、搜索、筛选、响应式布局、指针与键盘交互、参数控制，以及代码、提示词和下载示例。检查流程见 `MAINTENANCE.md`；脚本不能替代浏览器排版或 WebGL 验证。修复问题时附上复现与验证步骤。
 
 ## 交互、动效与封面规则
 

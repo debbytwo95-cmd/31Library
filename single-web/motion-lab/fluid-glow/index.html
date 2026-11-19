@@ -1,79 +1,50 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <link rel="icon" type="image/png" sizes="46x46" href="../../../assets/favicon.png">
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>光带流动 · uiuxarih 复刻</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fluid Glow — 31Library</title><meta name="description" content="弧线骨架、相位波动与三层辉光，调节属于你的流体光带。">
+  <link rel="icon" href="../../../assets/favicon.png">
   <script src="../../../assets/cover.js" data-kind="lab"></script>
+  <link rel="stylesheet" href="../../../single-web/components/magnetic-button-studio/styles.css">
+  <style>.library-fluid-preview{position:relative;background:#030303;aspect-ratio:2560/1268}.library-fluid-preview canvas{position:absolute;inset:0;width:100%;height:100%}</style>
   <link rel="stylesheet" href="../../../assets/site.css">
+  <link rel="stylesheet" href="../../../assets/lab-workbench.css">
   <link rel="stylesheet" href="../../../assets/cover.css">
 </head>
 <body>
-  <header class="studio-header"><a class="study" href="./index.html"><span class="status-dot"></span> LIGHT STUDY <span>/ 001</span></a><span>uiuxarih · 光效流动研究</span><button id="compare" aria-pressed="false">对照原视频 ↗</button></header>
-  <main>
-    <section class="preview" aria-label="光效复刻预览">
-      <div class="stage">
-        <canvas id="light" aria-label="弧形光带，细线连续交织流动"></canvas>
-        <div class="footer-content">
-          <div class="newsletter">
-            <div class="brand-row"><strong class="brand">Thirtyone</strong><div class="socials"><span>𝕏</span><span>f</span><span>in</span></div></div>
-            <h2>Newsletter</h2>
-            <form id="newsletter"><label class="sr-only" for="email">Your email address</label><input id="email" type="email" placeholder="Your email address" required><button>Subscribe</button></form>
-            <p id="form-note" aria-live="polite">Get latest product news and behind the scenes updates.</p>
-          </div>
-          <div class="link-column"><h3>Account</h3><span>Linked Accounts</span><span>Budget & Analytics</span><span>Mobile Cards</span><span>Overdrafts</span><span>Loans</span></div>
-          <div class="link-column"><h3>Wealth</h3><span>Saving Pots</span><span>Credit Builder</span><span>Credit Boost</span><span>Stocks & Shares</span><span>Cryptocurrency</span></div>
-          <div class="link-column"><h3>Payment</h3><span>Money Transfer</span><span>Subscriptions</span><span>Group Bills</span><span>Overdrafts</span><span>Credit Passport</span></div>
-          <div class="link-column"><h3>Extras</h3><span>Discovery</span><span>Marketplace</span><span>Donations</span><span>Phone Insurance</span><span>Travel Insurance</span></div>
+  <header class="site-header"></header>
+  <div class="main-shell">
+    <header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../../../index.html?section=lab">实验室</a><span>/</span><strong>Fluid Glow</strong></nav></header>
+    <main>
+      <section class="intro"><div class="eyebrow"><span class="tag">技术实现 · Canvas 2D</span></div><div class="title-row"><h1>Fluid Glow</h1></div><p class="intro-copy">弧线骨架、相位波动与三层辉光，调节属于你的流体光带。</p></section>
+      <section class="workspace lab-workspace" aria-label="Fluid Glow 工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1">代码</button></div><button class="toolbar-copy" id="copy-code">复制组件代码</button></div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab"><div class="field"><div class="library-fluid-preview"><canvas id="light" aria-label="弧形光带，点击播放后开始运动"></canvas></div></div></div>
+          <div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading">Fluid Glow · HTML / CSS / JavaScript</div><pre><code id="source-code"></code></pre><div class="code-bottom">代码同步当前参数</div></div>
+          <div class="demo-caption">初始静止，点击播放后运行；所有参数实时生效。</div>
         </div>
-        <div class="footer-bottom"><span>2026 Thirtyone  All rights reserved.</span><span>Terms & Conditions　　 Privacy Policy　　 Cookie Policy</span></div>
-      </div>
-      <div class="reference" hidden><video src="uiuxarih.mp4" muted loop controls playsinline preload="metadata"></video><span>REFERENCE / 原视频 · 10.32s</span></div>
-    </section>
-    <section class="controls" aria-label="光效参数">
-      <div class="transport"><button id="play" aria-label="暂停动画">Ⅱ</button><div><strong>Arc flow</strong><span id="state">实时渲染 · Canvas 2D</span></div></div>
-      <label for="speed">流速 <output id="speed-value">1.00×</output><input id="speed" type="range" min="0.1" max="2.5" step="0.05" value="1"></label>
-      <label for="weave">交织 <output id="weave-value">65%</output><input id="weave" type="range" min="0" max="1" step="0.01" value="0.65"></label>
-      <label for="glow">辉光 <output id="glow-value">100%</output><input id="glow" type="range" min="0" max="1.7" step="0.01" value="1"></label>
-      <div class="actions"><button id="layers" aria-pressed="false">拆解光轨</button><button id="reset" aria-label="恢复默认参数">↺</button></div>
-      <div class="spacing-control" role="group" aria-label="光轨排列">
-        <div class="spacing-heading">光轨排列 <span>调整光线的间距与弯曲</span></div>
-        <label for="spacing">光线间距 <output id="spacing-value" for="spacing">3.35 px</output><input id="spacing" type="range" min="0" max="12" step="0.05" value="3.35"></label>
-        <label for="curvature">弯曲度 <output id="curvature-value" for="curvature">100%</output><input id="curvature" type="range" min="0" max="2" step="0.01" value="1"></label>
-      </div>
-      <div class="thickness-control" role="group" aria-label="光带粗细">
-        <div class="spacing-heading">光带粗细 <span>调整单根光线的宽度</span></div>
-        <div class="width-modes" role="group" aria-label="粗细模式">
-          <button type="button" data-width-mode="thick" aria-pressed="false">粗</button>
-          <button type="button" data-width-mode="thin" aria-pressed="true">细</button>
-          <button type="button" data-width-mode="random" aria-pressed="false">随机</button>
-        </div>
-        <label for="thickness">基础粗细 <output id="thickness-value" for="thickness">2.10 px</output><input id="thickness" type="range" min="0.3" max="8" step="0.1" value="2.1"></label>
-        <button id="shuffle-widths" type="button" hidden>重新随机</button>
-      </div>
-      <div class="spacing-control" role="group" aria-label="光带位移">
-        <div class="spacing-heading">光带位移 <span>水平：左 − / 右 ＋ · 垂直：上 − / 下 ＋</span></div>
-        <label for="offset-x">水平位移 <output id="offset-x-value" for="offset-x">0 px</output><input id="offset-x" type="range" min="-720" max="720" step="2" value="0"></label>
-        <label for="offset-y">垂直位移 <output id="offset-y-value" for="offset-y">0 px</output><input id="offset-y" type="range" min="-300" max="300" step="2" value="0"></label>
-        <button id="center-flow" type="button">归位</button>
-      </div>
-      <div class="color-control">
-        <label for="color">光效颜色</label><input id="color" type="color" value="#ff5c37" aria-label="光效颜色"><output id="color-value" for="color">#FF5C37</output>
-        <div class="color-presets" role="group" aria-label="预设颜色">
-          <button type="button" data-color="#ff5c37" style="--swatch:#ff5c37" aria-label="橙色" aria-pressed="true"></button>
-          <button type="button" data-color="#388cff" style="--swatch:#388cff" aria-label="蓝色" aria-pressed="false"></button>
-          <button type="button" data-color="#29e1cc" style="--swatch:#29e1cc" aria-label="青色" aria-pressed="false"></button>
-          <button type="button" data-color="#b56aff" style="--swatch:#b56aff" aria-label="紫色" aria-pressed="false"></button>
-          <button type="button" data-color="#ff5fbc" style="--swatch:#ff5fbc" aria-label="粉色" aria-pressed="false"></button>
-        </div>
-      </div>
-    </section>
-    <div class="caption"><span><i></i> 弧线骨架 + 相位波动 + 三层辉光</span><span>纯代码绘制 · 无贴图 / 无外部依赖</span></div>
-    <details class="notes"><summary>这段光效是怎么做的？ <span>＋</span></summary><div><p>画面里保持稳定的是向上拱起的弧形轮廓。每条细光轨在弧线上叠加不同相位的波动，两端的波动更大，所以会出现编织感；中心线条更密集，叠加后接近白色过曝。</p><p>这里先将曲线绘入离屏画布，再分别以大范围红色柔光、小范围橙色辉光和清晰的暖白细线叠加。沿曲线移动的亮度波让光像电流一样流动。点击「拆解光轨」可关闭辉光，直接查看曲线运动。</p><p>这是根据视频画面建立的近似模型，原作者也可能采用了三维曲线、Shader 或后期合成；仅凭视频无法确定具体制作工具。</p></div></details>
-  </main>
-  <script src="light.js"></script>
+        <aside class="settings" aria-label="光效参数"><div class="settings-heading"><h2>光效参数</h2><button id="reset" type="button" aria-label="重置所有参数">重置</button></div><p id="state">已暂停 · Canvas 2D</p><div class="lab-actions"><button id="play" aria-pressed="false">播放光效</button><button id="layers" aria-pressed="false">拆解光轨</button></div>
+<label for="speed">流速<output id="speed-value" for="speed"></output><input id="speed" type="range" min="0.1" max="2.5" step="0.05" value="1"></label>
+<label for="weave">交织<output id="weave-value" for="weave"></output><input id="weave" type="range" min="0" max="1" step="0.01" value="0.65"></label>
+<label for="glow">辉光<output id="glow-value" for="glow"></output><input id="glow" type="range" min="0" max="1.7" step="0.01" value="1"></label>
+<label for="spacing">光线间距<output id="spacing-value" for="spacing"></output><input id="spacing" type="range" min="0" max="12" step="0.05" value="3.35"></label>
+<label for="curvature">弯曲度<output id="curvature-value" for="curvature"></output><input id="curvature" type="range" min="0" max="2" step="0.01" value="1"></label>
+<label for="thickness">基础粗细<output id="thickness-value" for="thickness"></output><input id="thickness" type="range" min="0.3" max="8" step="0.1" value="2.1"></label>
+<label for="offset-x">水平位移<output id="offset-x-value" for="offset-x"></output><input id="offset-x" type="range" min="-720" max="720" step="2" value="0"></label>
+<label for="offset-y">垂直位移<output id="offset-y-value" for="offset-y"></output><input id="offset-y" type="range" min="-300" max="300" step="2" value="0"></label>
+<h3>光带粗细</h3><div class="lab-actions"><button data-width-mode="thick" aria-pressed="false">粗</button><button data-width-mode="thin" aria-pressed="true">细</button><button data-width-mode="random" aria-pressed="false">随机</button><button id="shuffle-widths" hidden>重新随机</button></div><div class="lab-actions"><button id="center-flow">位移归位</button></div>
+<label for="color">光效颜色 <output id="color-value">#FF5C37</output></label><input id="color" type="color" value="#ff5c37"><div class="lab-actions" role="group" aria-label="预设颜色"><button data-color="#ff5c37" aria-pressed="true">橙</button><button data-color="#388cff" aria-pressed="false">蓝</button><button data-color="#29e1cc" aria-pressed="false">青</button><button data-color="#b56aff" aria-pressed="false">紫</button><button data-color="#ff5fbc" aria-pressed="false">粉</button></div></aside>
+      </section>
+      <section class="integration-notes"><h2>原理与使用</h2><p>18 根光轨叠加相位波动，以离屏画布生成光带，再合成柔光、辉光和清晰核心。点击“拆解光轨”观察曲线。颜色、粗细与位移均会带入代码、示例和提示词；随机模式保留当前每根光线的宽度。</p><p>无第三方依赖与外部资源，下载 HTML 可直接打开。复制代码后放置完整容器，样式引入一次，在结构之后初始化。多个实例互不影响；移除前调用 <code>root.libraryComponent.destroy()</code>，<code>reset()</code> 暂停并恢复静态。</p><p>播放按钮支持鼠标、触屏与键盘，Tab 聚焦、Enter／空格激活。减少动态效果时降低速度。视觉参考：uiuxarih 视频研究；这是根据画面建立的近似模型，不代表原作者的技术实现。</p></section>
+      <details class="integration-notes"><summary>查看参考视频</summary><video src="uiuxarih.mp4" controls playsinline preload="none" style="display:block;width:100%;max-width:720px;margin-top:16px;border-radius:14px" aria-label="uiuxarih 原始视觉参考"></video></details>
+      <section class="guide"><div><h2>带进你的项目</h2><p>复制组件代码接入已有页面，下载示例验证效果；提示词用于辅助改编，精确效果以代码为准。</p></div><button id="download" class="download-button">下载示例</button></section>
+    </main>
+  </div>
+  <footer class="site-footer"><span>31Library · 个人 UI 资源库</span></footer>
+  <script src="../../../assets/delivery.js"></script>
+  <script src="../../../assets/lab-workbench.js"></script>
+  <script src="effect.js"></script><script src="light.js"></script>
   <script src="../../../assets/site-shell.js" data-section="lab"></script>
 </body>
 </html>
-

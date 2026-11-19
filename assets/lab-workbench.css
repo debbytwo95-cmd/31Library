@@ -1,0 +1,19 @@
+/* Public lab chrome follows the same workbench layout as component pages. */
+.lab-workspace { grid-template-columns: minmax(0,1fr) 320px; align-items: start; }
+.lab-workspace .demo-column { height: auto; }
+.lab-workspace .stage { height: auto; overflow: hidden; }
+.lab-workspace .field { position: relative; inset: auto; min-height: 0; }
+.lab-workspace .settings { min-height: 0; }
+.lab-workspace .settings label { display: block; font-size: 13px; margin: 18px 0; }
+.lab-workspace .settings input[type=range] { margin: 12px 0 0; }
+.lab-workspace .settings output { float: right; }
+.lab-workspace .settings .lab-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.lab-actions button { padding: 8px 12px; border: 1px solid #e2e2e6; border-radius: 8px; color: #18181c; background: white; font: 400 13px var(--library-font); }
+.lab-actions button[aria-pressed=true] { background: #18181c; color: white; }
+.lab-workspace .settings input[type=color] { width: 50px; height: 30px; border: 1px solid #e2e2e6; border-radius: 6px; }
+.lab-workspace .settings h3 { font-size: 13px; margin: 24px 0 8px; }
+.lab-workspace .settings p { font-size: 12px; color: #5c5c66; line-height: 1.7; }
+.lab-workspace .code-panel { height: 540px; }
+.lab-workspace.no-settings { grid-template-columns: minmax(0,1fr); }
+.lab-workspace.no-settings .demo-column { width: 100%; }
+@media(max-width:959px){.lab-workspace{grid-template-columns:1fr}.lab-workspace .settings{display:block}}

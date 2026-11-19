@@ -1,25 +1,18 @@
-# Connected Earth 地球效果复刻
+# Connected Earth · 交互地球
 
-以 https://www.connected.earth/ 的头部地球为参考，独立编写的静态实现。
+以 https://www.connected.earth/ 的地球视觉为参考，使用本地 Three.js、OrbitControls 与地图采样构建点阵大陆、地点标记、关联弧线和环绕卡片。地点为本地演示数据，不连接原网站的录音数据库。
 
-- Three.js 透明点阵球体：大陆纹理采样、稀疏海洋点阵、彩色地点标记。
-- 与参考一致的球体、相机、点大小、透明度和入场减速参数。
-- 环绕卡片、远近透明度与景深模糊、悬停联动、地点连线。
-- 支持拖动旋转、暂停、重新播放、仅看地球、移动端和减少动态效果偏好。
-- 地点与卡片数据为本地演示数据，不连接原网站的录音数据库。
-- 依赖与地球纹理均已保存在 `dist/assets`，运行不需要外部 CDN。
+在本目录运行 `node serve.cjs`，或在仓库根目录运行 `node scripts/serve.mjs`，访问终端显示的地址。服务同时提供公共导航与字体；ES 模块需要 HTTP，不能直接双击页面。
 
-## 本地运行
+- `dist/index.html`：实验室详情，包含公共介绍、预览／代码页签、交付和使用说明；没有参数时不显示右侧空面板。
+- `dist/effect.js`、`dist/effect.css`：容器隔离的地球实现，预览与交付共用。
+- `dist/globe.js`：工作台初始化与交付登记；旧 `dist/style.css` 保留为构图参考，不再加载。
+- `dist/assets/`：Three.js、OrbitControls、MIT 许可及 Three.js 示例地图资源。
 
-安装 Node.js 后，在本目录运行 `node serve.cjs`，打开终端显示的本地网址。
-不要直接双击 `dist/index.html`，浏览器会限制 file 协议下的 ES 模块加载。
+初始静止，真实点击“开始旋转”后连续运动；支持鼠标或触屏拖拽、地点按钮和键盘方向键旋转。重置恢复默认视角并暂停。减少动态效果时降低速度、减弱卡片缩放并立即完成视角切换。
 
-## 文件
+提供复制组件代码、下载示例和复制提示词。下载为 ZIP，包含运行示例、组件片段、提示词、`effect.js`、所有必要资源与许可、`serve.cjs`。解压后运行 `node serve.cjs`，访问 http://127.0.0.1:8000 。
 
-`dist/globe.js`：地球、采样、镜头、交互与环绕动画；文件顶部 `config` 为视觉参数。
-`dist/style.css`：头部构图、背景、入场、景深与响应式。
-`dist/index.html`：独立页面。
+复制代码前，从源码包将 `effect.js` 与 `assets/` 放到接入页同级，或调整对应导入路径。Inter 字体与许可内嵌在样式，中文 Noto Sans SC 字体和许可随源码包提供。多个 `.library-earth` 容器各自初始化；移除前调用 `root.libraryComponent.destroy()` 清理事件、动画和 WebGL 资源。
 
-Three.js 与 OrbitControls 使用 MIT License，详见 `dist/assets/THREE-LICENSE.txt`。地球纹理来自 Three.js 示例资源。
-
-验证限制：参考页面源代码与资源已核对；当前环境的浏览器观察及截图工具不可用，未完成逐帧视觉比对。
+修改后检查登记与子路径资源，以及实际 WebGL 加载、拖拽、键盘与源码包解压运行。脚本检查不能代替浏览器视觉验证。

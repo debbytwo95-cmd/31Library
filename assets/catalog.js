@@ -1,10 +1,5 @@
 /* Classification and tags never change a project's stable path. */
-const entries = [
-  { id: 'icon-button-studio', section: 'components', category: 'buttons', href: './single-web/components/icon-button-studio/index.html', title: 'Icon Button · 扩散箭头按钮', interactions: ['hover', 'press'], technologies: ['CSS', 'JavaScript'], keywords: '图标 圆形 扩散 箭头 按钮 icon button circle', previewHeight: 224 },
-  { id: 'magnetic-button-studio', section: 'components', category: 'buttons', href: './single-web/components/magnetic-button-studio/index.html', title: 'Magnetic Button · 磁吸按钮', interactions: ['hover', 'press'], technologies: ['JavaScript'], keywords: '磁吸 鼠标 按钮 spring 弹簧 magnetic button', previewHeight: 216 },
-  { id: 'earth-replica', section: 'lab', category: 'all', href: './single-web/motion-lab/earth-replica/dist/index.html', title: 'Connected Earth · 交互地球', interactions: ['drag', 'hover', 'press'], technologies: ['Three.js'], keywords: '3D 地球 粒子 earth webgl', previewHeight: 354 },
-  { id: 'fluid-glow', section: 'lab', category: 'all', href: './single-web/motion-lab/fluid-glow/index.html', title: 'Fluid Glow · 流体光效', interactions: ['press', 'input'], technologies: ['Canvas 2D'], keywords: '光效 光带 流体 fluid glow canvas', previewHeight: 180 }
-];
+const entries = window.LibraryCatalog;
 const interactionLabels = { hover: '悬停 hover', press: '按压 press', drag: '拖拽 drag', swipe: '滑动 swipe', scroll: '滚动 scroll', input: '输入 input' };
 const grid = document.querySelector('#grid'), heading = document.querySelector('h1'), description = document.querySelector('#description'), search = document.querySelector('#search'), sidebar = document.querySelector('#categories'), chips = document.querySelector('#chips');
 const storageKey = '31library:catalog:' + new URL('.', document.baseURI).pathname;

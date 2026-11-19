@@ -1,0 +1,12 @@
+.library-magnetic-field{position:relative;min-height:240px;isolation:isolate}
+.library-magnetic-field .library-magnetic-button{box-sizing:border-box;position:absolute;left:50%;top:50%;width:168px;height:56px;margin:-28px 0 0 -84px;padding:0;border:0;border-radius:28px;background:#18181c;color:#fff;font:600 16px/1.2 Inter,Arial,sans-serif;z-index:2;cursor:pointer;touch-action:manipulation;will-change:transform}
+.library-magnetic-field[data-appearance=dark] .library-magnetic-button{background:#fff;color:#18181c}
+.library-magnetic-button .library-magnetic-label{display:inline-flex;align-items:center;gap:8px;will-change:transform;pointer-events:none}
+.library-magnetic-button .library-magnetic-label svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7}
+.library-magnetic-button:focus-visible{outline:2px solid #18181c;outline-offset:7px}
+.library-magnetic-field[data-appearance=dark] .library-magnetic-button:focus-visible{outline-color:#fff}
+.library-magnetic-field .library-magnetic-ripple{box-sizing:border-box;position:absolute;left:50%;top:50%;width:170px;height:58px;border:1px solid #18181c;border-radius:29px;transform:translate(-50%,-50%);opacity:0;z-index:1;pointer-events:none}
+.library-magnetic-field[data-appearance=dark] .library-magnetic-ripple{border-color:#fff}
+.library-magnetic-field .library-magnetic-ripple.is-popping{animation:library-magnetic-pop .6s ease-out}
+@keyframes library-magnetic-pop{from{opacity:.55;transform:translate(-50%,-50%) scale(.95)}to{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+@media(prefers-reduced-motion:reduce){.library-magnetic-field .library-magnetic-ripple.is-popping{animation:none}}
