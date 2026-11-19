@@ -1,0 +1,117 @@
+/* Foundations and semantic tokens from DESIGN.md. Public UI uses semantic names. */
+:root {
+    --library-gray-0: #ffffff;
+    --library-gray-50: #f7f7f8;
+    --library-gray-100: #efefef;
+    --library-gray-150: #eeeef0;
+    --library-gray-200: #e2e2e6;
+    --library-gray-400: #9999a4;
+    --library-gray-500: #7b7b82;
+    --library-gray-600: #5c5c66;
+    --library-gray-900: #18181c;
+
+    --library-bg-page: var(--library-gray-0);
+    --library-bg-surface: var(--library-gray-50);
+    --library-bg-subtle: var(--library-gray-150);
+    --library-bg-inverse: var(--library-gray-900);
+    --library-text-primary: var(--library-gray-900);
+    --library-text-secondary: var(--library-gray-600);
+    --library-text-tertiary: var(--library-gray-500);
+    --library-text-quaternary: var(--library-gray-400);
+    --library-text-on-inverse: var(--library-gray-0);
+    --library-border-default: var(--library-gray-200);
+    --library-border-divider: var(--library-gray-100);
+    --library-border-strong: var(--library-gray-900);
+    --library-focus-ring: var(--library-gray-900);
+    --library-overlay: rgba(0, 0, 0, .33);
+
+    --library-status-danger: #d92d20;
+    --library-status-danger-bg: #fef3f2;
+    --library-status-success: #067647;
+    --library-status-success-bg: #ecfdf3;
+    --library-status-warning: #b54708;
+    --library-status-warning-bg: #fffaeb;
+    --library-status-info: var(--library-text-secondary);
+    --library-status-info-bg: var(--library-bg-surface);
+
+    --library-space-half: 2px;
+    --library-space-1: 4px;
+    --library-space-2: 8px;
+    --library-space-3: 12px;
+    --library-space-4: 16px;
+    --library-space-5: 20px;
+    --library-space-6: 24px;
+    --library-space-7: 28px;
+    --library-space-8: 32px;
+    --library-space-10: 40px;
+    --library-space-12: 48px;
+    --library-space-15: 60px;
+    --library-space-18: 72px;
+    --library-control-sm: 32px;
+    --library-control-md: 40px;
+    --library-control-lg: 48px;
+    --library-header-height: 58px;
+    --library-content-width: 100%;
+    --library-page-width: 100%;
+    --library-detail-content-width: 1200px;
+    --library-sidebar-width: 210px;
+    --library-page-gutter: var(--library-space-15);
+    --library-page-bottom-space: var(--library-space-18);
+    --library-shell-padding: var(--library-page-gutter);
+
+    --library-radius-xs: 6px;
+    --library-radius-sm: 8px;
+    --library-radius-md: 10px;
+    --library-radius-lg: 14px;
+    --library-radius-xl: 18px;
+    --library-radius-2xl: 20px;
+    --library-radius-full: 999px;
+    --library-shadow-none: none;
+    --library-shadow-xs: 0 1px 2px rgba(24, 24, 28, .06);
+    --library-shadow-sm: 0 1px 5px rgba(0, 0, 0, .2);
+    --library-shadow-md: 0 8px 24px rgba(24, 24, 28, .08);
+    --library-shadow-lg: 0 24px 48px rgba(24, 24, 28, .12);
+    --library-z-nav: 60;
+    --library-z-dropdown: 100;
+    --library-z-dialog: 200;
+    --library-z-status: 300;
+
+    /* Reference sizes; the pending 8/9/10/17px cleanup is not applied globally. */
+    --library-text-2xs: 11px;
+    --library-text-xs: 12px;
+    --library-text-sm: 13px;
+    --library-text-md: 14px;
+    --library-text-lg: 15px;
+    --library-text-xl: 16px;
+    --library-text-2xl: 18px;
+    --library-text-3xl: 28px;
+    --library-text-display: 64px;
+    --library-leading-2xs: 16px;
+    --library-leading-xs: 18px;
+    --library-leading-sm: 20px;
+    --library-leading-md: 20px;
+    --library-leading-lg: 22px;
+    --library-leading-xl: 24px;
+    --library-leading-2xl: 22px;
+    --library-leading-3xl: 40px;
+    --library-leading-display: 74px;
+    --library-tracking-display: -3.4px;
+    --library-font: Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --library-code: Cousine, Consolas, monospace;
+
+    --library-duration-fast: 150ms;
+    --library-duration-base: 200ms;
+    --library-duration-page: 500ms;
+    --library-duration-content: 600ms;
+    --library-ease-page: ease-in;
+    --library-ease-out: cubic-bezier(.22, 1, .36, 1);
+
+    /* Compatibility aliases for the existing workbench layouts. */
+    --library-canvas: var(--library-bg-surface);
+    --library-primary: var(--library-text-primary);
+    --library-secondary: var(--library-text-secondary);
+    --library-describe: var(--library-text-tertiary);
+    --library-border: var(--library-border-default);
+    --font: var(--library-font);
+    --mono: var(--library-font);
+}

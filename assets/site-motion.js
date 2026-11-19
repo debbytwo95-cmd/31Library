@@ -13,12 +13,17 @@
     function reveal(nodes) {
         cancel();
         if (reduced.matches || navigationTransition) return;
+        const style = getComputedStyle(root);
+        const durationToken = style.getPropertyValue('--library-duration-content').trim();
+        const parsedDuration = parseFloat(durationToken) * (durationToken.endsWith('ms') ? 1 : 1000);
+        const duration = Math.max(500, Math.min(800, Number.isFinite(parsedDuration) ? parsedDuration : 600));
+        const easing = style.getPropertyValue('--library-ease-page').trim() || 'ease-in';
         nodes.forEach((node, i) => {
             if (!node || typeof node.animate !== 'function') return;
             const animation = node.animate([
                 { opacity: 0, transform: 'translateY(8px)' },
                 { opacity: 1, transform: 'translateY(0)' }
-            ], { duration: 280, delay: i * 30, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
+            ], { duration, delay: Math.min(i * 30, 800 - duration), easing, fill: 'backwards' });
             running.set(node, animation);
             const done = () => { if (running.get(node) === animation) running.delete(node); };
             animation.finished.then(done, done);
@@ -30,7 +35,12 @@
         const transition = event.viewTransition;
         navigationTransition = transition;
         // Skipped or interrupted transitions are an ordinary navigation outcome.
-        transition.ready.catch(() => {});
+        transition.ready.catch(() => {
+            if (event.type !== 'pagereveal' || document.hidden || reduced.matches) return;
+            if (navigationTransition && navigationTransition !== transition) return;
+            navigationTransition = null;
+            requestAnimationFrame(() => reveal([...document.querySelectorAll('.main, .main-shell')]));
+        });
         const done = () => { if (navigationTransition === transition) navigationTransition = null; };
         transition.finished.then(done, done);
         if (reduced.matches) navigationTransition.skipTransition();

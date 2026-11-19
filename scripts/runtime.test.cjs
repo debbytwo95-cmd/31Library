@@ -134,7 +134,7 @@ test('workbench exports and prompts include edited parameters; reset preserves t
         const key=name==='magnetic-button'?'radius':'duration',value=name==='magnetic-button'?195:735;
         ids.get(key).value=String(value); ids.get(key).emit('input');
         const bundle=await options.bundle();
-        if(name==='magnetic-button') assert.match(bundle.js,/"radius":195/); else assert.match(bundle.html,/--duration:735ms/);
+        if(name==='magnetic-button') assert.match(bundle.js,/"radius":195/); else assert.match(bundle.html,/--icon-button-duration:735ms/);
         assert.match(options.prompt(),new RegExp(String(value)+' (px|ms)'));
         assert.doesNotMatch(bundle.html,/main-shell|settings|library-header/);
         new vm.Script(bundle.js);

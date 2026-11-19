@@ -31,10 +31,17 @@
     };
     const header = document.createElement('header');
     header.className = 'library-header';
+    header.id = 'top';
     header.innerHTML = `<div class="library-header-left"><a class="library-logo" href="${index.href}" aria-label="31Library 首页">31Library</a><nav class="library-nav" aria-label="资源板块">${[['components', '组件'], ['blocks', '区块'], ['lab', '实验室']].map(([id, label]) => `<a class="library-nav-item${section === id ? ' active' : ''}" href="${sectionURL(id).href}"${section === id ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div><form class="library-search" role="search"><img src="${new URL('assets/search.svg', root).href}" alt="" width="16" height="16"><input type="search" name="q" aria-label="搜索名称、关键词或标签" placeholder="搜索名称、关键词或标签" autocomplete="off"><kbd>${navigator.platform.includes('Mac') ? '⌘' : 'Ctrl+'}K</kbd></form>`;
-    const oldHeader = document.querySelector('.site-header, .header');
+    const oldHeader = document.querySelector('body > .library-header, body > .site-header, body > .header');
     if (oldHeader) oldHeader.replaceWith(header);
     else document.body.prepend(header);
+    const footer = document.createElement('footer');
+    footer.className = 'library-footer';
+    footer.innerHTML = '<span>31Library · 个人 UI 资源库 · V1.1</span><span>Explore → Preview → Experiment → Refine → Reuse</span>';
+    const oldFooter = document.querySelector('body > footer');
+    if (oldFooter) oldFooter.replaceWith(footer);
+    else document.body.append(footer);
     const input = header.querySelector('input');
     if (catalog) input.id = 'search';
     header.querySelector('form').addEventListener('click', () => input.focus());

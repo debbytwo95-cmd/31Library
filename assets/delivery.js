@@ -63,32 +63,38 @@
         if (document.documentElement.hasAttribute('data-cover')) return { refresh() {} };
         const copyButton = document.getElementById('copy-code'), downloadButton = document.getElementById('download');
         copyButton.querySelector('span') ? copyButton.querySelector('span').textContent = '复制组件代码' : copyButton.textContent = '复制组件代码';
-        downloadButton.textContent = options.archive ? '下载示例（源码包）' : '下载示例';
-        const promptButton = document.createElement('button'); promptButton.id = 'copy-prompt'; promptButton.className = 'delivery-secondary'; promptButton.textContent = '复制提示词'; downloadButton.before(promptButton);
+        const downloadLabel = downloadButton.querySelector('span') || downloadButton;
+        downloadLabel.textContent = options.archive ? '下载示例（源码包）' : '下载示例';
+        const promptButton = document.createElement('button'); promptButton.id = 'copy-prompt'; promptButton.className = 'delivery-secondary';
+        promptButton.innerHTML = `<img class="library-icon design-icon" data-library-icon="copy" src="${new URL('assets/icons/copy.svg', root).href}" width="16" height="16" alt=""><span>复制提示词</span>`;
+        downloadButton.before(promptButton);
         const status = document.createElement('p'); status.className = 'delivery-status'; status.setAttribute('role', 'status'); downloadButton.closest('.guide').after(status);
         const fallback = document.createElement('dialog'); fallback.className = 'delivery-dialog';
         fallback.innerHTML = '<form method="dialog"><strong>手动复制</strong><button>关闭</button></form><textarea aria-label="待复制内容" readonly></textarea>';
         document.body.append(fallback);
-        const notify = message => { status.textContent = message; };
+        const notify = (message, state = 'info') => { status.dataset.state = state; status.textContent = message; };
         async function copyText(text, message) {
-            try { await copy(text); notify(message); }
-            catch { fallback.querySelector('textarea').value = text; fallback.showModal(); fallback.querySelector('textarea').select(); notify('请在弹窗中手动复制'); }
+            try { await copy(text); notify(message, 'success'); }
+            catch { fallback.querySelector('textarea').value = text; fallback.showModal(); fallback.querySelector('textarea').select(); notify('请在弹窗中手动复制', 'warning'); }
         }
         copyButton.addEventListener('click', async () => {
+            copyButton.disabled = true; copyButton.setAttribute('aria-busy', 'true'); notify('正在准备组件代码…');
             try { const bundle = await options.bundle(); await copyText(snippet(bundle), '已复制组件代码，包含当前参数'); }
-            catch { notify('资源读取失败，请通过本地服务打开页面后重试'); }
+            catch { notify('资源读取失败，请通过本地服务打开页面后重试', 'danger'); }
+            finally { copyButton.disabled = false; copyButton.setAttribute('aria-busy', 'false'); }
         });
         promptButton.addEventListener('click', () => copyText(options.prompt(), '已复制提示词，包含当前参数'));
         downloadButton.addEventListener('click', async () => {
             downloadButton.disabled = true;
+            downloadButton.setAttribute('aria-busy', 'true'); notify('正在准备示例…');
             try {
                 const bundle = await options.bundle(true);
                 if (options.archive) {
                     download(zip({ 'index.html': example(bundle, options.title), 'README.md': options.readme, 'component.html': snippet(bundle), 'prompt.txt': bundle.prompt || options.prompt(), ...bundle.files }), options.id + '.zip');
                 } else download(new Blob([example(bundle, options.title)], { type: 'text/html;charset=utf-8' }), options.id + '.html');
-                notify('已下载示例，包含当前参数');
-            } catch { notify('下载失败，请检查本地资源后重试'); }
-            finally { downloadButton.disabled = false; }
+                notify('已下载示例，包含当前参数', 'success');
+            } catch { notify('下载失败，请检查本地资源后重试', 'danger'); }
+            finally { downloadButton.disabled = false; downloadButton.setAttribute('aria-busy', 'false'); }
         });
         let version = 0;
         async function refresh() {

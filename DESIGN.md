@@ -11,11 +11,27 @@
 - 索引和详情页共享顶部导航，高度 **58px**，品牌入口返回首页。
 - 板块入口为组件、区块、实验室；当前板块使用深色文字与底部细线。
 - 返回所属板块时恢复搜索、筛选和浏览位置。
-- 桌面参考画板为 1440px，左右留白 60px，主体宽 1320px。索引侧栏宽 210px，与内容间隔 28px。
+- 索引主体宽度为 `--library-content-width: 100%`，随可用页面宽度展开，保留页面左右留白。索引侧栏宽 210px，与内容间隔 28px。
+- 所有组件与实验室详情的内容区统一为 `--library-detail-content-width: 1200px`，居中排列；此宽度不包含外围留白。窄屏按可用宽度收缩，面包屑与主体内容对齐。
+
+### 导航与页脚共用规则
+
+索引、组件详情和实验室详情使用 `assets/site-shell.js` 生成同一套导航与页脚，入口 HTML 仅保留 `.library-header`、`.library-footer` 占位。样式只在 `assets/site.css` 定义，项目样式不得单独改写公共导航或页脚的间距、字号与高度。
+
+| 范围 | 共用规则 |
+| --- | --- |
+| 左右留白 | 默认 60px；视口不超过 1100px 时为 28px，不超过 700px 时为 20px。导航、页脚、列表主体和详情主体使用同一个 `--library-page-gutter` |
+| 宽屏对齐 | 导航与页脚使用相同的页面左右留白，各页面保持一致；索引主体占满可用宽度，详情内容区单独居中、最大宽 1200px。滚动条占用的宽度从可用页面宽度扣除 |
+| 滚动条占位 | 公共页面统一预留纵向滚动条空间，避免短列表与长详情切换时左右跳动；封面 iframe 不预留 |
+| 内容底部 | 至页脚边界的基础留白为 72px；上述两档窄屏分别为 60px、48px，由 `--library-page-bottom-space` 统一控制 |
+| 页脚 | 上下内边距 24px，13px 字号、20px 行高、Regular 字重，顶部 1px 分隔线。桌面左右两端排列，700px 及以下改为纵向排列、间隔 8px |
+| 页脚内容 | 左侧为“31Library · 个人 UI 资源库 · V1.1”，右侧为统一使用流程；内容换行时自然增高，不固定页脚高度 |
+
+以上是公共外框的当前执行规则，完整响应式规范仍待后续补充。页面内容较少时页脚贴近视口底部，内容较多时随文档排列；不覆盖正文，也不进入组件导出文件。
 
 ### 页面入场与切换
 
-页面导航、介绍与工作区采用轻量淡入和 4–10px 位移，分组依次出现，整体约 0.3–0.5 秒完成。站内跨页跳转支持时使用浏览器原生过渡，导航保持稳定，内容短暂交接；不支持时使用页面入场作为回退。索引切换板块、分类和筛选时柔和更新内容，连续输入搜索不重复播放入场。
+页面导航、介绍与工作区采用轻量淡入和 4–10px 位移，运动曲线统一使用 `ease-in`，在 **0.5–0.8 秒**内完成（含分组延迟）。导航动效为 0.5 秒，内容入场与页面切换为 0.6 秒，分组依次出现并将总时长控制在 0.8 秒以内。站内跨页跳转支持时使用浏览器原生过渡，导航保持稳定，内容短暂交接；不支持时使用页面入场作为回退。索引切换板块、分类和筛选时柔和更新内容，连续输入搜索不重复播放入场。
 
 系统开启“减少动态效果”时直接显示内容。公共页面动效不进入封面内的组件实现、复制代码或下载示例；组件交互仍由真实操作触发。公共样式由 `assets/site-motion.css` 提供，页面在 head 中同步加载 `assets/site-motion.js`，避免过渡快照与首次入场叠加。
 
@@ -31,25 +47,148 @@
 
 字号参考：详情英文大标题 64px，索引分类标题 28px，品牌名 18px，参数面板标题 16px，卡片名称 15px，导航与搜索 14px，参数标签与正文 13px，卡片标签与面包屑 12px，弱辅助信息 11px。详情大标题参考行高 74px、字距 -3.4px；这些展示标题值不套用于普通文字。
 
-### 颜色、间距与圆角
+字号 token（档位待确认，见第 6 节）：
 
-| 用途 | 色值 |
-| --- | --- |
-| 页面、导航、输入框 | `#FFFFFF` |
-| 封面、演示与参数面板 | `#F7F7F8` |
-| 次级填充 | `#EEEEF0` |
-| 主要文字、选中项 | `#18181C` |
-| 次要文字 | `#5C5C66` |
-| 描述与占位文字 | `#7B7B82` |
-| 弱辅助文字 | `#9999A4` |
-| 控件边框 | `#E2E2E6` |
-| 浅分隔线 | `#EFEFEF` |
+| Token | 字号 / 行高 | 用途 |
+| --- | --- | --- |
+| `--library-text-2xs` | 11 / 16px | 弱辅助信息、刻度标签 |
+| `--library-text-xs` | 12 / 18px | 卡片标签、面包屑、状态提示 |
+| `--library-text-sm` | 13 / 20px | 参数标签、正文、筛选标签 |
+| `--library-text-md` | 14 / 20px | 导航、搜索、页面描述 |
+| `--library-text-lg` | 15 / 22px | 卡片名称 |
+| `--library-text-xl` | 16 / 24px | 参数面板标题、小节标题 |
+| `--library-text-2xl` | 18 / 22px | 品牌名 |
+| `--library-text-3xl` | 28 / 40px | 索引分类标题 |
+| `--library-text-display` | 64 / 74px，字距 -3.4px | 详情英文大标题 |
 
-现阶段公共界面只做浅色，以黑白灰为主。组件或实验自身的配色、演示区主题可独立设置。现有状态反馈暂保留，后期统一其完整视觉规则。
+### 设计 token
 
-基础间距参考 4、8、12、16、20、24、32px；页面大留白按布局设置。常见圆角：侧栏与预设外壳 8px，搜索框 10px，封面卡片 14px，预览切换外壳与下载提示 18px，演示区 20px，参数面板 24px，标签与胶囊按钮使用全圆角。细边框以 1px 为主。
+公共样式统一使用 `--library-` 前缀，格式为 `--library-<类别>-<用途>-<变体>`，分为两层：基础色板只描述颜色本身，组件只引用语义 token。组件私有变量使用组件自己的前缀（如 `--icon-button-duration`），不与公共 token 冲突。现有 `--text`、`--line`、`--library-primary` 等旧变量在迁移期作为别名保留。
 
-筛选标签普通态白底灰边，选中态深底白字；预览切换与预设选中项使用白色底面。公共界面通过留白、填充和边界建立层级，封面卡片不添加悬停投影。
+### 颜色
+
+基础灰阶：
+
+| Token | 色值 | 用途 |
+| --- | --- | --- |
+| `--library-gray-0` | `#FFFFFF` | 页面、导航、输入框 |
+| `--library-gray-50` | `#F7F7F8` | 封面、演示与参数面板 |
+| `--library-gray-100` | `#EFEFEF` | 浅分隔线 |
+| `--library-gray-150` | `#EEEEF0` | 次级填充 |
+| `--library-gray-200` | `#E2E2E6` | 控件边框 |
+| `--library-gray-400` | `#9999A4` | 弱辅助文字 |
+| `--library-gray-500` | `#7B7B82` | 描述与占位文字 |
+| `--library-gray-600` | `#5C5C66` | 次要文字 |
+| `--library-gray-900` | `#18181C` | 主要文字、选中项 |
+
+语义 token：
+
+| 类别 | Token | 取值 |
+| --- | --- | --- |
+| 背景 | `--library-bg-page` | gray-0 |
+| | `--library-bg-surface` | gray-50（演示区、面板、封面） |
+| | `--library-bg-subtle` | gray-150（次级填充、悬停底） |
+| | `--library-bg-inverse` | gray-900（选中标签、主按钮） |
+| 文字 | `--library-text-primary` | gray-900 |
+| | `--library-text-secondary` | gray-600 |
+| | `--library-text-tertiary` | gray-500 |
+| | `--library-text-quaternary` | gray-400 |
+| | `--library-text-on-inverse` | gray-0 |
+| 边框 | `--library-border-default` | gray-200 |
+| | `--library-border-divider` | gray-100 |
+| | `--library-border-strong` | gray-900（当前板块下划线、侧栏选中线） |
+| 焦点 | `--library-focus-ring` | gray-900，2px 实线 |
+| 遮罩 | `--library-overlay` | `rgba(0,0,0,.33)` |
+
+状态色只用于反馈文字、图标和少量底色，不用于大面积装饰：
+
+| 状态 | 文字 / 图标 | 浅底 |
+| --- | --- | --- |
+| 错误 danger | `#D92D20` | `#FEF3F2` |
+| 成功 success | `#067647` | `#ECFDF3` |
+| 警告 warning | `#B54708` | `#FFFAEB` |
+| 信息 info | 沿用 text-secondary | 沿用 bg-surface |
+
+状态文字需在白底上满足 WCAG AA 4.5:1 对比度。原成功色 `#079455` 在白底为 3.91:1，已校正为 `#067647`（5.69:1）；成功浅底上的对比度为 5.40:1。错误、成功、警告及信息色通过 `--library-status-<状态>` 与 `--library-status-<状态>-bg` 引用；这些 token 不替代组件自身配色。
+
+现阶段公共界面只做浅色，以黑白灰为主；语义 token 结构预留主题切换（在 `:root[data-theme=dark]` 下重新映射语义层），深色值待需要时再定。组件或实验自身的配色、演示区主题可独立设置。
+
+### 间距
+
+以 4px 为基准：
+
+| Token | 值 | 典型用途 |
+| --- | --- | --- |
+| `--library-space-half` | 2px | 侧栏项间距、细调 |
+| `--library-space-1` | 4px | 图标与文字、紧凑标签内边距 |
+| `--library-space-2` | 8px | 标签间距、按钮组间距 |
+| `--library-space-3` | 12px | 输入框水平内边距、卡片信息区 |
+| `--library-space-4` | 16px | 控件组、卡片信息区水平内边距 |
+| `--library-space-5` | 20px | 弹窗内边距、小屏页边距 |
+| `--library-space-6` | 24px | 区块内部 |
+| `--library-space-7` | 28px | 侧栏与内容间距、内容区纵向间距 |
+| `--library-space-8` | 32px | 区块之间 |
+| `--library-space-10` | 40px | 导航项组间距 |
+| `--library-space-12` | 48px | 页面顶部留白 |
+| `--library-space-15` | 60px | 桌面页面左右留白 |
+| `--library-space-18` | 72px | 页面底部留白 |
+
+控件高度：`--library-control-sm` 32px，`--library-control-md` 40px（搜索框），`--library-control-lg` 48px（主按钮）；导航高度保持 58px。细边框以 1px 为主。
+
+2px 半档命名为 `half`，避免未转义的小数点导致 CSS 自定义属性名无效。布局尺寸使用 `--library-header-height: 58px`、`--library-page-width: 100%`、`--library-content-width: 100%`、`--library-detail-content-width: 1200px` 与 `--library-sidebar-width: 210px`。详情容器的最大外宽为内容宽加两侧页面留白，保证实际内容区达到 1200px。
+
+### 圆角
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `--library-radius-xs` | 6px | 颜色选择器、下拉框、小控件 |
+| `--library-radius-sm` | 8px | 侧栏项、预设外壳、次级按钮 |
+| `--library-radius-md` | 10px | 搜索框、输入框 |
+| `--library-radius-lg` | 14px | 封面卡片 |
+| `--library-radius-xl` | 18px | 预览切换外壳、下载提示、弹窗 |
+| `--library-radius-2xl` | 20px | 演示区、参数面板 |
+| `--library-radius-full` | 999px | 标签、胶囊按钮、徽标 |
+
+现有 3、7、12、24、25px 等零散圆角迁移时归入上表。组件自身的圆角参数（如按钮的 `--icon-button-corner`）不受此限制。
+
+### 阴影与层级
+
+公共界面通过留白、填充和边界建立层级，封面卡片不添加悬停投影。阴影只用于真正浮起的元素：
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `--library-shadow-none` | none | 默认，卡片、面板 |
+| `--library-shadow-xs` | `0 1px 2px rgba(24,24,28,.06)` | 分段控件选中项的白色滑块 |
+| `--library-shadow-sm` | `0 1px 5px rgba(0,0,0,.2)` | 滑块拇指 |
+| `--library-shadow-md` | `0 8px 24px rgba(24,24,28,.08)` | 下拉菜单、气泡提示、复制成功提示 |
+| `--library-shadow-lg` | `0 24px 48px rgba(24,24,28,.12)` | 弹窗 |
+
+描边效果使用 `border` 或 `outline`，不使用 `box-shadow` 模拟。层级 `z-index`：导航 60、下拉 100、弹窗 200、提示 300。
+
+上述层级分别使用 `--library-z-nav`、`--library-z-dropdown`、`--library-z-dialog`、`--library-z-status`。阴影 token 只提供投影，浮层的 1px 边界单独引用 `--library-border-default`。
+
+### 公共动效 token
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `--library-duration-fast` | 150ms | 颜色、边框变化 |
+| `--library-duration-base` | 200ms | 悬停、按压反馈 |
+| `--library-duration-page` | 500ms | 导航入场 |
+| `--library-duration-content` | 600ms | 内容入场、页面切换 |
+| `--library-ease-page` | ease-in | 公共页面入场 |
+| `--library-ease-out` | cubic-bezier(.22,1,.36,1) | 公共控件反馈 |
+
+组件演示的时长和缓动属于组件参数，不受公共 token 约束。
+
+### 控件样式
+
+筛选标签普通态白底灰边，选中态深底白字；预览切换与预设选中项使用白色底面。
+
+### 图标
+
+网站公共操作图标以磁吸按钮页面为准，统一引用 `assets/icons/` 中的同一份 SVG，不在项目内另画预览、代码、复制、主题、指针提示、重置与下载图标。搜索与分类箭头继续使用公共资源 `assets/search.svg`、`assets/chevron-down.svg`。
+
+尺寸沿用磁吸按钮页：预览 14×16px，代码与复制 16×16px，主题 14×14px，指针提示、重置与下载 13×13px，接入说明图标 22×22px。图形、描边与颜色沿用该页资源；主题图标随演示背景调整明暗。纯图标按钮保留可访问名称，装饰图标使用空 `alt`。交付按钮更新文字时保留图标。组件效果内自带的箭头、SVG 动效与内容插图按各自设计保留。
 
 ## 2. 索引与封面
 
@@ -81,10 +220,59 @@
 
 交付操作统一命名为“复制组件代码”“下载示例”“复制提示词”。提示词提供独立复制入口，具体排布随内容组织，不额外固定工作区参数结构。代码、示例与提示词同步当前参数；功能及资源要求见 [STANDARDS.md：代码与复用交付](./STANDARDS.md#7-代码与复用交付)。
 
-## 4. 设计检查
+## 4. 基础界面组件
 
-检查公共导航高度与当前板块样式、字体与数值显示、颜色与控件层级、卡片等宽与内容高度、封面留白和动效空间、名称与标签、详情页区域组织，以及封面和详情的初始效果一致性。
+以下为网站自身的基础界面组件，只作为网站内部规范，不作为收录项目进入“组件”板块展示，与磁吸按钮等收录组件分开管理。
 
-## 5. 待补充
+### P0：现有页面已在用，优先统一
 
-状态反馈与完整响应式规范后期补充。现有小屏适配继续保留，不作为已确认的最终规范。已确认内容作为当前执行依据，后续根据实际使用需要修订。
+| 组件 | 变体 / 状态 | 现有位置 |
+| --- | --- | --- |
+| Button 按钮 | primary（深底）、secondary（白底描边）、ghost；sm / md / lg；胶囊或 8px 圆角；hover、active、focus、disabled、loading | 下载按钮、“复制组件代码”、重置、实验室操作按钮 |
+| Icon Button 图标按钮 | 方形 / 圆形；同上状态 | 主题切换、复制图标、工具栏 |
+| Input 输入框 | 默认、聚焦、禁用、错误；可带前后缀 | 参数数值输入 |
+| Search 搜索框 | 带图标和快捷键提示；小屏收起 | 顶部导航 |
+| Select 下拉选择 | 原生 select 统一外观 | 缓动选择、实验参数 |
+| Slider 滑块 | 带标签、数值输出与刻度 | 参数面板 |
+| Chip 筛选标签 | 普通、选中、悬停、聚焦 | 索引交互筛选 |
+| Tag 标签文字 | 交互标签、技术标签 | 卡片信息区、详情页 |
+| Segmented Control 分段控件 | 2–4 项，白色选中项 | 预览／代码切换、演示主题、预设 |
+| Card 封面卡片 | 演示区 + 信息区；无投影 | 索引瀑布流 |
+
+### P1：已出现但规则未定
+
+Tabs 页签（代码面板文件页签）、Code Block 代码块（Cousine，含复制按钮）、Dialog 弹窗（交付弹窗）、Toast / Status 状态提示（“已复制”“下载中”等，使用状态色）、Color Input 颜色选择、Nav Item 导航项与 Badge 计数徽标。
+
+### P2：后续区块会用到
+
+Switch 开关、Checkbox / Radio、Tooltip 气泡提示、Empty State 空状态、Breadcrumb 面包屑、Skeleton 加载占位。
+
+每个基础组件的规范至少写明：结构与尺寸、引用的 token、全部状态（含 focus-visible 与 disabled）、键盘操作、触屏行为、减少动态效果时的表现。
+
+### P0 执行约定
+
+公共定义位于 `assets/tokens.css`，网站控件位于 `assets/ui.css`；索引、导航和实验室共用这些 token。现有类名仍可使用，新增通用按钮可使用 `.library-button`，通过 `data-variant="primary|secondary|ghost"`、`data-size="sm|md|lg"` 指定变体。
+
+| 组件 | 结构与尺寸 / token | 状态与输入方式 |
+| --- | --- | --- |
+| Button | 32 / 40 / 48px 最小高度，sm 或 full 圆角，引用 bg、text、border、duration 与 ease 语义 token | 悬停改变填充，按下减弱不透明度；2px 焦点环；原生 disabled 禁用；`aria-busy` 表示准备中；Enter／空格与触屏点击激活 |
+| Icon Button | 通常 32px 方形；演示主题选择作为分段控件，内部图标沿用实际演示主题的前景色 | 支持按钮同样的状态与操作；必须有可访问名称 |
+| Input / Select | 40px 最小高度；输入框 radius-md、下拉框 radius-xs；文字 text-sm，数值输入使用 Inter | 焦点环与禁用态统一；`aria-invalid` 使用 danger 边框和浅底；保留原生输入、数值增减及下拉键盘操作，不阻断触屏选择 |
+| Search | 40px 高、radius-md，图标、搜索字段和 Inter 快捷键；小屏沿用当前收起方式 | 点击或 Ctrl／⌘K 聚焦，Escape 退出；原生搜索输入与触屏点击；焦点环、disabled 和 invalid 样式可用 |
+| Slider | 标签关联原生 range 与 output；现有轨道、拇指尺寸保留，进度填充引用 bg-inverse 与 border-default；拇指使用 shadow-sm | 原生方向键调值、鼠标或触屏拖动；输出使用 Inter；禁用时不接受输入 |
+| Chip | radius-full，普通白底灰边，选中 bg-inverse / text-on-inverse | 悬停使用 bg-subtle；Tab、Enter／空格及触屏操作；选中状态由 `aria-pressed` 表达 |
+| Tag | 文字与可选底面，radius-full；交互标签与技术标签按板块区分 | 作为信息展示，不增加虚假按钮行为或焦点停靠 |
+| Segmented Control | 高 40px；页签外壳 radius-xl，预设外壳 radius-sm，选中白底并允许 shadow-xs；选中前后内边距和字号一致 | 页签保留方向键、Home／End；预设和主题按钮使用 Enter／空格或触屏；selected / aria-selected / aria-pressed 同步 |
+| Card | 等宽瀑布流，radius-lg；主体与信息区分开，引用 bg-surface；默认及悬停均无阴影 | 点击主体按钮或信息链接进入详情；可通过键盘访问真实控件，不把整张卡片作为按钮 |
+
+所有上述网站控件在系统减少动态效果时取消过渡，保留填充、焦点与选中状态。交付的状态提示按 info、success、warning、danger 选择文字色；复制和下载准备期间展示信息状态并暂时禁用对应按钮，结束后恢复可操作。完整提示时机、持续时间与状态流程仍属于 P1 待补内容。
+
+## 5. 设计检查
+
+检查公共导航高度与当前板块样式、字体与数值显示、颜色与控件层级、是否引用公共 token、卡片等宽与内容高度、封面留白和动效空间、名称与标签、详情页区域组织，以及封面和详情的初始效果一致性。
+
+## 6. 待补充
+
+- 工作台深色主题中的暖灰（如 `#262626`、`#3C3B37`、`#F4F3F1`）是否保留，或统一为冷灰。
+- 字号是否收为上表 9 档，取消现有 8、9、10、17px。
+- 状态反馈的完整交互规则、深色模式取值与完整响应式规范后期补充。现有小屏适配继续保留，不作为已确认的最终规范。已确认内容作为当前执行依据，后续根据实际使用需要修订。

@@ -2,17 +2,16 @@
 @media (prefers-reduced-motion: no-preference) {
     @view-transition { navigation: auto; }
 
-    html:not([data-cover]) .library-header { view-transition-name: library-header; }
-    html:not([data-cover])::view-transition-group(root) { animation-duration: 280ms; }
+    /* Fade the page as one surface so the shared navigation stays in place. */
+    html:not([data-cover])::view-transition-group(root) { animation-duration: var(--library-duration-content); animation-timing-function: var(--library-ease-page); }
     html:not([data-cover])::view-transition-old(root) {
-        animation: library-page-leave 160ms ease-out both;
+        animation: library-page-leave var(--library-duration-page) var(--library-ease-page) both;
     }
     html:not([data-cover])::view-transition-new(root) {
-        animation: library-page-arrive 280ms cubic-bezier(.22, 1, .36, 1) both;
+        animation: library-page-arrive var(--library-duration-content) var(--library-ease-page) both;
     }
-    html:not([data-cover])::view-transition-group(library-header) { animation-duration: 180ms; }
 
-    html:not([data-cover]):not([data-library-motion-settled]) :is(
+    html:not([data-cover]):not([data-library-motion-settled]) :where(
         .library-header,
         .main > aside,
         .content > .title,
@@ -26,12 +25,14 @@
         .main-shell main > .guide,
         body > footer
     ) {
-        animation: library-surface-arrive 380ms cubic-bezier(.22, 1, .36, 1) backwards;
+        animation: library-surface-arrive var(--library-duration-content) var(--library-ease-page) backwards;
     }
     html:not([data-cover]):not([data-library-motion-settled]) .library-header {
         animation-name: library-chrome-arrive;
-        animation-duration: 280ms;
+        animation-duration: var(--library-duration-page);
     }
+    /* Do not translate the viewport-bottom footer and create a temporary scrollbar. */
+    html:not([data-cover]):not([data-library-motion-settled]) body > footer { animation-name: library-page-arrive; }
     .content > .title, .main-shell main > .intro { animation-delay: 30ms; }
     .content > .chips { animation-delay: 60ms; }
     .content > .grid, .main-shell main > .workspace { animation-delay: 90ms; }
@@ -50,6 +51,6 @@
     to { opacity: 0; }
 }
 @keyframes library-page-arrive {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

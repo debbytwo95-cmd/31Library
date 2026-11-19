@@ -1219,20 +1219,6 @@ input[type=range]::-moz-range-thumb {
     opacity: .85
 }
 
-.site-footer {
-    height: 65px;
-    padding: 24px 60px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20px;
-    border-top: 1px solid var(--line);
-    font-size: 13px;
-    line-height: 16px;
-    font-weight: 500;
-    color: #5d5d66;
-    background: var(--page)
-}
 
 .toast {
     position: fixed;
@@ -1420,9 +1406,6 @@ input[type=range]::-moz-range-thumb {
         font-size: 12px
     }
 
-    .site-footer {
-        font-size: 11px
-    }
 
     .intro-copy>span {
         margin-left: 0;
@@ -1769,16 +1752,6 @@ input[type=range]::-moz-range-thumb {
         padding: 11px 14px
     }
 
-    .site-footer {
-        height: auto;
-        min-height: 85px;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 23px 22px;
-        gap: 10px;
-        font-size: 10px;
-        line-height: 16px
-    }
 
     .toast {
         max-width: calc(100vw - 40px);

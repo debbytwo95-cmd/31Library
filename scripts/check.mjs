@@ -9,7 +9,7 @@ const origin = 'http://library.test/';
 const window = {};
 vm.runInNewContext(await readFile(path.join(root, 'assets/catalog-data.js'), 'utf8'), { window });
 const entries = window.LibraryCatalog;
-const errors = [], seen = new Set(), pending = ['index.html', 'single-web/components/index.html', ...entries.map(item => item.href)];
+const errors = [], seen = new Set(), pending = ['index.html', 'single-web/components/index.html', 'assets/search.svg', ...entries.map(item => item.href)];
 const ids = new Set();
 for (const item of entries) {
     if (ids.has(item.id) || !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(item.id)) errors.push('Invalid / duplicate project ID: ' + item.id);

@@ -13,21 +13,7 @@
   <script src="./assets/catalog.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <div class="header-left">
-      <a class="logo" href="./index.html">31Library</a>
-      <nav aria-label="资源板块">
-        <a class="nav-item active" data-section="components" aria-pressed="true" href="./single-web/components/index.html">组件</a>
-        <button class="nav-item" data-section="blocks" aria-pressed="false">区块</button>
-        <button class="nav-item" data-section="lab" aria-pressed="false">实验室</button>
-      </nav>
-    </div>
-    <label class="search-field">
-      <img src="./assets/search.svg" alt="" width="16" height="16">
-      <input id="search" type="search" aria-label="搜索名称、关键词或标签" placeholder="搜索名称、关键词或标签" autocomplete="off">
-      <kbd>⌘K</kbd>
-    </label>
-  </header>
+  <header class="library-header"></header>
   <main class="main">
     <aside aria-label="资源分类"><div class="category-heading"><img src="./assets/chevron-down.svg" alt="" width="16" height="16"><span>全部组件</span></div><div id="categories"></div></aside>
     <section class="content" aria-label="资源列表">
@@ -37,6 +23,6 @@
       <noscript><a href="./single-web/components/icon-button-studio/index.html">打开 Icon Button 扩散箭头按钮</a>。请启用 JavaScript 查看分类和列表。<a href="./single-web/components/magnetic-button-studio/index.html">打开 Magnetic Button 磁吸按钮</a>。<a href="./single-web/motion-lab/fluid-glow/index.html">打开流体炫光实验</a></noscript>
     </section>
   </main>
-  <footer><span>31Library · 个人 UI 资源库 · V1.1</span><span>Explore → Preview → Experiment → Refine → Reuse</span></footer>
+  <footer class="library-footer"></footer>
 </body>
 </html>

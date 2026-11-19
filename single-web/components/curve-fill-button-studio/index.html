@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <header class="site-header"></header>
+  <header class="library-header"></header>
   <div class="main-shell">
     <header class="topbar">
       <nav class="breadcrumbs" aria-label="面包屑"><a href="../index.html">组件</a><span class="slash">/</span><a
@@ -34,40 +34,21 @@
         <div class="demo-column">
           <div class="demo-toolbar">
             <div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab"
-                aria-selected="true" aria-controls="preview-panel"><svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false"
-                aria-controls="code-panel" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m8 7-5 5 5 5m8-10 5 5-5 5m-2-12-4 16" />
-                </svg>代码</button></div>
-            <button class="toolbar-copy" id="copy-code"><svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="8" y="8" width="12" height="13" rx="2" />
-                <path d="M16 8V3H3v13h5" />
-              </svg><span>复制组件代码</span></button>
+                aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" data-library-icon="preview" src="../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false"
+                aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" data-library-icon="code" src="../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" data-library-icon="copy" src="../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
           </div>
           <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
             <div class="stage-top"><span class="live-label"><span></span>LIVE PLAYGROUND</span>
               <div class="stage-themes" role="group" aria-label="演示区主题"><button class="selected"
-                  data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><svg viewBox="0 0 24 24"
-                    aria-hidden="true">
-                    <circle cx="12" cy="12" r="4" />
-                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
-                  </svg></button><button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><svg
-                    viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z" />
-                  </svg></button></div>
+                  data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" data-library-icon="sun" src="../../../assets/icons/sun.svg" width="14" height="14" alt=""></button><button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" data-library-icon="moon" src="../../../assets/icons/moon.svg" width="14" height="14" alt=""></button></div>
             </div>
             <div class="field" id="field"><button id="curve-cta" class="library-curve-button" data-appearance="light"
                 type="button"><span class="curve-label">Get started</span><svg class="curve-svg" viewBox="0 0 100 100"
                   preserveAspectRatio="none" aria-hidden="true">
                   <path class="curve-path" d="M 0 100 V 100 Q 50 100 100 100 V 100 z" />
                 </svg></button></div>
-            <div class="stage-bottom"><span><svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m5 3 14 10-7 1-3 7Z" />
-                </svg>从不同方向移入按钮，观察弧线填充</span><button class="slow-control" id="slow-control" aria-pressed="false"><span
+            <div class="stage-bottom"><span><img class="library-icon design-icon" data-library-icon="cursor" src="../../../assets/icons/cursor.svg" width="13" height="13" alt="">从不同方向移入按钮，观察弧线填充</span><button class="slow-control" id="slow-control" aria-pressed="false"><span
                   class="slow-dot"></span><span id="speed-label">1×</span>播放速度</button></div>
           </div>
           <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
@@ -81,10 +62,7 @@
         </div>
         <aside class="settings" aria-label="动效参数">
           <div class="settings-heading">
-            <h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数" title="重置参数"><svg
-                viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 10a8 8 0 1 1 1 8M4 4v6h6" />
-              </svg></button>
+            <h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数" title="重置参数"><img class="library-icon design-icon" data-library-icon="reset" src="../../../assets/icons/reset.svg" width="13" height="13" alt=""></button>
           </div>
           <p class="settings-intro">保留弧线的柔软，调出合适的节奏。</p>
           <div class="preset-group" role="group" aria-label="动效预设"><button data-preset="default" class="selected"
@@ -135,13 +113,11 @@
         </div>
       </section>
       <section class="guide">
-        <div class="guide-icon"><svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 4v12m-5-5 5 5 5-5M4 17v4h16v-4" />
-          </svg></div>
+        <div class="guide-icon"><img class="library-icon design-icon" data-library-icon="code-guide" src="../../../assets/icons/code-guide.svg" width="22" height="22" alt=""></div>
         <div>
           <h2>把这个细节，带进你的作品</h2>
           <p>复制组件代码接入已有页面，或下载可直接打开的示例。三个入口均同步当前参数。</p>
-        </div><button id="download" class="download-button">下载示例</button>
+        </div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" data-library-icon="download" src="../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
       </section>
       <section class="integration-notes">
         <h2>使用与接入</h2>
@@ -151,8 +127,7 @@
       </section>
     </main>
   </div>
-  <footer class="site-footer"><span>31Library · 个人 UI 资源库</span><span>Explore → Preview → Experiment → Refine →
-      Reuse</span></footer>
+  <footer class="library-footer"></footer>
   <script src="assets/gsap.min.js"></script>
   <script src="effect.js"></script>
   <script src="../../../assets/delivery.js"></script>

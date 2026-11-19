@@ -15,7 +15,7 @@
  function notify(message){clearTimeout(toastTimer);$('toast').querySelector('span').textContent=message;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600);}
  function apply(){
   const factor=slow?4:1;
-  const vars={'--duration':config.duration*factor+'ms','--arrow-delay':config.arrowDelay*factor+'ms','--ease':curves[config.easing],'--disc':config.iconSize+'px','--corner':config.cornerRadius+'px','--travel':config.arrowTravel+'px','--icon-center':config.iconSize/2+8+'px'};
+  const vars={'--icon-button-duration':config.duration*factor+'ms','--icon-button-arrow-delay':config.arrowDelay*factor+'ms','--icon-button-ease':curves[config.easing],'--icon-button-disc':config.iconSize+'px','--icon-button-corner':config.cornerRadius+'px','--icon-button-travel':config.arrowTravel+'px','--icon-button-icon-center':config.iconSize/2+8+'px'};
   for(const [key,value] of Object.entries(vars))button.style.setProperty(key,value);
   for(const [key,unit] of Object.entries(units)){
    const input=$(key);input.value=config[key];input.style.setProperty('--progress',100*(config[key]-Number(input.min))/(Number(input.max)-Number(input.min))+'%');
@@ -32,9 +32,7 @@
  $('slow-control').addEventListener('click',()=>{slow=!slow;$('slow-control').setAttribute('aria-pressed',String(slow));$('speed-label').textContent=slow?'0.25×':'1×';apply();});
  function setStageTheme(theme){stage.dataset.theme=theme;button.dataset.appearance=theme;document.querySelectorAll('[data-stage-theme]').forEach(b=>{const selected=b.dataset.stageTheme===theme;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});if(codeVisible)delivery?.refresh();}
  document.querySelectorAll('[data-stage-theme]').forEach(b=>{const theme=b.dataset.stageTheme;b.setAttribute('aria-label',theme==='light'?'浅色演示区':'深色演示区');b.setAttribute('title',theme==='light'?'浅色':'深色');b.addEventListener('click',()=>setStageTheme(theme));});
- function setPageTheme(theme){document.documentElement.dataset.theme=theme;$('page-theme').innerHTML=`<svg><use href="#i-${theme==='dark'?'moon':'sun'}"/></svg>`;$('page-theme').setAttribute('aria-label',theme==='dark'?'切换为浅色页面':'切换为深色页面');try{localStorage.setItem('icon-button-page-theme',theme);}catch{}}
- setPageTheme('light');setStageTheme('light');
- $('page-theme').addEventListener('click',()=>{const theme=document.documentElement.dataset.theme==='dark'?'light':'dark';setPageTheme(theme);setStageTheme(theme);});
+ document.documentElement.dataset.theme='light';setStageTheme('light');
  function setTab(code){codeVisible=code;clearInteraction();stage.hidden=code;$('code-panel').hidden=!code;[$('preview-tab'),$('code-tab')].forEach((tab,i)=>{const selected=Boolean(i)===code;tab.classList.toggle('selected',selected);tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;});if(code)delivery?.refresh();}
  $('preview-tab').addEventListener('click',()=>setTab(false));$('code-tab').addEventListener('click',()=>setTab(true));
  document.querySelector('.tabs').addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const code=e.key==='Home'?false:e.key==='End'?true:!codeVisible;setTab(code);$(code?'code-tab':'preview-tab').focus();}});
@@ -44,7 +42,7 @@
   async bundle(){
    const snapshot={...config},theme=stage.dataset.theme;
    const clone=button.cloneNode(true);clone.removeAttribute('id');clone.className='library-icon-button';clone.classList.remove('is-active','is-pressed');
-   clone.style.setProperty('--duration',snapshot.duration+'ms');clone.style.setProperty('--arrow-delay',snapshot.arrowDelay+'ms');
+   clone.style.setProperty('--icon-button-duration',snapshot.duration+'ms');clone.style.setProperty('--icon-button-arrow-delay',snapshot.arrowDelay+'ms');
    const [css,font]=await Promise.all([LibraryDelivery.read(new URL('button.css',location.href).href),LibraryDelivery.fontCSS()]);
    return {html:clone.outerHTML,css:font+'\n'+css.replace(/Inter,Arial/g,'LibraryButtonInter,Arial'),
     js:'(() => {\nconst mount = '+LibraryButtons.mountIcon.toString()+';\ndocument.querySelectorAll(".library-icon-button").forEach(root=>{root.libraryComponent?.destroy();root.libraryComponent=mount(root);});\n})();',
