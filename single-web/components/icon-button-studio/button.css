@@ -2,11 +2,11 @@
     --icon-button-duration: 500ms;
     --icon-button-arrow-delay: 30ms;
     --icon-button-ease: cubic-bezier(.22, 1, .36, 1);
-    --icon-button-disc: 48px;
+    --icon-button-disc: 42px;
     --icon-button-corner: 32px;
     --icon-button-travel: 40px;
     --icon-button-cover: 150%;
-    --icon-button-icon-center: 32px;
+    --icon-button-icon-center: 28px;
     --icon-button-base: #18181b;
     --icon-button-ink: #fff;
     --icon-button-fill: #fff;
