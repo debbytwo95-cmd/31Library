@@ -1502,7 +1502,7 @@ input[type=range]::-moz-range-thumb {
 
     .title-row {
         height: auto;
-        padding: 19px 0 16px
+        padding: 18px 0 0px
     }
 
     h1 {
