@@ -1,0 +1,151 @@
+/* Shared parameter fields from the supplied canshu component variants. */
+.main-shell .settings {
+    height: auto;
+    min-height: 0;
+    gap: 0;
+}
+.main-shell .settings .spring-controls { display: contents; }
+.main-shell .settings .palette { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.main-shell .settings .library-property {
+    --library-property-position: 0;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    margin: 0 0 var(--library-space-2);
+    padding: 12px 16px;
+    border: 0;
+    border-radius: var(--library-radius-sm);
+    background: var(--library-property-bg);
+    color: var(--library-property-label);
+    font: 400 12px/14px var(--library-font);
+}
+.main-shell .settings .library-property .library-property-label {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--library-space-2);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    color: var(--library-property-label);
+    font: 400 12px/14px var(--library-font);
+}
+.main-shell .settings .library-property output {
+    display: inline-flex;
+    align-items: center;
+    float: none;
+    margin: 0;
+    color: var(--library-property-value);
+    font: 600 12px/15px Inter, sans-serif;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+.main-shell .settings .library-property output span { color: inherit; font: inherit; }
+.library-property[data-kind=text] .library-property-label > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.main-shell .settings .library-property .range-labels { display: none; }
+.main-shell .settings .library-property[data-kind=range] { isolation: isolate; padding-block: 0; }
+.main-shell .settings .library-property[data-kind=range]::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0 auto 0 0;
+    width: calc(16px + (100% - 32px) * var(--library-property-position, 0));
+    border-radius: 8px 0 0 8px;
+    background: var(--library-property-fill);
+    pointer-events: none;
+}
+.main-shell .settings .library-property[data-kind=range] .library-property-label {
+    width: 100%;
+    pointer-events: none;
+}
+.library-property-ticks { position: absolute; z-index: -1; inset: 0 16px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+.library-property-ticks i { width: 2px; height: 2px; border-radius: 50%; background: var(--library-property-tick); }
+.main-shell .settings .library-property input[type=range] {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 40px;
+    min-height: 0;
+    margin: 0;
+    padding: 0 16px;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    cursor: ew-resize;
+    touch-action: pan-y;
+}
+.main-shell .settings .library-property input[type=range]::-webkit-slider-runnable-track { height: 12px; background: transparent; }
+.main-shell .settings .library-property input[type=range]::-moz-range-track { height: 12px; background: transparent; }
+.main-shell .settings .library-property input[type=range]::-moz-range-progress { background: transparent; }
+.main-shell .settings .library-property input[type=range]::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 1.5px; height: 12px; margin: 0; border: 0; border-radius: 1px; background: var(--library-text-quaternary); box-shadow: none; }
+.main-shell .settings .library-property input[type=range]::-moz-range-thumb { width: 1.5px; height: 12px; border: 0; border-radius: 1px; background: var(--library-text-quaternary); box-shadow: none; }
+.main-shell .settings .library-property input[type=range]:is(:hover, :active, :focus-visible)::-webkit-slider-thumb { background: var(--library-property-value); }
+.main-shell .settings .library-property input[type=range]:is(:hover, :active, :focus-visible)::-moz-range-thumb { background: var(--library-property-value); }
+.main-shell .settings .library-property:is([data-kind=text], [data-kind=number]) { height: auto; min-height: 51px; }
+.main-shell .settings .library-property :is(input[type=text], input[type=number], textarea) {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    width: 0;
+    height: 27px;
+    min-height: 27px;
+    margin: 0;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: var(--library-radius-xs);
+    background: var(--library-property-fill);
+    color: var(--library-property-value);
+    font: 400 12px/15px Inter, var(--library-font);
+    text-align: right;
+}
+.main-shell .settings .library-property select {
+    appearance: none;
+    min-height: 16px;
+    max-width: 70%;
+    width: auto;
+    margin: 0;
+    padding: 0 20px 0 0;
+    border: 0;
+    border-radius: 0;
+    background: url('chevron-down.svg') right center / 16px 16px no-repeat;
+    color: var(--library-property-value);
+    font: 500 12px/16px var(--library-font);
+    text-align: right;
+    cursor: pointer;
+}
+.main-shell .settings .library-property select option { background: var(--library-bg-page); color: var(--library-text-primary); }
+.main-shell .settings .library-property input[type=checkbox] { appearance: none; position: relative; flex: none; width: 28px; height: 16px; margin: 0; padding: 0; border: 0; border-radius: 12px; background: var(--library-property-tick); cursor: pointer; }
+.main-shell .settings .library-property input[type=checkbox]::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--library-bg-page); transition: transform var(--library-duration-fast) var(--library-ease-out); }
+.main-shell .settings .library-property input[type=checkbox]:checked { background: #0e0f11; }
+.main-shell .settings .library-property input[type=checkbox]:checked::after { transform: translateX(12px); }
+.library-property-color-value { display: flex; align-items: center; gap: 4px; margin-left: auto; min-width: 0; }
+.main-shell .settings .library-property input[type=color] { appearance: none; flex: none; box-sizing: border-box; width: 14px; height: 14px; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 4px; background: transparent; cursor: pointer; }
+.main-shell .settings .library-property input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+.main-shell .settings .library-property input[type=color]::-webkit-color-swatch { border: 0; border-radius: 4px; }
+.main-shell .settings .library-property input[type=color]::-moz-color-swatch { border: 0; border-radius: 4px; }
+.main-shell .settings .library-property input.library-property-hex { flex: none; width: 82px; background: var(--library-bg-page); }
+.main-shell .settings .library-property :is(input, select, textarea):focus-visible { outline: 2px solid var(--library-focus-ring); outline-offset: 2px; }
+.main-shell .settings .library-property :is(input, select, textarea)[aria-invalid=true] { outline: 1px solid var(--library-status-danger); }
+.main-shell .settings .library-property.is-disabled { opacity: .45; }
+.main-shell .settings .library-property.is-disabled :is(input, select, textarea) { opacity: 1; cursor: not-allowed; }
+@media (min-width: 960px) {
+    .main-shell .workspace:not(.no-settings) { grid-template-columns: minmax(0, 1fr) 363px; }
+}
+@media (max-width: 959px) {
+    .main-shell .workspace:not(.no-settings) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .main-shell .settings .library-property input[type=checkbox]::after { transition: none; }
+}

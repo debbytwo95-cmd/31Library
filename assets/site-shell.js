@@ -59,6 +59,11 @@
         if (event.key === 'Escape') input.blur();
     });
     if (catalog) return;
+    if (document.querySelector('.main-shell .settings')) {
+        const controls = document.createElement('script');
+        controls.src = new URL('assets/property-controls.js', root).href;
+        document.body.append(controls);
+    }
     let saved;
     try { saved = JSON.parse(sessionStorage.getItem('31library:catalog:' + root.pathname) || 'null'); } catch {}
     if (saved?.section === section && saved.url) {

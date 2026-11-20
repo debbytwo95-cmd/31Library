@@ -14,6 +14,11 @@
     --library-bg-surface: var(--library-gray-50);
     --library-bg-subtle: var(--library-gray-150);
     --library-bg-inverse: var(--library-gray-900);
+    --library-property-bg: var(--library-gray-150);
+    --library-property-fill: #e4e4e4;
+    --library-property-tick: #c9c9d0;
+    --library-property-label: var(--library-gray-500);
+    --library-property-value: var(--library-gray-600);
     --library-text-primary: var(--library-gray-900);
     --library-text-secondary: var(--library-gray-600);
     --library-text-tertiary: var(--library-gray-500);

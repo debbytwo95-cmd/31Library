@@ -10,6 +10,7 @@
 4. 通过 `assets/cover.js`、`assets/cover.css` 与 `assets/site-shell.js` 接入封面、公共导航和页脚。页面仅保留 `.library-header`、`.library-footer` 占位，公共外框样式统一引用 `assets/site.css`，不在项目内另写导航或页脚间距。封面只保留主体，真实操作触发，移出后静止。
 5. 通过 `assets/delivery.js` 登记交付：`bundle()` 在异步读取资源前取得当前参数，返回组件结构、隔离样式和初始化逻辑；`prompt()` 描述同一组参数、单位、依赖和操作约束。下载为源码包时，`bundle(true)` 同时返回必要文件及许可。
 6. 详情页说明输入能力、依赖、最少接入步骤，以及 `reset()`、`destroy()` 等实际提供的操作；没有可调参数时不增加空面板。
+7. 参数区使用 `.settings` 与关联原生输入的 `label`；通过公共外框自动加载 `assets/property-controls.css`、`assets/property-controls.js`，统一滑块、开关、下拉、文本和颜色属性样式，不在项目内另写参数控件外观。程序修改滑块值时同步原有 `--progress`，或提供 `input` / `change` 及预设、重置入口，使公共进度同步。
 
 ## 修改、改名与删除
 
@@ -28,6 +29,7 @@ node scripts/check.mjs
 node scripts/runtime.test.cjs
 node scripts/delivery.test.cjs
 node scripts/curve-fill.test.cjs
+node scripts/ascii-field.test.cjs
 node scripts/design.test.cjs
 ```
 

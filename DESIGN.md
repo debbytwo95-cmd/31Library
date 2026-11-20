@@ -184,6 +184,22 @@
 
 筛选标签普通态白底灰边，选中态深底白字；预览切换与预设选中项使用白色底面。
 
+### 参数调节控件
+
+所有项目的参数属性沿用已确认的 `canshu` 样式，由 `assets/property-controls.css` 与 `assets/property-controls.js` 共用实现；新项目加载公共外框后自动接入。参数种类与数量按项目实际需要决定，继续使用真实原生输入，不改变参数范围、默认值或交付内容。
+
+桌面参数面板宽 363px、内边距 20px，标准参数行宽 323px；窄屏随面板宽度伸缩。每行底色 `#EEEEF0`、圆角 8px，左右内边距 16px，相邻行间隔 8px。标题使用 Noto Sans SC Regular 12/14px、`#7B7B82`；值为 `#5C5C66`，数值使用 Inter 12/15px，强调沿用已加载的 Semibold。
+
+| 类型 | 共用结构与样式 |
+| --- | --- |
+| 滑块 | 整行高 40px，标题居左、数值居右；`#E4E4E4` 填充随真实数值推进，轨道提供 9 个 2px 灰色刻度点；1.5×12px 竖线手柄，普通态灰色，悬停、按下或键盘聚焦时加深。隐藏旧的独立细轨与两端说明 |
+| 开关 | 高 40px；左侧标题、右侧 28×16px 开关，滑块直径 12px、内距 2px；开态深底浅色滑块 |
+| 下拉 | 高 40px；标题居左、选中值与公共 16px 向下箭头居右；保留原生选择和键盘行为 |
+| 文本 / 数值输入 | 标准高 51px，内边距 12px 16px；右侧输入区高 27px、圆角 6px、`#E4E4E4` 填充，文字右对齐；较长说明允许自然增高 |
+| 颜色 | 高 40px；标题居左，右侧 14×14px 色块与 27px 高白底十六进制输入，输入区圆角 6px。两种输入同步同一参数；不完整色值编辑期间不改变组件颜色，离开时恢复有效值 |
+
+进度、色值和数值在拖动、键盘调整、预设与重置后同步。保留输入关联标签、焦点环、禁用态；公共参数外观不进入封面主体、复制代码或下载示例。设计稿组件集的紫色虚线外框及各变体的绝对坐标不属于网站界面。
+
 ### 图标
 
 网站公共操作图标以磁吸按钮页面为准，统一引用 `assets/icons/` 中的同一份 SVG，不在项目内另画预览、代码、复制、主题、指针提示、重置与下载图标。搜索与分类箭头继续使用公共资源 `assets/search.svg`、`assets/chevron-down.svg`。
@@ -257,9 +273,9 @@ Switch 开关、Checkbox / Radio、Tooltip 气泡提示、Empty State 空状态�
 | --- | --- | --- |
 | Button | 32 / 40 / 48px 最小高度，sm 或 full 圆角，引用 bg、text、border、duration 与 ease 语义 token | 悬停改变填充，按下减弱不透明度；2px 焦点环；原生 disabled 禁用；`aria-busy` 表示准备中；Enter／空格与触屏点击激活 |
 | Icon Button | 通常 32px 方形；演示主题选择作为分段控件，内部图标沿用实际演示主题的前景色 | 支持按钮同样的状态与操作；必须有可访问名称 |
-| Input / Select | 40px 最小高度；输入框 radius-md、下拉框 radius-xs；文字 text-sm，数值输入使用 Inter | 焦点环与禁用态统一；`aria-invalid` 使用 danger 边框和浅底；保留原生输入、数值增减及下拉键盘操作，不阻断触屏选择 |
+| Input / Select | 参数区按“参数调节控件”定义使用 51px 文本行、27px 输入框与 40px 下拉行；其他公共输入沿用 40px 最小高度 | 焦点环与禁用态统一；`aria-invalid` 使用 danger；保留原生输入、数值增减及下拉键盘操作，不阻断触屏选择 |
 | Search | 40px 高、radius-md，图标、搜索字段和 Inter 快捷键；小屏沿用当前收起方式 | 点击或 Ctrl／⌘K 聚焦，Escape 退出；原生搜索输入与触屏点击；焦点环、disabled 和 invalid 样式可用 |
-| Slider | 标签关联原生 range 与 output；现有轨道、拇指尺寸保留，进度填充引用 bg-inverse 与 border-default；拇指使用 shadow-sm | 原生方向键调值、鼠标或触屏拖动；输出使用 Inter；禁用时不接受输入 |
+| Slider | 标签关联原生 range 与 output；40px 灰底整行滑块、填充进度、灰色刻度与竖线手柄，引用 property 语义 token，无投影 | 原生方向键调值、鼠标或触屏拖动；输出使用 Inter；预设与重置同步填充；禁用时不接受输入 |
 | Chip | radius-full，普通白底灰边，选中 bg-inverse / text-on-inverse | 悬停使用 bg-subtle；Tab、Enter／空格及触屏操作；选中状态由 `aria-pressed` 表达 |
 | Tag | 文字与可选底面，radius-full；交互标签与技术标签按板块区分 | 作为信息展示，不增加虚假按钮行为或焦点停靠 |
 | Segmented Control | 高 40px；页签外壳 radius-xl，预设外壳 radius-sm，选中白底并允许 shadow-xs；选中前后内边距和字号一致 | 页签保留方向键、Home／End；预设和主题按钮使用 Enter／空格或触屏；selected / aria-selected / aria-pressed 同步 |
