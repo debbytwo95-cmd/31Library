@@ -140,12 +140,6 @@
 .main-shell .settings .library-property :is(input, select, textarea)[aria-invalid=true] { outline: 1px solid var(--library-status-danger); }
 .main-shell .settings .library-property.is-disabled { opacity: .45; }
 .main-shell .settings .library-property.is-disabled :is(input, select, textarea) { opacity: 1; cursor: not-allowed; }
-@media (min-width: 960px) {
-    .main-shell .workspace:not(.no-settings) { grid-template-columns: minmax(0, 1fr) 363px; }
-}
-@media (max-width: 959px) {
-    .main-shell .workspace:not(.no-settings) { grid-template-columns: minmax(0, 1fr); }
-}
 @media (prefers-reduced-motion: reduce) {
     .main-shell .settings .library-property input[type=checkbox]::after { transition: none; }
 }

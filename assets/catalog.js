@@ -23,7 +23,7 @@ function save() {
 function render(animate = false) {
   const lab = section === 'lab';
   const sectionItems = entries.filter(item => item.section === section);
-  const categories = section === 'components' ? [['buttons', '按钮'], ['text', '文字']] : [['all', lab ? '全部实验' : '全部区块']];
+  const categories = section === 'components' ? [['buttons', '按钮'], ['text', '文字'], ['backgrounds', '背景']] : [['all', lab ? '全部实验' : '全部区块']];
   if (!categories.some(([id]) => id === category)) category = categories[0][0];
   document.querySelectorAll('.library-nav-item').forEach(link => {
     const active = new URL(link.href).searchParams.get('section') === section;

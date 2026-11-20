@@ -4,7 +4,7 @@
 
 在本目录运行 `node serve.cjs`，或在仓库根目录运行 `node scripts/serve.mjs`，访问终端显示的地址。服务同时提供公共导航与字体；ES 模块需要 HTTP，不能直接双击页面。
 
-- `dist/index.html`：实验室详情，包含公共介绍、预览／代码页签、交付和使用说明；没有参数时不显示右侧空面板。
+- `dist/index.html`：实验室详情，包含公共介绍、预览／代码页签、交付和使用说明；没有参数时不显示下方空面板。
 - `dist/effect.js`、`dist/effect.css`：容器隔离的地球实现，预览与交付共用。
 - `dist/globe.js`：工作台初始化与交付登记；旧 `dist/style.css` 保留为构图参考，不再加载。
 - `dist/assets/`：Three.js、OrbitControls、MIT 许可及 Three.js 示例地图资源。

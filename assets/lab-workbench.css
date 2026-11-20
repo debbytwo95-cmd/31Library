@@ -1,5 +1,5 @@
 /* Public lab chrome follows the same workbench layout as component pages. */
-.lab-workspace { grid-template-columns: minmax(0,1fr) 320px; align-items: start; }
+.lab-workspace { align-items: start; }
 .lab-workspace .demo-column { height: auto; }
 .lab-workspace .stage { height: auto; overflow: hidden; }
 .lab-workspace .field { position: relative; inset: auto; min-height: 0; }

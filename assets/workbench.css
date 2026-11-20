@@ -1,0 +1,80 @@
+/* Detail workbenches share a stacked preview and parameter layout. */
+html:not([data-cover]) .main-shell .workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--library-space-5);
+}
+html:not([data-cover]) .main-shell .workspace .demo-column {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    padding: var(--library-space-5);
+    border-radius: var(--library-radius-2xl);
+    background: var(--library-bg-surface);
+}
+html:not([data-cover]) .main-shell .workspace .stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--library-space-5);
+    box-sizing: border-box;
+    height: auto;
+    min-height: 419px;
+    padding: var(--library-space-5);
+    border-radius: var(--library-radius-2xl);
+    background: var(--library-bg-page);
+}
+html:not([data-cover]) .main-shell .workspace .stage[data-theme=light] { --stage-bg: var(--library-bg-page); }
+html:not([data-cover]) .main-shell .workspace .stage[data-theme=dark] { background: var(--stage-bg); }
+html:not([data-cover]) .main-shell .workspace .stage > .stage-top,
+html:not([data-cover]) .main-shell .workspace .stage > .stage-bottom {
+    position: relative;
+    inset: auto;
+    flex: none;
+    width: 100%;
+    color: var(--library-text-secondary);
+}
+html:not([data-cover]) .main-shell .workspace .stage > .field {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    width: 100%;
+    min-height: 260px;
+    background: transparent;
+}
+/* The gray module wraps the toolbar, themed preview and technical caption. */
+html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes { background: var(--library-bg-subtle); }
+html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes button.selected { background: var(--library-bg-page); }
+html:not([data-cover]) .main-shell .workspace .stage-top [data-stage-theme=dark] img { filter: invert(1); }
+html:not([data-cover]) .main-shell .workspace .live-label,
+html:not([data-cover]) .main-shell .workspace .stage-bottom { color: var(--stage-muted); }
+html:not([data-cover]) .main-shell .workspace .live-label > span { background: var(--stage-inverse); }
+html:not([data-cover]) .main-shell .workspace.lab-workspace .stage { min-height: 0; }
+html:not([data-cover]) .main-shell .workspace.lab-workspace .stage > .field { flex: none; min-height: 0; }
+/* Background effects fill the rounded preview; the gray module keeps its 20px gutter. */
+html:not([data-cover]) .main-shell .workspace[data-category=backgrounds] .stage {
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+}
+html:not([data-cover]) .main-shell .workspace[data-category=backgrounds] .stage > .field { min-height: 0; }
+html:not([data-cover]) .main-shell .workspace .settings {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--library-space-2);
+    align-items: start;
+    align-content: start;
+    width: 100%;
+    max-width: none;
+}
+html:not([data-cover]) .main-shell .workspace .settings > :not(.library-property) { grid-column: 1 / -1; }
+html:not([data-cover]) .main-shell .workspace .settings .preset-group { width: min(100%, 363px); }
+@media (max-width: 959px) {
+    html:not([data-cover]) .main-shell .workspace .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+    html:not([data-cover]) .main-shell .workspace .settings { grid-template-columns: minmax(0, 1fr); }
+    html:not([data-cover]) .main-shell .workspace .stage { min-height: 365px; }
+    html:not([data-cover]) .main-shell .workspace .stage > .field { min-height: 220px; }
+    html:not([data-cover]) .main-shell .workspace .stage > .stage-bottom { flex-wrap: wrap; }
+}

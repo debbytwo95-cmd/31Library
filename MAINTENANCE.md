@@ -11,6 +11,7 @@
 5. 通过 `assets/delivery.js` 登记交付：`bundle()` 在异步读取资源前取得当前参数，返回组件结构、隔离样式和初始化逻辑；`prompt()` 描述同一组参数、单位、依赖和操作约束。下载为源码包时，`bundle(true)` 同时返回必要文件及许可。
 6. 详情页说明输入能力、依赖、最少接入步骤，以及 `reset()`、`destroy()` 等实际提供的操作；没有可调参数时不增加空面板。
 7. 参数区使用 `.settings` 与关联原生输入的 `label`；通过公共外框自动加载 `assets/property-controls.css`、`assets/property-controls.js`，统一滑块、开关、下拉、文本和颜色属性样式，不在项目内另写参数控件外观。程序修改滑块值时同步原有 `--progress`，或提供 `input` / `change` 及预设、重置入口，使公共进度同步。
+8. 背景分类的详情工作区使用 `data-category="backgrounds"`，让背景铺满圆角预览面板，避免公共演示内边距产生白边；外层浅灰模块仍保留 20px 留白。
 
 ## 修改、改名与删除
 

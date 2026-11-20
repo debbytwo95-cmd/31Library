@@ -3,13 +3,14 @@
 @import url("site-motion.css");
 @import url("ui.css");
 @import url("property-controls.css");
+@import url("workbench.css");
 
 :root {
     font-synthesis: none;
     color-scheme: light;
 }
 body { font-family: var(--library-font); }
-html:not([data-cover]) { scrollbar-gutter: stable; }
+html:not([data-cover]) { scrollbar-gutter: stable; scroll-padding-top: calc(var(--library-header-height) + var(--library-space-6)); }
 html:not([data-cover]) > body { display: flex; flex-direction: column; min-height: 100svh; }
 html:not([data-cover]) .main-shell { flex: 1 0 auto; padding-bottom: var(--library-page-bottom-space); }
 body > main.main { padding-bottom: var(--library-page-bottom-space); }
@@ -48,8 +49,9 @@ output, input[type=number] { font-family: Inter, sans-serif; font-weight: 600; }
 
 .library-header, .library-header * { box-sizing: border-box; }
 header.library-header {
-    position: relative;
+    position: sticky;
     inset: auto;
+    top: 0;
     z-index: var(--library-z-nav);
     display: flex;
     align-items: center;

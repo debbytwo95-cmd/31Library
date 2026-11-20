@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
-const cssFiles = ['tokens.css','site.css','ui.css','property-controls.css','catalog.css','lab-workbench.css','cover.css','site-motion.css'];
+const cssFiles = ['tokens.css','site.css','ui.css','property-controls.css','workbench.css','catalog.css','lab-workbench.css','cover.css','site-motion.css'];
 const sheets = cssFiles.map(name => fs.readFileSync('assets/' + name, 'utf8'));
 const tokens = new Map([...sheets[0].matchAll(/(--library-[\w-]+)\s*:\s*([^;]+);/g)].map(match => [match[1], match[2].trim()]));
 function resolve(name, path = []) {
