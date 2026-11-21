@@ -167,10 +167,13 @@ void main(){
     gl.uniform3fv(locations['trails[0]'], trailData); gl.uniform3fv(locations['rings[0]'], ringData);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
-  function tick(now) {
+  function tick() {
     frame = 0;
     if (destroyed || lost || !visible || document.hidden) return;
-    const dt = Math.min(.05, (now - previous) / 1000 || .016); previous = now;
+    // Embedded documents can receive an RAF timestamp earlier than wake's clock.
+    // Keep elapsed time in one monotonic clock, including time spent rendering.
+    const now = performance.now();
+    const dt = clamp((now - previous) / 1000, .001, .05); previous = now;
     if (introRunning) {
       introElapsed += dt;
       const progress = clamp(introElapsed / Math.max(.001, config.intro), 0, 1);
@@ -184,9 +187,10 @@ void main(){
     rings.forEach(r => r.radius += dt * 420 * config.speed); rings = rings.filter(r => r.radius < Math.max(width, height) * 1.3);
     if (pointer.amount < .001 && !pointer.active) pointer.amount = 0;
     render();
-    if (introRunning || trails.length || rings.length || Math.abs(pointer.x-pointer.tx) + Math.abs(pointer.y-pointer.ty) > .05 || Math.abs(pointer.amount - (pointer.active ? 1 : 0)) > .001) wake();
+    if (introRunning || trails.length || rings.length || Math.abs(pointer.x-pointer.tx) + Math.abs(pointer.y-pointer.ty) > .05 || Math.abs(pointer.amount - (pointer.active ? 1 : 0)) > .001) schedule();
   }
-  function wake() { if (!frame && !destroyed && visible && !document.hidden && !lost) { previous = performance.now(); frame = requestAnimationFrame(tick); } }
+  function schedule() { if (!frame && !destroyed && visible && !document.hidden && !lost) frame = requestAnimationFrame(tick); }
+  function wake() { if (!frame) { previous = performance.now(); schedule(); } }
   function releaseCapture() { if (pointer.id !== null && root.hasPointerCapture?.(pointer.id)) root.releasePointerCapture(pointer.id); pointer.id = null; }
   function reset() {
     cancelAnimationFrame(frame); frame = 0; releaseCapture();

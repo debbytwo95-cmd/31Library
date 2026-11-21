@@ -10,7 +10,7 @@ class Element extends EventTarget {
   setPointerCapture(id){this.capture.add(id);}hasPointerCapture(id){return this.capture.has(id);}releasePointerCapture(id){this.capture.delete(id);}
   emit(type, props={}){const e=new Event(type,{cancelable:true});Object.assign(e,props);this.dispatchEvent(e);return e;}
 }
-function setup(reduced=false){
+function setup(reduced=false,rafOffset=0){
   let now=0,id=0,draws=0,deletes=0;const frames=new Map(),observers=[],uniforms={};
   const media=new Element();media.matches=reduced;
   const document=new Element(),window=new Element();document.hidden=false;
@@ -18,7 +18,7 @@ function setup(reduced=false){
   const context=vm.createContext({window,document,console,AbortController,Float32Array,devicePixelRatio:1,matchMedia:()=>media,performance:{now:()=>now},requestAnimationFrame:fn=>{frames.set(++id,fn);return id;},cancelAnimationFrame:i=>frames.delete(i),ResizeObserver:class{constructor(fn){this.fn=fn;observers.push(this);}observe(){}disconnect(){this.disconnected=true;}},IntersectionObserver:class{constructor(fn){this.fn=fn;observers.push(this);}observe(){}disconnect(){this.disconnected=true;}}});
   vm.runInContext(fs.readFileSync(__dirname+'/effect.js','utf8'),context);
   function root(){const r=new Element();r.canvas=new Element();r.canvas.getContext=()=>gl;return r;}
-  function tick(count=1){for(let i=0;i<count;i++){now+=16;const jobs=[...frames.values()];frames.clear();jobs.forEach(fn=>fn(now));}}
+  function tick(count=1){for(let i=0;i<count;i++){now+=16;const jobs=[...frames.values()];frames.clear();jobs.forEach(fn=>fn(now+rafOffset));}}
   return {root,mount:context.mountHalftoneHorizon,tick,frames,window,document,media,observers,uniforms,get draws(){return draws;},get deletes(){return deletes;}};
 }
 test('intro disabled stays still; real input settles; instances clean up independently',()=>{
@@ -100,4 +100,15 @@ test('rapid input retains the requested wake lifetime; shortening duration clear
   assert.ok(data.filter((_,i)=>i%3===2).filter(v=>v>0).length<=32);
   effect.update({trailLength:.2});e.tick(20);assert.ok(e.uniforms['trails[0]'].every(v=>v===0),'new duration also applies to existing wake');
   e.tick(100);assert.equal(e.frames.size,0);effect.destroy();
+});
+test('embedded-frame timestamp skew cannot invert interaction or prevent settling',()=>{
+  for(const offset of [-32,5000]){
+    const e=setup(false,offset),r=e.root();r.clientWidth=294;r.clientHeight=147;
+    const effect=e.mount(r,{intro:0});
+    r.emit('pointermove',{pointerType:'mouse',clientX:140,clientY:35});
+    e.tick();assert.ok(e.uniforms.pointer[2]>=0&&e.uniforms.pointer[2]<=1,'lens opacity must stay within [0,1]');
+    e.tick(80);assert.ok(e.uniforms['trails[0]'].every(v=>v===0),'wake expires using elapsed local time');
+    r.emit('pointerleave');e.tick(200);assert.equal(e.frames.size,0);assert.equal(e.uniforms.pointer[2],0);
+    effect.destroy();
+  }
 });
