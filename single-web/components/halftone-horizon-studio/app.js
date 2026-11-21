@@ -30,11 +30,6 @@
   document.querySelectorAll('[data-palette]').forEach(input => input.addEventListener('input', () => { const colors = effect.getConfig().colors; colors[Number(input.dataset.palette)] = input.value; effect.update({colors}); sync(); }));
   $('reset').addEventListener('click', () => { effect.reset(); effect.update(initial); sync(); });
   $('replay-intro').addEventListener('click', effect.replayIntro);
-  document.querySelectorAll('[data-viewport]').forEach(button => button.addEventListener('click', () => {
-    root.dataset.width = button.dataset.viewport;
-    document.querySelectorAll('[data-viewport]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-    effect.reset();
-  }));
   if (document.documentElement.hasAttribute('data-cover')) {
     root.addEventListener('pointerleave', effect.reset); window.addEventListener('blur', effect.reset);
   }
