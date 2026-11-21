@@ -68,7 +68,7 @@ html:not([data-cover]) .main-shell .workspace .settings {
     max-width: none;
 }
 html:not([data-cover]) .main-shell .workspace .settings > :not(.library-property) { grid-column: 1 / -1; }
-html:not([data-cover]) .main-shell .workspace .settings .preset-group { width: min(100%, 363px); }
+html:not([data-cover]) .main-shell .workspace .settings .preset-group { width: min(100%); }
 @media (max-width: 959px) {
     html:not([data-cover]) .main-shell .workspace .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

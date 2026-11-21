@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Halftone Horizon — 31Library</title>
+<meta name="description" content="从深色半调网点过渡至橙色地平线，支持指针透镜、拖尾与点击涟漪；实时调参与独立代码导出。">
+<link rel="icon" href="../../../assets/favicon.png">
+<script src="../../../assets/cover.js" data-kind="lab"></script><script src="../../../assets/site-motion.js"></script>
+<link rel="stylesheet" href="../../../single-web/components/magnetic-button-studio/styles.css">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="../../../assets/site.css">
+<link rel="stylesheet" href="../../../assets/lab-workbench.css"><link rel="stylesheet" href="../../../assets/cover.css">
+</head><body>
+<header class="library-header"></header><div class="main-shell">
+<header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../../components/index.html?section=components">组件</a><span>/</span><a href="../../components/index.html?section=components&amp;category=backgrounds">背景</a><span>/</span><strong>Halftone Horizon</strong></nav></header>
+<main><section class="intro"><div class="eyebrow"><span class="tag">鼠标交互 · hover / press</span></div><div class="title-row"><h1>Halftone Horizon</h1></div><p class="intro-copy">让网点，融进一道地平线。深色、暖橙与微光之间，每一次经过都留下涟漪。</p></section>
+<section class="workspace lab-workspace" data-category="backgrounds" aria-label="Halftone Horizon 工作台">
+<div class="demo-column"><div class="demo-toolbar">
+<div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" data-library-icon="preview" src="../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" data-library-icon="code" src="../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div>
+<div class="horizon-viewport" role="group" aria-label="预览宽度"><button data-viewport="desktop" aria-pressed="true">桌面</button><button data-viewport="tablet" aria-pressed="false">平板</button><button data-viewport="mobile" aria-pressed="false">手机</button></div>
+<button class="horizon-replay" id="replay-intro" type="button"><img class="library-icon design-icon" data-library-icon="reset" src="../../../assets/icons/reset.svg" width="13" height="13" alt="">重播入场</button><button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" data-library-icon="copy" src="../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button></div>
+<div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab"><div class="field"><div class="library-halftone-horizon" id="horizon" aria-label="半调地平线，移动指针查看透镜，点击发出涟漪"><canvas aria-hidden="true"></canvas></div></div></div>
+<div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading">halftone-horizon.html · HTML / CSS / JavaScript</div><pre><code id="source-code"></code></pre><div class="code-bottom">代码同步当前参数 · 无第三方依赖</div></div>
+<div class="demo-caption">移动指针查看透镜与拖尾，点击发出涟漪。聚焦后按 Enter / 空格触发涟漪。首次可见时播放入场，结束后静止；可点击“重播入场”再次查看。</div></div>
+<aside class="settings" aria-label="半调地平线参数"><div class="settings-heading"><h2>自定义地平线<span id="state" class="settings-state">入场 2.4 s · WebGL</span></h2><button id="reset" type="button" aria-label="重置所有参数"><img class="library-icon design-icon" data-library-icon="reset" src="../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+<div class="horizon-controls"><label for="multicolor">多色渐变</label><input id="multicolor" type="checkbox"><label for="color" id="color-label">主色</label><input id="color" type="color" value="#f0602a">
+<label for="direction">暗部方向</label><select id="direction"><option value="top">顶部 top</option><option value="right">右侧 right</option><option value="bottom">底部 bottom</option><option value="left">左侧 left</option></select>
+<div class="horizon-palette" id="palette" hidden><label for="palette-0">色板 1 · 暗部</label><input id="palette-0" data-palette="0" type="color" value="#07060f"><label for="palette-1">色板 2</label><input id="palette-1" data-palette="1" type="color" value="#231a5c"><label for="palette-2">色板 3</label><input id="palette-2" data-palette="2" type="color" value="#6b3fc4"><label for="palette-3">色板 4</label><input id="palette-3" data-palette="3" type="color" value="#e2609a"><label for="palette-4">色板 5</label><input id="palette-4" data-palette="4" type="color" value="#ffc9a3"><label for="palette-5">色板 6 · 亮部</label><input id="palette-5" data-palette="5" type="color" value="#fff8ef"></div>
+<label for="curve">弧度<output id="curve-value" for="curve"></output><input id="curve" type="range" min="0" max="2" step="0.05" value="1"></label>
+<label for="reach">暗部延伸<output id="reach-value" for="reach"></output><input id="reach" type="range" min="0.2" max="2" step="0.05" value="1"></label>
+<label for="softness">过渡柔度<output id="softness-value" for="softness"></output><input id="softness" type="range" min="0.2" max="2" step="0.05" value="1.1"></label>
+<label for="spacing">网点间距<output id="spacing-value" for="spacing"></output><input id="spacing" type="range" min="3" max="24" step="0.5" value="7"></label>
+<label for="dotSize">网点尺寸<output id="dotSize-value" for="dotSize"></output><input id="dotSize" type="range" min="0.2" max="2" step="0.05" value="1"></label>
+<label for="minDot">最小网点<output id="minDot-value" for="minDot"></output><input id="minDot" type="range" min="0" max="1" step="0.01" value="0.25"></label>
+<label for="dots">网点覆盖<output id="dots-value" for="dots"></output><input id="dots" type="range" min="0" max="1" step="0.01" value="0.7"></label>
+<label for="speed">涟漪速度<output id="speed-value" for="speed"></output><input id="speed" type="range" min="0.1" max="3" step="0.1" value="1"></label>
+<label for="grain">胶片颗粒<output id="grain-value" for="grain"></output><input id="grain" type="range" min="0" max="0.15" step="0.005" value="0.04"></label>
+<label for="seed">构图种子<output id="seed-value" for="seed"></output><input id="seed" type="range" min="0" max="99" step="1" value="0"></label>
+<label for="radius">透镜半径<output id="radius-value" for="radius"></output><input id="radius" type="range" min="30" max="260" step="5" value="120"></label>
+<label for="lens">透镜强度<output id="lens-value" for="lens"></output><input id="lens" type="range" min="0" max="1" step="0.01" value="0.6"></label>
+<label for="trailLength">拖尾时长<output id="trailLength-value" for="trailLength"></output><input id="trailLength" type="range" min="0" max="3" step="0.1" value="1.2"></label>
+<label for="follow">浅色跟随<output id="follow-value" for="follow"></output><input id="follow" type="range" min="0" max="1" step="0.01" value="0.4"></label>
+<label for="intro">入场时长<output id="intro-value" for="intro"></output><input id="intro" type="range" min="0" max="6" step="0.1" value="2.4"></label>
+<label for="introFrom">入场起始深度<output id="introFrom-value" for="introFrom"></output><input id="introFrom" type="range" min="0" max="2" step="0.05" value="0"></label>
+<label for="interactive">指针交互</label><input id="interactive" type="checkbox" checked><label for="ripples">点击涟漪</label><input id="ripples" type="checkbox" checked>
+</div></aside></section>
+<section class="integration-notes"><h2>原理与使用</h2><p>用 WebGL 片元着色器生成弧形亮度场，按固定间距采样圆形网点。暗部网点细小，接近地平线时逐渐变大并融入平滑渐变，固定的胶片颗粒让过渡更自然。支持四个方向、单色与六色渐变。依据 <a href="https://uibrik.com/components/halftone-horizon" target="_blank" rel="noreferrer">uibrik 的公开预览</a>独立复刻，未使用其 Pro 源码。</p><p>鼠标经过深色区域也会显出放大的圆点透镜，暖色柔光稍后跟随，并沿路径留下逐渐缩小、淡出的网点笔迹；点击发出网点涟漪；触屏按住移动，松手或取消后复位，页面仍可纵向滚动；键盘聚焦后按 Enter 或空格触发中心涟漪。系统开启减少动态效果时保留即时透镜，关闭拖尾与涟漪。没有 WebGL 时降级为静态渐变。</p><p>首次进入视口时，从暖白底开始，用 2.4 秒展开暗部与半调网点；入场时长设为 0 可关闭。入场结束后停帧，只响应真实交互。“重播入场”按当前参数重放，重置则直接回到静止构图。索引封面保持初始静止；系统减少动态效果时跳过入场。复制完整组件代码放入页面，容器宽高决定背景尺寸，可在其中叠放内容。多实例各自独立；通过 <code>root.libraryComponent.update({...})</code> 更新参数，<code>replayIntro()</code> 重播入场，<code>reset()</code> 清除交互并结束入场，移除前调用 <code>destroy()</code> 清理资源。</p></section>
+<section class="guide"><div class="guide-icon"><img class="library-icon design-icon" data-library-icon="code-guide" src="../../../assets/icons/code-guide.svg" width="22" height="22" alt=""></div><div><h2>带进你的项目</h2><p>复制当前组件代码，或下载可直接打开的独立 HTML。所有参数与你的预览保持一致。</p></div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" data-library-icon="download" src="../../../assets/icons/download.svg" width="13" height="13" alt=""></button></section>
+</main></div><footer class="library-footer"></footer>
+<script src="../../../assets/delivery.js"></script><script src="../../../assets/lab-workbench.js"></script><script src="effect.js"></script><script src="app.js"></script><script src="../../../assets/site-shell.js" data-section="components"></script>
+</body></html>

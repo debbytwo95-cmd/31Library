@@ -1,0 +1,22 @@
+/* Workbench layout only; component styles are exported separately. */
+.library-halftone-horizon{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:2/1;min-height:260px;background:#fff8ef;touch-action:pan-y;cursor:crosshair}
+.library-halftone-horizon>canvas{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%;pointer-events:none}
+.library-halftone-horizon:focus-visible{outline:2px solid #18181c;outline-offset:-4px}
+.horizon-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.settings-heading{display:flex;align-items:center;justify-content:space-between}
+.settings-heading h2{display:flex;align-items:baseline;gap:12px;margin:0}
+.settings-state{font-size:12px;font-weight:400;color:var(--library-text-tertiary)}
+.horizon-palette:not([hidden]){display:contents}
+.settings [hidden]{display:none!important}
+.horizon-viewport{display:flex;gap:4px;margin-left:auto}
+.horizon-viewport button{border:0;background:transparent;color:var(--library-text-secondary);border-radius:6px;padding:5px 9px;font:inherit;font-size:12px;cursor:pointer}
+.horizon-viewport button[aria-pressed=true]{background:#fff;color:var(--library-text-primary)}
+.horizon-replay{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:0;border-radius:6px;background:transparent;color:var(--library-text-secondary);font:inherit;font-size:12px;cursor:pointer}
+.horizon-replay:hover{background:#fff;color:var(--library-text-primary)}
+.workspace .field{display:flex;justify-content:center;background:#eeeef0}
+.library-halftone-horizon[data-width=tablet]{max-width:768px;aspect-ratio:4/3}
+.library-halftone-horizon[data-width=mobile]{max-width:375px;aspect-ratio:3/4}
+html[data-cover] .library-halftone-horizon{min-height:0;aspect-ratio:2/1}
+.integration-notes a{color:inherit;text-underline-offset:3px}
+@media(max-width:959px){.horizon-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.horizon-controls{grid-template-columns:minmax(0,1fr)}.library-halftone-horizon{min-height:320px;aspect-ratio:1/1}.horizon-viewport{display:none}.settings-heading h2{flex-wrap:wrap;gap:4px}}

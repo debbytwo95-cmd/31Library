@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Halftone Horizon · 半调地平线</title><style>body{margin:0;padding:32px;background:#fff8ef}.library-example{max-width:1320px;margin:auto;display:grid;min-height:calc(100svh - 64px);align-content:center;justify-items:center}.library-example>.library-magnetic-field,.library-example>.library-fluid-glow,.library-example>.library-earth{width:100%}</style></head><body><main class="library-example">
+<!-- HTML：放入目标页面；每个实例保持完整容器 -->
+<div class="library-halftone-horizon" aria-label="半调地平线，移动指针查看透镜，点击发出涟漪"><canvas aria-hidden="true"></canvas></div>
+
+<!-- CSS：引入一次 -->
+<style>
+.library-halftone-horizon{position:relative;isolation:isolate;overflow:hidden;width:100%;min-height:260px;aspect-ratio:2/1;background:#fff8ef;touch-action:pan-y}.library-halftone-horizon>canvas{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%;pointer-events:none}.library-halftone-horizon:focus-visible{outline:2px solid #18181c;outline-offset:-4px}
+</style>
+
+<!-- JavaScript：在结构之后初始化，重复执行会先清理旧实例 -->
+<script>
+(() => {
+const mount = /* Independent reconstruction from the public visual reference. No vendor source. */
+function mountHalftoneHorizon(root, options = {}) {
+  const defaults = { color: '#f0602a', multicolor: false, colors: ['#07060f', '#231a5c', '#6b3fc4', '#e2609a', '#ffc9a3', '#fff8ef'], direction: 'top', curve: 1, reach: 1, softness: 1.1, spacing: 7, dotSize: 1, minDot: .25, dots: .7, speed: 1, grain: .04, seed: 0, interactive: true, radius: 120, lens: .6, trailLength: 1.2, ripples: true, follow: .4, intro: 2.4, introFrom: 0 };
+  let config = { ...defaults, ...options, colors: [...(options.colors || defaults.colors)] };
+  const canvas = root.querySelector('canvas') || root.appendChild(document.createElement('canvas'));
+  const media = matchMedia('(prefers-reduced-motion: reduce)');
+  const abort = new AbortController(), signal = abort.signal;
+  const originalTab = root.getAttribute('tabindex');
+  root.tabIndex = originalTab === null ? 0 : Number(originalTab);
+  let gl, program, buffer, locations = {}, destroyed = false, lost = false;
+  let width = 1, height = 1, ratio = 1, frame = 0, previous = 0, visible = true;
+  let pointer = { x: -1000, y: -1000, tx: -1000, ty: -1000, amount: 0, active: false, id: null };
+  let trails = [], rings = [];
+  let introPending = config.intro > 0 && !media.matches;
+  let introRunning = false, introElapsed = 0, introValue = introPending ? config.introFrom : 1;
+  root.dataset.intro = introPending ? 'pending' : 'complete';
+  const vertex = 'attribute vec2 position;void main(){gl_Position=vec4(position,0.,1.);}';
+  const fragment = `precision highp float;
+uniform vec2 size; uniform float dpr;
+uniform float curve,reach,softness,spacing,dotSize,minDot,dots,grain,seed,radius,lens,introReach;
+uniform int direction; uniform vec3 palette[6]; uniform vec3 pointer; uniform vec2 lightPointer;
+uniform vec3 trails[32]; uniform vec3 rings[4];
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7))+seed*19.19)*43758.5453);}
+float field(vec2 p){
+ vec2 uv=p/size;
+ if(direction==1)uv=vec2(uv.y,1.-uv.x);
+ if(direction==2)uv=vec2(1.-uv.x,1.-uv.y);
+ if(direction==3)uv=vec2(1.-uv.y,uv.x);
+ float arch=pow(abs((uv.x-.5)*2.),2.0)*.16*curve;
+ float wave=sin(uv.x*5.3+seed*.71)*.018+sin(uv.x*11.7+seed*.3)*.009;
+ return max(0.,(uv.y+arch+wave-(reach-1.)*.26-.48)/max(.15,softness)*1.25+.48+(1.-introReach)*1.4);
+}
+// Shared tangents keep the color slope continuous at every palette stop.
+vec3 spline(vec3 a,vec3 b,vec3 c,vec3 d,float t){
+ return clamp(.5*((2.*b)+(-a+c)*t+(2.*a-5.*b+4.*c-d)*t*t+(-a+3.*b-3.*c+d)*t*t*t),0.,1.);
+}
+vec3 ramp(float v){
+ v=clamp(v,0.,1.);
+ // A long, flattening shoulder dissolves the warm color into the light edge.
+ v=mix(v,1.-pow(1.-v,1.45),smoothstep(.2,.5,v));
+ float t=v*5.;
+ if(t<1.)return spline(palette[0],palette[0],palette[1],palette[2],t);
+ if(t<2.)return spline(palette[0],palette[1],palette[2],palette[3],t-1.);
+ if(t<3.)return spline(palette[1],palette[2],palette[3],palette[4],t-2.);
+ if(t<4.)return spline(palette[2],palette[3],palette[4],palette[5],t-3.);
+ return spline(palette[3],palette[4],palette[5],palette[5],t-4.);
+}
+void main(){
+ vec2 p=vec2(gl_FragCoord.x, size.y*dpr-gl_FragCoord.y)/dpr;
+ float distanceToPointer=length(p-pointer.xy);
+ float influence=exp(-pow(distanceToPointer/max(radius,1.),2.)*2.)*pointer.z;
+ vec2 q=p-(p-pointer.xy)*influence*lens*.38;
+ float lightInfluence=exp(-pow(length(p-lightPointer)/max(radius*1.25,1.),2.)*2.)*pointer.z;
+ float sp=max(3.,spacing);
+ vec2 trailCell=(floor(p/sp)+.5)*sp;
+ float trail=0.;
+ // Join the sampled path, rather than stacking disconnected circular light spots.
+ for(int i=0;i<32;i++){
+  if(trails[i].z>0.){
+   float distanceToPath=length(trailCell-trails[i].xy);
+   float life=trails[i].z;
+   if(i>0){
+    if(trails[i-1].z>0.){
+     vec2 edge=trails[i].xy-trails[i-1].xy;
+     float along=clamp(dot(trailCell-trails[i-1].xy,edge)/max(dot(edge,edge),.001),0.,1.);
+     distanceToPath=length(trailCell-mix(trails[i-1].xy,trails[i].xy,along));
+     life=mix(trails[i-1].z,trails[i].z,along);
+    }
+   }
+   float width=max(radius*(.24+.14*life),1.);
+   trail=max(trail,exp(-pow(distanceToPath/width,2.)*2.)*pow(life,1.6));
+  }
+ }
+ float swell=0.;
+ for(int i=0;i<4;i++){float d=length(p-rings[i].xy);float r=rings[i].z; if(r>0.)swell+=exp(-pow((d-r)/15.,2.))*max(0.,1.-r/(max(size.x,size.y)*1.3));}
+ vec2 cell=(floor(q/sp)+.5)*sp;
+ float f=field(q)+swell*.025;
+ float sampleValue=field(cell)+swell*.025;
+ // Darkness hides the resting print, but does not remove the grid under the lens.
+ // Use local field darkness, so this works at every edge and orientation.
+ float darkLens=influence*clamp(lens/.6,0.,1.)*(1.-smoothstep(.10,.36,sampleValue));
+ float r=mix(minDot*.44,.77,smoothstep(.04,.70,sampleValue))*dotSize;
+ r=mix(r,max(r,.29*dotSize),darkLens);
+ r+=min(r*influence*lens*.08,max(0.,.66-r));
+ r*=1.+swell*.22;
+ float dist=length(q-cell)/sp;
+ float aa=1./(dpr*sp);
+ float dotMask=1.-smoothstep(r-aa,r+aa,dist);
+ float printed=1.-smoothstep(dots-.18,dots+.18,f);
+ float inkValue=mix(sampleValue,f,smoothstep(.40,.72,sampleValue));
+ inkValue=mix(inkValue,max(inkValue,.30),darkLens);
+ // Follow the local warm palette, so the light cannot turn the dark into gray fog.
+ vec3 ink=ramp(clamp(inkValue+.03+lightInfluence*.09+trail*.045,0.,1.));
+ vec3 paper=ramp(clamp(f-.24,0.,1.));
+ paper=mix(paper,ramp(clamp(f+.035,0.,1.)),lightInfluence*.18);
+ vec3 sky=ramp(clamp(f+lightInfluence*.085,0.,1.));
+ vec3 color=mix(sky,mix(paper,ink,dotMask),printed);
+ // A faint printed wake survives behind the lens, including in the smooth light.
+ float trailValue=field(trailCell);
+ float trailRadius=mix(.12,.31,smoothstep(.15,.85,trailValue))*dotSize*sqrt(trail);
+ float trailMask=1.-smoothstep(trailRadius-aa,trailRadius+aa,length(p-trailCell)/sp);
+ float trailShade=trailValue+mix(.16,-.18,smoothstep(.35,.80,trailValue));
+ color=mix(color,ramp(clamp(trailShade,0.,1.)),trailMask*trail*.32);
+ color+=(hash(floor(p*dpr))-.5)*grain;
+ gl_FragColor=vec4(clamp(color,0.,1.),1.);
+}`;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const rgb = hex => hex.replace('#', '').match(/../g).map(x => parseInt(x, 16) / 255);
+  const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  function palette() {
+    if (config.multicolor) return config.colors.map(rgb);
+    const c = rgb(config.color);
+    return [[.005, .003, .004], c.map(v => v * .16), c.map(v => v * .7), c, mix(c, [1, .96, .91], .64), [1, .978, .951]];
+  }
+  function createGL() {
+    gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: true });
+    if (!gl) return false;
+    const compile = (type, source) => {
+      const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { const error = gl.getShaderInfoLog(shader); gl.deleteShader(shader); throw Error(error); }
+      return shader;
+    };
+    const vs = compile(gl.VERTEX_SHADER, vertex), fs = compile(gl.FRAGMENT_SHADER, fragment);
+    program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+    gl.deleteShader(vs); gl.deleteShader(fs);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw Error(gl.getProgramInfoLog(program));
+    gl.useProgram(program); buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+    const attr = gl.getAttribLocation(program, 'position'); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0);
+    for (const name of ['size','dpr','curve','reach','softness','spacing','dotSize','minDot','dots','grain','seed','radius','lens','introReach','direction','pointer','lightPointer','palette[0]','trails[0]','rings[0]']) locations[name] = gl.getUniformLocation(program, name);
+    root.dataset.renderer = 'WebGL'; return true;
+  }
+  // A static CSS approximation remains visible on devices without WebGL.
+  function fallback() {
+    root.dataset.renderer = 'CSS fallback';
+    canvas.hidden = true;
+    gl = null;
+    introPending = introRunning = false; introValue = 1; root.dataset.intro = 'complete';
+    root.style.background = `radial-gradient(ellipse at 50% 0%, #080302 10%, ${config.color} 55%, #fff8ef 90%)`;
+  }
+  function render() {
+    if (destroyed || lost || !gl) return;
+    gl.viewport(0, 0, canvas.width, canvas.height); gl.useProgram(program);
+    gl.uniform2f(locations.size, width, height); gl.uniform1f(locations.dpr, ratio);
+    gl.uniform1f(locations.introReach, introValue);
+    for (const key of ['curve','reach','softness','spacing','dotSize','minDot','dots','grain','seed','radius','lens']) gl.uniform1f(locations[key], config[key]);
+    gl.uniform1i(locations.direction, ['top', 'right', 'bottom', 'left'].indexOf(config.direction));
+    gl.uniform3fv(locations['palette[0]'], new Float32Array(palette().flat()));
+    gl.uniform3f(locations.pointer, pointer.tx, pointer.ty, pointer.amount);
+    gl.uniform2f(locations.lightPointer, pointer.x, pointer.y);
+    const trailData = new Float32Array(96), ringData = new Float32Array(12);
+    trails.slice(-32).forEach((t, i) => trailData.set([t.x, t.y, clamp(t.life / Math.max(.01, config.trailLength), 0, 1)], i * 3));
+    rings.slice(-4).forEach((r, i) => ringData.set([r.x, r.y, r.radius], i * 3));
+    gl.uniform3fv(locations['trails[0]'], trailData); gl.uniform3fv(locations['rings[0]'], ringData);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+  function tick(now) {
+    frame = 0;
+    if (destroyed || lost || !visible || document.hidden) return;
+    const dt = Math.min(.05, (now - previous) / 1000 || .016); previous = now;
+    if (introRunning) {
+      introElapsed += dt;
+      const progress = clamp(introElapsed / Math.max(.001, config.intro), 0, 1);
+      introValue = config.introFrom + (1 - config.introFrom) * (1 - Math.pow(1 - progress, 3));
+      if (progress === 1) { introRunning = false; introValue = 1; root.dataset.intro = 'complete'; }
+    }
+    const factor = media.matches || config.follow === 0 ? 1 : 1 - Math.exp(-dt / (.04 + config.follow * .28));
+    pointer.x += (pointer.tx - pointer.x) * factor; pointer.y += (pointer.ty - pointer.y) * factor;
+    pointer.amount += ((pointer.active ? 1 : 0) - pointer.amount) * (media.matches ? 1 : 1 - Math.exp(-dt * 14));
+    trails.forEach(t => t.life -= dt); trails = trails.filter(t => t.life > 0);
+    rings.forEach(r => r.radius += dt * 420 * config.speed); rings = rings.filter(r => r.radius < Math.max(width, height) * 1.3);
+    if (pointer.amount < .001 && !pointer.active) pointer.amount = 0;
+    render();
+    if (introRunning || trails.length || rings.length || Math.abs(pointer.x-pointer.tx) + Math.abs(pointer.y-pointer.ty) > .05 || Math.abs(pointer.amount - (pointer.active ? 1 : 0)) > .001) wake();
+  }
+  function wake() { if (!frame && !destroyed && visible && !document.hidden && !lost) { previous = performance.now(); frame = requestAnimationFrame(tick); } }
+  function releaseCapture() { if (pointer.id !== null && root.hasPointerCapture?.(pointer.id)) root.releasePointerCapture(pointer.id); pointer.id = null; }
+  function reset() {
+    cancelAnimationFrame(frame); frame = 0; releaseCapture();
+    introPending = introRunning = false; introValue = 1; root.dataset.intro = 'complete';
+    pointer = { x: -1000, y: -1000, tx: -1000, ty: -1000, amount: 0, active: false, id: null }; trails = []; rings = []; render();
+  }
+  function replayIntro() {
+    if (destroyed) return;
+    reset(); introElapsed = 0;
+    introRunning = Boolean(gl && config.intro > 0 && !media.matches);
+    introValue = introRunning ? config.introFrom : 1;
+    root.dataset.intro = introRunning ? 'running' : 'complete'; render();
+    if (introRunning) wake();
+  }
+  function position(event) { const rect = root.getBoundingClientRect(); return { x: clamp(event.clientX-rect.left,0,width), y: clamp(event.clientY-rect.top,0,height) }; }
+  function move(event) {
+    if (!config.interactive || event.pointerType === 'touch' && pointer.id !== event.pointerId) return;
+    const p = position(event);
+    if (!pointer.active) { pointer.x = p.x; pointer.y = p.y; }
+    pointer.tx = p.x; pointer.ty = p.y; pointer.active = true;
+    const last = trails[trails.length-1];
+    const now = performance.now();
+    // Time sampling keeps the configured lifetime at high pointer event rates.
+    if (!media.matches && config.trailLength > 0 && (!last || Math.hypot(last.x-p.x,last.y-p.y)>config.spacing && now-last.time>=config.trailLength*1000/28)) {
+      trails.push({ ...p, life: config.trailLength, time: now }); trails = trails.slice(-32);
+    }
+    wake();
+  }
+  function ripple(x, y) { if (config.interactive && config.ripples && !media.matches) { rings.push({ x, y, radius: .01 }); rings = rings.slice(-4); wake(); } }
+  function resize() {
+    width = Math.max(1, root.clientWidth); height = Math.max(1, root.clientHeight);
+    ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio); render();
+  }
+  root.addEventListener('pointermove', move, { signal });
+  root.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') move(event); }, { signal });
+  root.addEventListener('pointerdown', event => {
+    if (!config.interactive || event.button !== 0) return;
+    if (event.pointerType === 'touch') { pointer.id = event.pointerId; root.setPointerCapture(event.pointerId); }
+    move(event); const p = position(event); ripple(p.x, p.y);
+  }, { signal });
+  root.addEventListener('pointerleave', () => { pointer.active = false; wake(); }, { signal });
+  root.addEventListener('pointerup', event => { if (event.pointerType === 'touch') { releaseCapture(); pointer.active = false; wake(); } }, { signal });
+  root.addEventListener('pointercancel', reset, { signal });
+  root.addEventListener('lostpointercapture', event => { if (event.pointerType === 'touch') { pointer.id = null; pointer.active = false; wake(); } }, { signal });
+  root.addEventListener('keydown', event => { if (event.target === root && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); if (!event.repeat) ripple(width/2,height/2); } }, { signal });
+  window.addEventListener('blur', reset, { signal });
+  document.addEventListener('visibilitychange', reset, { signal });
+  media.addEventListener('change', reset, { signal });
+  canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); lost = true; reset(); }, { signal });
+  canvas.addEventListener('webglcontextrestored', () => { lost = false; try { createGL(); resize(); } catch { fallback(); } }, { signal });
+  const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(root);
+  const intersectionObserver = new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    if (!visible) { if (!introPending) reset(); }
+    else if (introPending) replayIntro();
+    else render();
+  }); intersectionObserver.observe(root);
+  try { if (!createGL()) fallback(); } catch (error) { console.warn('Halftone Horizon renderer:', error.message); fallback(); }
+  resize();
+  return {
+    getConfig: () => ({ ...config, colors: [...config.colors] }),
+    update(next) {
+      const previousTrailLength = config.trailLength;
+      config = { ...config, ...next, colors: [...(next.colors || config.colors)] };
+      for (const [key, min, max] of [['curve',0,2],['reach',.2,2],['softness',.2,2],['spacing',3,24],['dotSize',.2,2],['minDot',0,1],['dots',0,1],['speed',.1,3],['grain',0,.15],['seed',0,99],['radius',30,260],['lens',0,1],['trailLength',0,3],['follow',0,1],['intro',0,6],['introFrom',0,2]]) config[key] = clamp(Number(config[key]) || 0, min, max);
+      if (!config.interactive) reset();
+      if (!config.ripples) rings = [];
+      if (previousTrailLength > 0 && previousTrailLength !== config.trailLength) trails.forEach(t => { t.life *= config.trailLength / previousTrailLength; });
+      if (config.trailLength === 0) trails = [];
+      if (config.intro === 0 && (introPending || introRunning)) reset();
+      if (!gl) fallback(); else render();
+    },
+    reset,
+    replayIntro,
+    destroy() { if (destroyed) return; reset(); destroyed = true; abort.abort(); resizeObserver.disconnect(); intersectionObserver.disconnect(); if (gl && !lost) { gl.deleteBuffer(buffer); gl.deleteProgram(program); } if (originalTab === null) root.removeAttribute('tabindex'); else root.setAttribute('tabindex', originalTab); }
+  };
+};
+document.querySelectorAll(".library-halftone-horizon").forEach(root => { root.libraryComponent?.destroy(); root.libraryComponent = mount(root, {"color":"#f0602a","multicolor":false,"colors":["#07060f","#231a5c","#6b3fc4","#e2609a","#ffc9a3","#fff8ef"],"direction":"top","curve":1,"reach":1,"softness":1.1,"spacing":7,"dotSize":1,"minDot":0.25,"dots":0.7,"speed":1,"grain":0.04,"seed":0,"interactive":true,"radius":120,"lens":0.6,"trailLength":1.2,"ripples":true,"follow":0.4,"intro":2.4,"introFrom":0}); });
+})();
+</script>
+</main></body></html>
