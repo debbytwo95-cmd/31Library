@@ -21,7 +21,7 @@ function environment(reduce = false) {
         fromTo(path, from, to) { tweens.push({ path, from, to }); live.set(path, to); path.setAttribute('d', to.attr.d); }
     };
     const context = vm.createContext({ window, document, matchMedia: () => media, AbortController, gsap });
-    vm.runInContext(fs.readFileSync('single-web/components/curve-fill-button-studio/effect.js', 'utf8'), context);
+    vm.runInContext(fs.readFileSync('single-web/components/button/curve-fill-button-studio/effect.js', 'utf8'), context);
     function instance(config) {
         const button = new Surface(), path = new Surface(); button.querySelector = () => path;
         return { button, path, runtime: window.LibraryCurve.mount(button, config) };

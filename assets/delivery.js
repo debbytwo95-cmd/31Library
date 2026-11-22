@@ -14,7 +14,7 @@
         const license = await read(new URL('assets/fonts/INTER-OFL.txt', root).href);
         const weights = regular ? [400, 600] : [600];
         const faces = await Promise.all(weights.map(async weight => {
-            const bytes = new Uint8Array(await read(new URL(`single-web/components/magnetic-button-studio/assets/fonts/inter-${weight}.ttf`, root).href, true));
+            const bytes = new Uint8Array(await read(new URL(`assets/fonts/inter-${weight}.ttf`, root).href, true));
             let binary = ''; bytes.forEach(byte => { binary += String.fromCharCode(byte); });
             return `@font-face{font-family:LibraryButtonInter;font-weight:${weight === 600 ? '500 700' : weight};font-display:swap;src:url(data:font/ttf;base64,${btoa(binary)}) format('truetype')}`;
         }));

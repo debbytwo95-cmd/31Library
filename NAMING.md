@@ -32,13 +32,15 @@
 
 | 版块 | 目录约定 | 入口示例 |
 | --- | --- | --- |
-| 组件 Components | `single-web/components/` | `single-web/components/magnetic-button-studio/index.html` |
+| 组件 Components | `single-web/components/<category>/<project>/` | `single-web/components/button/magnetic-button-studio/index.html` |
 | 区块 Blocks | 新增时使用 `single-web/blocks/` | `single-web/blocks/sidebar-navigation/index.html`（规划示例） |
 | 实验室 Motion Lab | `single-web/motion-lab/` | `single-web/motion-lab/fluid-glow/index.html` |
 
 组件是按钮、卡片等独立 UI 单元；区块是导航、表单、页头等组合区域；实验室用于探索性视觉与交互效果。实验室沿用当前 `motion-lab` 路径，展示文案可使用“实验室”。
 
-页面入口统一为 `index.html`；已有地球实验保留 `earth-replica/dist/index.html`。按钮、文字等内容分类，以及悬停、拖拽、技术标签，记录在项目信息中，不增加路径层级。分类或标签变化不改目录。
+页面入口统一为 `index.html`；已有地球实验保留 `earth-replica/dist/index.html`。组件的第一层目录就是分类：`button`（按钮）、`background`（背景）、`label`（标签）、`text`（文字）。新项目放入对应分类目录；出现新分类时，先新建同名分类目录，再放入项目。分类目录名使用小写英文与短横线。交互和技术标签只记入项目信息，不增加目录层级。
+
+分类与项目路径以实际文件夹为准。登记项目信息后运行 `node scripts/sync-catalog.mjs`，同步索引路径和分类清单；项目自带预览服务启动时也会自动同步。项目改变分类时保留标识，但同步修改目录、引用和入口。空分类通过 `.gitkeep` 保留。
 
 ## 4. 变体、状态与历史版本
 
@@ -66,7 +68,7 @@
 
 ## 6. 收录信息与改名流程
 
-新增项目应记录：中英文名称、项目标识、所属版块、内容分类、实际支持的交互、技术标签、简短说明；参考来源和关联项目按需补充。当前索引在 `assets/catalog.js` 中维护，使用现有的 `href`、`title`、`tags`、`keywords` 等字段；这些信息不要求全部变成新的代码字段。
+新增项目应记录：中英文名称、项目标识、所属版块、内容分类、实际支持的交互、技术标签、简短说明；参考来源和关联项目按需补充。项目信息在 `assets/catalog-data.js` 维护；`assets/catalog-categories.js` 根据分类文件夹生成，不再在页面脚本中维护固定分类列表。
 
 改名前先检查同版块是否重名，再同步核对目录、`package.json`、索引链接、页面标题、资源引用、README 和复制或导出的内容。路径变化时处理旧入口，检查仓库子路径下的相对链接。展示文案调整通常无需改变稳定标识。
 

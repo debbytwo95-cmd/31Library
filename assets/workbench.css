@@ -52,12 +52,12 @@ html:not([data-cover]) .main-shell .workspace .live-label > span { background: v
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage { min-height: 0; }
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage > .field { flex: none; min-height: 0; }
 /* Background effects fill the rounded preview; the gray module keeps its 20px gutter. */
-html:not([data-cover]) .main-shell .workspace[data-category=backgrounds] .stage {
+html:not([data-cover]) .main-shell .workspace:is([data-category=background], [data-category=backgrounds]) .stage {
     min-height: 0;
     padding: 0;
     background: transparent;
 }
-html:not([data-cover]) .main-shell .workspace[data-category=backgrounds] .stage > .field { min-height: 0; }
+html:not([data-cover]) .main-shell .workspace:is([data-category=background], [data-category=backgrounds]) .stage > .field { min-height: 0; }
 html:not([data-cover]) .main-shell .workspace .settings {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

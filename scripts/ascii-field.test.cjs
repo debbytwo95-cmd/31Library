@@ -33,7 +33,7 @@ function environment(reduce = false) {
     const context = vm.createContext({ window, document, matchMedia: () => media, AbortController,
         performance: { now: () => now }, ResizeObserver: class { observe() {} disconnect() {} },
         requestAnimationFrame: fn => { frames.set(++next, fn); return next; }, cancelAnimationFrame: id => frames.delete(id) });
-    vm.runInContext(fs.readFileSync('single-web/motion-lab/ascii-field/effect.js', 'utf8'), context);
+    vm.runInContext(fs.readFileSync('single-web/components/background/ascii-field/effect.js', 'utf8'), context);
     function tick(count = 1) { for (let i = 0; i < count; i++) { now += 16; const jobs = [...frames.values()]; frames.clear(); jobs.forEach(fn => fn(now)); } }
     function root() { const node = new NodeStub(); node.canvas = canvas(); return node; }
     return { window, document, media, frames, context, tick, root, draws: () => draws, mount: window.mountAsciiField };
@@ -83,7 +83,7 @@ test('ASCII touch capture, cancellation, keyboard, visibility and reduced motion
 });
 
 test('ASCII workbench delivers the edited parameters and executable isolated code', async () => {
-    const env = environment(), ids = new Map(), html = fs.readFileSync('single-web/motion-lab/ascii-field/index.html', 'utf8');
+    const env = environment(), ids = new Map(), html = fs.readFileSync('single-web/components/background/ascii-field/index.html', 'utf8');
     for (const tag of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) {
         const node = tag[1] === 'ascii' ? env.root() : new NodeStub();
         for (const key of ['min', 'max', 'value']) node[key] = tag[0].match(new RegExp('\\b' + key + '="([^"]*)"'))?.[1];
@@ -93,7 +93,7 @@ test('ASCII workbench delivers the edited parameters and executable isolated cod
     Object.assign(env.document, { activeElement: null, documentElement: { hasAttribute: () => false }, getElementById: id => { assert.ok(ids.has(id), id); return ids.get(id); }, querySelectorAll: () => palette });
     let options;
     Object.assign(env.context, { mountAsciiField: env.mount, mountLabWorkbench: value => { options = value; return { refresh() {} }; } });
-    vm.runInContext(fs.readFileSync('single-web/motion-lab/ascii-field/app.js', 'utf8'), env.context);
+    vm.runInContext(fs.readFileSync('single-web/components/background/ascii-field/app.js', 'utf8'), env.context);
     const savedDefaults = await options.bundle();
     for (const pair of ['"cellSize":9', '"scale":0.4', '"glow":0.53', '"twinkle":0.23', '"seed":28', '"animate":true']) assert.ok(savedDefaults.js.includes(pair), pair);
     assert.equal(ids.get('animate').checked, true);

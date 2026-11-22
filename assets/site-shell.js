@@ -6,9 +6,12 @@
     const catalog = script.hasAttribute('data-catalog');
     const requested = new URLSearchParams(location.search).get('section');
     const section = catalog && ['components', 'blocks', 'lab'].includes(requested) ? requested : script.dataset.section || 'components';
+    const localPath = new URL(location.href).pathname.slice(root.pathname.length).split('/');
+    const category = section === 'components' && !catalog && localPath[0] === 'single-web' && localPath[1] === 'components' && localPath[3] ? localPath[2] : script.dataset.category;
+    if (category) document.querySelector('.workspace')?.setAttribute('data-category', category);
     if (cover) {
         const stage = document.getElementById('preview-panel') || document.querySelector('.preview, .hero');
-        const button = stage.querySelector('#mag, #icon-cta, #curve-cta');
+        const button = stage.querySelector('#mag, #icon-cta, #curve-cta, #hold-cta');
         const report = () => {
             if (button) stage.style.setProperty('--cover-component-height', `${button.offsetHeight}px`);
             parent.postMessage({ type: 'library:cover-size', height: stage.offsetHeight }, location.origin);
@@ -27,6 +30,7 @@
     const sectionURL = name => {
         const url = new URL(name === 'components' ? 'single-web/components/index.html' : 'index.html', root);
         url.searchParams.set('section', name);
+        if (name === 'components' && category) url.searchParams.set('category', category);
         return url;
     };
     const header = document.createElement('header');
@@ -66,7 +70,9 @@
     }
     let saved;
     try { saved = JSON.parse(sessionStorage.getItem('31library:catalog:' + root.pathname) || 'null'); } catch {}
-    if (saved?.section === section && saved.url) {
+    const savedCategory = saved?.url ? new URL(saved.url, location.href).searchParams.get('category') : null;
+    const canRestore = saved?.section === section && saved.url && (!category || ({ buttons: 'button', backgrounds: 'background' }[savedCategory] || savedCategory) === category);
+    if (canRestore) {
         const back = new URL(saved.url, location.href);
         if (back.origin === location.origin) {
             back.searchParams.set('restore', '1');
@@ -74,8 +80,8 @@
         }
     }
     document.querySelectorAll('.breadcrumbs a').forEach(link => {
-        if (['组件', '按钮', '实验室', '区块'].includes(link.textContent.trim())) {
-            const url = new URL(saved?.section === section && saved.url ? saved.url : sectionURL(section), location.href);
+        if (new URL(link.href, location.href).origin === location.origin) {
+            const url = new URL(canRestore ? saved.url : sectionURL(section), location.href);
             if (url.origin === location.origin) { url.searchParams.set('restore', '1'); link.href = url.href; }
         }
     });

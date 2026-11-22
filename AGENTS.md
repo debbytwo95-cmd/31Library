@@ -5,7 +5,7 @@
 31Library 是一个静态 UI 组件与动效实验资源库。
 
 - `index.html` 和 `single-web/components/index.html` 是索引入口；`assets/catalog.js` 和 `assets/catalog.css` 提供共用交互与样式。
-- `single-web/components/<project>/` 存放独立组件工作台，包含项目专用脚本、样式、字体和图标。
+- `single-web/components/<category>/<project>/` 按分类目录存放独立组件工作台（新分类建立新目录），包含项目专用脚本、样式、字体和图标。
 - `single-web/motion-lab/` 存放动效实验。地球实验的可部署文件位于 `earth-replica/dist/`；流体光效项目包含分析资料和历史参考。
 - `NAMING.md` 定义命名与组织规范。`test.html` 是占位页面，不是测试套件。
 
@@ -15,10 +15,10 @@
 
 ```powershell
 live-server
-npm --prefix single-web/components/magnetic-button-studio run dev
-npm --prefix single-web/components/icon-button-studio run dev
-npm --prefix single-web/components/magnetic-button-studio run check
-npm --prefix single-web/components/icon-button-studio run check
+npm --prefix single-web/components/button/magnetic-button-studio run dev
+npm --prefix single-web/components/button/icon-button-studio run dev
+npm --prefix single-web/components/button/magnetic-button-studio run check
+npm --prefix single-web/components/button/icon-button-studio run check
 node single-web/motion-lab/earth-replica/serve.cjs
 ```
 

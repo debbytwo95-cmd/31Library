@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="根据鼠标进出方向变化的曲线填充按钮，复刻 Annnimate Curve Fill Button 的 SVG 路径动效，支持实时调参与独立示例导出。">
+  <title>Curve Fill Button · 曲线填充按钮 — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a
+          href="../../index.html?category=button">按钮</a><span class="slash">/</span><strong>Curve Fill Button</strong>
+      </nav><span class="topbar-note">A little motion goes a long way.</span>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>CURVE FILL BUTTON · 曲线填充按钮</span><span class="tag">鼠标交互 · hover / press</span></div>
+        <div class="title-row">
+          <h1>Curve Fill Button<span class="title-period">.</span></h1>
+        </div>
+        <p class="intro-copy">从你经过的方向，填入一抹颜色。<span>弧线顺势推进，离开时沿指针方向退场。</span></p>
+      </section>
+      <section id="playground" class="workspace" aria-label="曲线填充按钮工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab"
+                aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" data-library-icon="preview" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false"
+                aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" data-library-icon="code" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" data-library-icon="copy" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top"><span class="live-label"><span></span>LIVE PLAYGROUND</span>
+              <div class="stage-themes" role="group" aria-label="演示区主题"><button class="selected"
+                  data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" data-library-icon="sun" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button><button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" data-library-icon="moon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button></div>
+            </div>
+            <div class="field" id="field"><button id="curve-cta" class="library-curve-button" data-appearance="light"
+                type="button"><span class="curve-label">Get started</span><svg class="curve-svg" viewBox="0 0 100 100"
+                  preserveAspectRatio="none" aria-hidden="true">
+                  <path class="curve-path" d="M 0 100 V 100 Q 50 100 100 100 V 100 z" />
+                </svg></button></div>
+            <div class="stage-bottom"><span><img class="library-icon design-icon" data-library-icon="cursor" src="../../../../assets/icons/cursor.svg" width="13" height="13" alt="">从不同方向移入按钮，观察弧线填充</span><button class="slow-control" id="slow-control" aria-pressed="false"><span
+                  class="slow-dot"></span><span id="speed-label">1×</span>播放速度</button></div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span><i></i>curve-fill-button.html</span><span>HTML · CSS · JavaScript</span>
+            </div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">参数与下方设置实时同步<span>GSAP 3.15 · 字体内嵌</span></div>
+          </div>
+          <div class="demo-caption"><span><span class="caption-dot"></span>SVG 曲线路径 · 四向感知填充</span><span>FOLLOW YOUR
+              DIRECTION.</span></div>
+        </div>
+        <aside class="settings" aria-label="动效参数">
+          <div class="settings-heading">
+            <h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数" title="重置参数"><img class="library-icon design-icon" data-library-icon="reset" src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button>
+          </div>
+          <p class="settings-intro">保留弧线的柔软，调出合适的节奏。</p>
+          <div class="preset-group" role="group" aria-label="动效预设"><button data-preset="default" class="selected"
+              aria-pressed="true">原版</button><button data-preset="soft" aria-pressed="false">舒缓</button><button
+              data-preset="snappy" aria-pressed="false">利落</button></div>
+          <div class="range-control"><label for="duration">动效时长<output id="duration-output"
+                for="duration">500<span>ms</span></output></label><input type="range" id="duration" min="150" max="1200"
+              step="10" value="500">
+            <div class="range-labels"><span>利落</span><span>舒缓</span></div>
+          </div>
+          <div class="range-control"><label for="cornerRadius">按钮圆角<output id="cornerRadius-output"
+                for="cornerRadius">24<span>px</span></output></label><input type="range" id="cornerRadius" min="0"
+              max="24" step="1" value="24"></div>
+          <div class="select-control"><label for="direction">方向感知</label><select id="direction">
+              <option value="all">四个方向</option>
+              <option value="vertical">仅上下</option>
+              <option value="horizontal">仅左右</option>
+            </select></div>
+          <div class="select-control"><label for="easing">缓动曲线</label><select id="easing">
+              <option value="power3.out">原版 · 四次减速</option>
+              <option value="power2.out">三次减速</option>
+              <option value="power1.inOut">柔和进出</option>
+            </select></div>
+          <label class="color-control" for="fillColor">填充颜色<input type="color" id="fillColor" value="#525252"></label>
+          <div class="settings-foot"><span></span>所有参数实时生效</div>
+        </aside>
+      </section>
+      <section class="principles" id="principles">
+        <div class="section-heading">
+          <h2>方向，决定填充的起点<span>The anatomy of a curve</span></h2>
+        </div>
+        <div class="principle-grid">
+          <article>
+            <div class="principle-top"><span>DIRECTION</span></div>
+            <h3>从经过的边缘进入</h3>
+            <p>比较指针到四条边的距离，<br>以最近的边缘作为填充起点。</p>
+          </article>
+          <article>
+            <div class="principle-top"><span>CURVE</span></div>
+            <h3>让边界带一点弧度</h3>
+            <p>SVG 二次贝塞尔曲线随路径推进，<br>沿用原版的曲率与减速节奏。</p>
+          </article>
+          <article>
+            <div class="principle-top"><span>RETURN</span></div>
+            <h3>沿离开的方向退场</h3>
+            <p>离开时重新判断方向，弧线顺势退出，<br>回到安静的深色胶囊。</p>
+          </article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" data-library-icon="code-guide" src="../../../../assets/icons/code-guide.svg" width="22" height="22" alt=""></div>
+        <div>
+          <h2>把这个细节，带进你的作品</h2>
+          <p>复制组件代码接入已有页面，或下载可直接打开的示例。三个入口均同步当前参数。</p>
+        </div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" data-library-icon="download" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes">
+        <h2>使用与接入</h2>
+        <p>鼠标从四个方向移入或离开；键盘 Tab 聚焦展开，Enter / 空格激活；触屏按住展开、松手收回。触屏不模拟悬停。系统减少动态效果时直接切换填充状态。</p>
+        <p>复制结构、样式和脚本后即可使用，GSAP 3.15.0 与 Inter Semibold 字体已内嵌。多个实例独立运行；重置调用
+          <code>root.libraryComponent.reset()</code>，移除前调用 <code>root.libraryComponent.destroy()</code>。示例保存后可直接打开。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="assets/gsap.min.js"></script>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="button"></script>
+</body>
+
+</html>

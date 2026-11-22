@@ -1,11 +1,14 @@
-/* Classification and tags never change a project's stable path. */
+/* Component category IDs and paths follow the category folders. */
 const entries = window.LibraryCatalog;
+const componentCategories = window.LibraryCategories.map(item => [item.id, item.label]);
+const defaultCategory = componentCategories.find(([id]) => id === 'button')?.[0] || componentCategories[0]?.[0] || 'all';
+const normalizeCategory = id => ({ buttons: 'button', backgrounds: 'background' }[id] || id);
 const interactionLabels = { hover: '悬停 hover', press: '按压 press', drag: '拖拽 drag', swipe: '滑动 swipe', scroll: '滚动 scroll', input: '输入 input' };
 const grid = document.querySelector('#grid'), heading = document.querySelector('h1'), description = document.querySelector('#description'), search = document.querySelector('#search'), sidebar = document.querySelector('#categories'), chips = document.querySelector('#chips');
 const storageKey = '31library:catalog:' + new URL('.', document.baseURI).pathname;
 const params = new URLSearchParams(location.search);
 let section = ['components', 'blocks', 'lab'].includes(params.get('section')) ? params.get('section') : 'components';
-let category = params.get('category') || (section === 'components' ? 'buttons' : 'all');
+let category = normalizeCategory(params.get('category')) || (section === 'components' ? defaultCategory : 'all');
 let filter = params.get('filter') || 'all';
 search.value = params.get('q') || '';
 let saved;
@@ -23,7 +26,7 @@ function save() {
 function render(animate = false) {
   const lab = section === 'lab';
   const sectionItems = entries.filter(item => item.section === section);
-  const categories = section === 'components' ? [['buttons', '按钮'], ['text', '文字'], ['backgrounds', '背景']] : [['all', lab ? '全部实验' : '全部区块']];
+  const categories = section === 'components' && componentCategories.length ? componentCategories : [['all', lab ? '全部实验' : section === 'blocks' ? '全部区块' : '全部组件']];
   if (!categories.some(([id]) => id === category)) category = categories[0][0];
   document.querySelectorAll('.library-nav-item').forEach(link => {
     const active = new URL(link.href).searchParams.get('section') === section;
@@ -68,7 +71,7 @@ function render(animate = false) {
 }
 document.querySelector('.library-nav').addEventListener('click', event => {
   const link = event.target.closest('.library-nav-item'); if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-  event.preventDefault(); section = new URL(link.href).searchParams.get('section'); category = section === 'components' ? 'buttons' : 'all'; filter = 'all'; search.value = ''; render(true);
+  event.preventDefault(); section = new URL(link.href).searchParams.get('section'); category = section === 'components' ? defaultCategory : 'all'; filter = 'all'; search.value = ''; render(true);
 });
 sidebar.addEventListener('click', event => { const button = event.target.closest('[data-category]'); if (button) { category = button.dataset.category; filter = 'all'; render(true); } });
 chips.addEventListener('click', event => { const button = event.target.closest('[data-filter]'); if (button) { filter = button.dataset.filter; render(true); } });

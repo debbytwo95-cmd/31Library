@@ -1,0 +1,5 @@
+/* Shared base with the existing compact title spacing. */
+@import url("../../../../assets/workbench-base.css");
+.title-row{height:auto;padding:18px 0 0}
+.settings-intro{margin:0 0 19px}
+@media(max-width:759px){.title-row{height:auto;padding:19px 0 16px}}

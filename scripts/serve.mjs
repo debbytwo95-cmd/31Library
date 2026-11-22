@@ -2,9 +2,11 @@ import http from 'node:http';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { syncCatalog } from './sync-catalog.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 export function serve({ port = Number(process.env.PORT) || 4173, entry = 'index.html' } = {}) {
+    syncCatalog();
     const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ttf': 'font/ttf', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.txt': 'text/plain; charset=utf-8' };
     const server = http.createServer(async (request, response) => {
         try {

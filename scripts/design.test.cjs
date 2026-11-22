@@ -54,7 +54,7 @@ test('page motion follows tokens, stays within 800ms and honors reduced motion',
 });
 
 test('reusable icon effect has its own variable namespace and no website token dependency', () => {
-    const css=fs.readFileSync('single-web/components/icon-button-studio/button.css','utf8');
+    const css=fs.readFileSync('single-web/components/button/icon-button-studio/button.css','utf8');
     assert.doesNotMatch(css,/var\(--library-/);
     for(const match of css.matchAll(/(--[a-z][\w-]*)/g)) assert.ok(match[1].startsWith('--icon-button-'),match[1]);
 });
@@ -71,7 +71,7 @@ test('all live pages use shared header and footer placeholders without project o
         assert.match(html, /src="[^"\n]*assets\/site-shell\.js"/, page);
     }
     const ownStyles = ['assets/catalog.css', 'assets/ui.css', 'assets/lab-workbench.css',
-        'single-web/components/magnetic-button-studio/styles.css', 'single-web/components/icon-button-studio/styles.css'];
+        'single-web/components/button/magnetic-button-studio/styles.css', 'single-web/components/button/icon-button-studio/styles.css'];
     for (const file of ownStyles) {
         const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
         assert.doesNotMatch(css, /(?:\.library-(?:header|footer)|\.site-footer)\b|(?:^|})\s*footer\s*\{/, file);

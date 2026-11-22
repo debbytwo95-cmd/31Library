@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ASCII Field — 31Library</title>
+  <meta name="description" content="以字符密度描绘的漂移光场，指针透镜放大并重排字符，点击发出一圈字符涟漪。">
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js" data-kind="lab"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="../../../../assets/workbench-base.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/lab-workbench.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a
+          href="../../index.html?section=components">组件</a><span>/</span><a
+          href="../../index.html?section=components&amp;category=background">背景</a><span>/</span><strong>ASCII
+          Field</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span class="tag">鼠标交互 · hover / press</span></div>
+        <div class="title-row">
+          <h1>ASCII Field</h1>
+        </div>
+        <p class="intro-copy">用字符描绘一片光场：越亮的地方，字形越密。</p>
+      </section>
+      <section class="workspace lab-workspace lab-stacked" data-category="background" aria-label="ASCII Field 工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab"
+                aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon"
+                  data-library-icon="preview" src="../../../../assets/icons/preview.svg" width="14" height="16"
+                  alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false"
+                aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" data-library-icon="code"
+                  src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div><button
+              class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" data-library-icon="copy"
+                src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab">
+            <div class="field">
+              <div class="library-ascii-preview" id="ascii"><canvas aria-label="字符光场，指针移入显示透镜，点击发出字符涟漪"></canvas></div>
+            </div>
+          </div>
+          <div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading">ASCII Field · HTML / CSS / JavaScript</div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">代码同步当前参数</div>
+          </div>
+          <div class="demo-caption">移入查看透镜与拖尾，点击或聚焦后按 Enter / 空格发出涟漪。默认开启漂移，可关闭“漂移动画”查看静止光场。</div>
+        </div>
+        <aside class="settings" aria-label="光场参数">
+          <div class="settings-heading">
+            <h2>光场参数<span id="state" class="settings-state">已暂停 · Canvas 2D</span></h2><button id="reset" type="button"
+              aria-label="重置所有参数"><img class="library-icon design-icon" data-library-icon="reset"
+                src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button>
+          </div>
+          <div class="ascii-controls">
+            <label for="multicolor">多色</label><input id="multicolor" type="checkbox">
+            <label for="color" id="color-row">字符颜色</label><input id="color" type="color" value="#3f6bff">
+            <label for="custom-background">自定义背景</label><input id="custom-background" type="checkbox">
+            <label for="background" id="background-row" hidden>背景颜色</label><input id="background" type="color"
+              value="#ffffff" hidden>
+            <div id="palette" class="ascii-palette" hidden role="group" aria-label="多色色板，由淡到密"><label for="palette-0">色板
+                1 · 最淡</label><input id="palette-0" type="color" data-palette="0" value="#1b2a4a"><label
+                for="palette-1">色板 2</label><input id="palette-1" type="color" data-palette="1" value="#2f6df6"><label
+                for="palette-2">色板 3</label><input id="palette-2" type="color" data-palette="2" value="#38c6d9"><label
+                for="palette-3">色板 4 · 最密</label><input id="palette-3" type="color" data-palette="3" value="#c4f5e4">
+            </div>
+            <label for="pattern">形态</label><select id="pattern">
+              <option value="flow">漂移 flow</option>
+              <option value="waves">交错 waves</option>
+              <option value="rings">环形 rings</option>
+            </select>
+            <label for="characters">字符 <span>由稀到密，最多 24 个</span><input id="characters" type="text" maxlength="24"
+                spellcheck="false" autocomplete="off" value=" .:-=+*#%@"></label>
+            <label for="cellSize">行高<output id="cellSize-value" for="cellSize"></output><input id="cellSize"
+                type="range" min="8" max="28" step="1" value="9"></label>
+            <label for="scale">形状尺度<output id="scale-value" for="scale"></output><input id="scale" type="range"
+                min="0.4" max="3" step="0.05" value="0.4"></label>
+            <label for="density">字符覆盖<output id="density-value" for="density"></output><input id="density" type="range"
+                min="0" max="1" step="0.01" value="0.7"></label>
+            <label for="fade">边缘渐隐<output id="fade-value" for="fade"></output><input id="fade" type="range" min="0"
+                max="1" step="0.01" value="0.6"></label>
+            <label for="glow">底部辉光<output id="glow-value" for="glow"></output><input id="glow" type="range" min="0"
+                max="1" step="0.01" value="0.53"></label>
+            <label for="twinkle">闪烁<output id="twinkle-value" for="twinkle"></output><input id="twinkle" type="range"
+                min="0" max="1" step="0.01" value="0.23"></label>
+            <label for="speed">速度<output id="speed-value" for="speed"></output><input id="speed" type="range" min="0"
+                max="3" step="0.1" value="1"></label>
+            <label for="seed">构图种子<output id="seed-value" for="seed"></output><input id="seed" type="range" min="0"
+                max="99" step="1" value="28"></label>
+            <label for="animate">漂移动画</label><input id="animate" type="checkbox" checked>
+            <label for="interactive">指针交互</label><input id="interactive" type="checkbox" checked>
+            <label for="radius">透镜半径<output id="radius-value" for="radius"></output><input id="radius" type="range"
+                min="30" max="260" step="5" value="100"></label>
+            <label for="magnify">放大<output id="magnify-value" for="magnify"></output><input id="magnify" type="range"
+                min="0" max="1" step="0.01" value="0.6"></label>
+            <label for="wake">拖尾<output id="wake-value" for="wake"></output><input id="wake" type="range" min="0"
+                max="1" step="0.01" value="0.7"></label>
+          </div>
+        </aside>
+      </section>
+      <section class="integration-notes">
+        <h2>原理与使用</h2>
+        <p>按行高把容器切成等宽字符网格。每格采样一个 0–1
+          的光场值：漂移形态用两级域扭曲分形噪声拉成弯曲光带，交错形态叠加两组正弦波，环形形态从三个种子中心向外扩散。值经过覆盖阈值和椭圆渐隐，映射为由稀到密的字符与浓淡；高值区域在低分辨率画布上模糊成一层底部辉光，少数格子随机闪烁。
+        </p>
+        <p>
+          指针移入时，半径内的采样坐标向指针收拢，形成放大透镜，光场加密、字形放大，下方叠一层浅色底盘；移动轨迹写入逐渐衰减的拖尾缓冲，拖尾内字符随机打散；点击从落点发出一圈由密集字符组成的散点圆环。触屏按住并移动查看透镜，松手或取消后复位，纵向滑动仍可滚动页面；键盘聚焦光场后按
+          Enter 或空格，从中心发出涟漪。字形预先绘制到图集，每帧只做贴图，无第三方依赖。</p>
+        <p>
+          按当前保存的默认参数开启漂移；关闭漂移动画后，只有真实指针交互期间逐帧绘制，交互余波结束即停止。重置恢复默认外观参数并暂停漂移。复制代码后放置完整容器，容器尺寸即光场尺寸，可在其中叠放内容。多个实例独立；<code>root.libraryComponent.play(true)</code>
+          开始漂移，<code>reset()</code> 暂停并清除交互痕迹，移除前调用 <code>destroy()</code>。减少动态效果时不漂移、不发出涟漪。</p>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" data-library-icon="code-guide"
+            src="../../../../assets/icons/code-guide.svg" width="22" height="22" alt=""></div>
+        <div>
+          <h2>带进你的项目</h2>
+          <p>复制组件代码接入已有页面，下载示例验证效果；提示词用于辅助改编，精确效果以代码为准。</p>
+        </div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon"
+            data-library-icon="download" src="../../../../assets/icons/download.svg" width="13" height="13"
+            alt=""></button>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="../../../../assets/lab-workbench.js"></script>
+  <script src="effect.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="background"></script>
+</body>
+
+</html>

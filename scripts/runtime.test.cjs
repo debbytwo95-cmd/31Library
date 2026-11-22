@@ -110,7 +110,7 @@ test('fluid renderer preserves parameters and random widths without starting pla
 });
 test('workbench exports and prompts include edited parameters; reset preserves theme and tab', async () => {
     for (const name of ['magnetic-button','icon-button']) {
-        const env=environment(), directory='single-web/components/'+name+'-studio/', html=fs.readFileSync(directory+'index.html','utf8');
+        const env=environment(), directory='single-web/components/button/'+name+'-studio/', html=fs.readFileSync(directory+'index.html','utf8');
         const ids=new Map();
         for(const tag of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) {
             const node=new NodeStub(); node.dataset={}; node.id=tag[1];
