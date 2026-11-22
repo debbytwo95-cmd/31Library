@@ -28,7 +28,7 @@
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 180ms ease;
+    transition: transform 180ms ease, background-color 0s;
     user-select: none
 }
 
@@ -96,6 +96,12 @@
 .library-icon-button .arrow-track svg+svg {
     left: calc(-1*var(--icon-button-travel));
     opacity: 0
+}
+
+/* Match the base after expansion to remove dark antialiasing at the rounded edge. */
+.library-icon-button.is-active {
+    background: var(--icon-button-fill);
+    transition-delay: 0s, var(--icon-button-duration)
 }
 
 .library-icon-button.is-active .icon-fill {

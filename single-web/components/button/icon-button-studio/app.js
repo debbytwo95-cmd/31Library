@@ -2,7 +2,7 @@
 (() => {
  'use strict';
  const $=id=>document.getElementById(id);
- const defaults={duration:500,arrowDelay:30,iconSize:48,arrowTravel:40,cornerRadius:32,easing:'smooth'};
+ const defaults={duration:500,arrowDelay:30,iconSize:42,arrowTravel:40,cornerRadius:32,easing:'smooth'};
  const presets={default:{duration:500,arrowDelay:30,easing:'smooth'},soft:{duration:800,arrowDelay:90,easing:'smooth'},snappy:{duration:280,arrowDelay:0,easing:'ease'}};
  const curves={smooth:'cubic-bezier(.22,1,.36,1)',ease:'cubic-bezier(.4,0,.2,1)',spring:'cubic-bezier(.34,1.35,.64,1)'};
  const units={duration:'ms',arrowDelay:'ms',iconSize:'px',arrowTravel:'px',cornerRadius:'px'};
@@ -15,7 +15,7 @@
  function notify(message){clearTimeout(toastTimer);$('toast').querySelector('span').textContent=message;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600);}
  function apply(){
   const factor=slow?4:1;
-  const vars={'--icon-button-duration':config.duration*factor+'ms','--icon-button-arrow-delay':config.arrowDelay*factor+'ms','--icon-button-ease':curves[config.easing],'--icon-button-disc':config.iconSize+'px','--icon-button-corner':config.cornerRadius+'px','--icon-button-travel':config.arrowTravel+'px','--icon-button-icon-center':config.iconSize/2+8+'px'};
+  const vars={'--icon-button-duration':config.duration*factor+'ms','--icon-button-arrow-delay':config.arrowDelay*factor+'ms','--icon-button-ease':curves[config.easing],'--icon-button-disc':config.iconSize+'px','--icon-button-corner':config.cornerRadius+'px','--icon-button-travel':config.arrowTravel+'px','--icon-button-icon-center':config.iconSize/2+7+'px'};
   for(const [key,value] of Object.entries(vars))button.style.setProperty(key,value);
   for(const [key,unit] of Object.entries(units)){
    const input=$(key);input.value=config[key];input.style.setProperty('--progress',100*(config[key]-Number(input.min))/(Number(input.max)-Number(input.min))+'%');
