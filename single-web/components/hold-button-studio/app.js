@@ -4,9 +4,12 @@
     const defaults = { holdMs: 1200, doneMs: 1700, width: 220, height: 56, rebound: 14 };
     const config = { ...defaults };
     const button = $('hold-cta'), stage = $('preview-panel');
-    const runtime = LibraryHoldButton.mount(button, config);
-    button.libraryComponent = runtime;
     const isCover = document.documentElement.hasAttribute('data-cover');
+    const runtime = LibraryHoldButton.mount(button, {
+        ...config,
+        onComplete: isCover ? () => window.parent.postMessage({ type: 'library:cover-open' }, location.origin) : undefined
+    });
+    button.libraryComponent = runtime;
     let slow = false, codeVisible = false, delivery;
     function sync() {
         runtime.update({ ...config, holdMs: slow ? config.holdMs * 4 : config.holdMs, doneMs: slow ? config.doneMs * 4 : config.doneMs });
