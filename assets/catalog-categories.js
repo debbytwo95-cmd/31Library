@@ -13,6 +13,10 @@ window.LibraryCategories = [
     "label": "标签"
   },
   {
+    "id": "tabs",
+    "label": "标签页"
+  },
+  {
     "id": "text",
     "label": "文字"
   }

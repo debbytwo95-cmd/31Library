@@ -31,6 +31,7 @@ node scripts/sync-catalog.mjs --check
 node scripts/catalog-structure.test.mjs
 node scripts/check.mjs
 node scripts/runtime.test.cjs
+node scripts/tab-pill.test.cjs
 node scripts/delivery.test.cjs
 node scripts/curve-fill.test.cjs
 node scripts/ascii-field.test.cjs

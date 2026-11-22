@@ -1,0 +1,74 @@
+.library-tab-pill {
+    --tab-pill-surface:#f0f0ef;
+    --tab-pill-fill:#0e0f11;
+    --tab-pill-muted:#6f6e68;
+    --tab-pill-active:#f4f3f1;
+    box-sizing:border-box;
+    position:relative;
+    width:350px;
+    max-width:100%;
+    container-type:inline-size;
+    font-family:Inter,"Helvetica Neue",Arial,sans-serif;
+    color-scheme:light;
+}
+.library-tab-pill[data-appearance=dark] {
+    --tab-pill-surface:#262626;
+    --tab-pill-fill:#fff;
+    --tab-pill-muted:#9a9a9a;
+    --tab-pill-active:#000;
+    color-scheme:dark;
+}
+.library-tab-pill .library-tab-pill-bar {
+    box-sizing:border-box;
+    position:relative;
+    display:flex;
+    width:100%;
+    padding:4px;
+    border-radius:999px;
+    background:var(--tab-pill-surface);
+    isolation:isolate;
+}
+.library-tab-pill .library-tab-pill-tab {
+    box-sizing:border-box;
+    position:relative;
+    z-index:1;
+    flex:1 1 auto;
+    min-width:0;
+    margin:0;
+    padding:9px clamp(4px,3cqw,16px);
+    border:0;
+    border-radius:999px;
+    background:transparent;
+    color:var(--tab-pill-muted);
+    cursor:pointer;
+    font:500 clamp(9px,4cqw,14px)/20px Inter,"Helvetica Neue",Arial,sans-serif;
+    white-space:nowrap;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    transition:color .25s;
+}
+.library-tab-pill .library-tab-pill-tab[aria-selected=true] { color:var(--tab-pill-active); }
+.library-tab-pill .library-tab-pill-tab:focus-visible { outline:2px solid var(--tab-pill-muted);outline-offset:5px; }
+.library-tab-pill .library-tab-pill-indicator {
+    position:absolute;
+    left:0;
+    top:4px;
+    bottom:4px;
+    border-radius:999px;
+    background:var(--tab-pill-fill);
+    pointer-events:none;
+}
+/* The reference shows only the tab bar; associated demo content remains accessible. */
+.library-tab-pill .library-tab-pill-panel {
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    overflow:hidden;
+    clip-path:inset(50%);
+    white-space:nowrap;
+}
+.library-tab-pill .library-tab-pill-panel[hidden] { display:none; }
+@media(prefers-reduced-motion:reduce) {
+    .library-tab-pill .library-tab-pill-tab { transition:none; }
+}

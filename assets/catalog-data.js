@@ -1,6 +1,24 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "tab-pill-studio",
+    "section": "components",
+    "category": "tabs",
+    "href": "./single-web/components/tabs/tab-pill-studio/index.html",
+    "title": "Tab Pill · 弹性胶囊标签页",
+    "interactions": [
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "点击切换时，胶囊前缘先行、后缘追随，双边弹簧形成弹性拉伸与收拢。",
+    "source": "https://designbookmark.com/motion#db-tab-pill",
+    "keywords": "标签页 胶囊 弹性 切换 弹簧 tab pill tabs spring",
+    "previewHeight": 206
+  },
+  {
     "id": "hold-button-studio",
     "section": "components",
     "category": "button",
