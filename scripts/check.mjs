@@ -10,7 +10,7 @@ const origin = 'http://library.test/';
 const window = {};
 vm.runInNewContext(await readFile(path.join(root, 'assets/catalog-data.js'), 'utf8'), { window });
 const entries = window.LibraryCatalog;
-const errors = [], seen = new Set(), pending = ['index.html', 'single-web/components/index.html', 'assets/search.svg', 'assets/property-controls.js', ...entries.map(item => item.href)];
+const errors = [], seen = new Set(), pending = ['index.html', 'single-web/components/index.html', 'assets/icons/copy.svg', 'assets/property-controls.js', ...entries.map(item => item.href)];
 try { syncCatalog({ check: true }); } catch (error) { errors.push(error.message); }
 const ids = new Set();
 for (const item of entries) {

@@ -42,7 +42,7 @@ function render(animate = false) {
     button.append(label, count); sidebar.append(button);
   });
   heading.textContent = categories.find(([id]) => category === id)[1];
-  document.querySelector('.category-heading span').textContent = lab ? '全部实验' : section === 'blocks' ? '全部区块' : '全部组件';
+  document.querySelector('.category-heading-label').textContent = lab ? '全部实验' : section === 'blocks' ? '全部区块' : '全部组件';
   const filters = lab ? [...new Set(sectionItems.flatMap(item => item.technologies))].map(id => [id, id]) : Object.entries(interactionLabels);
   if (filter !== 'all' && !filters.some(([id]) => id === filter)) filter = 'all';
   chips.setAttribute('aria-label', lab ? '技术筛选' : '交互筛选');

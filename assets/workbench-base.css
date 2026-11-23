@@ -1121,7 +1121,7 @@ input[type=range]::-moz-range-thumb {
     display: grid;
     grid-template-columns: 408.667fr 435.667fr 435.667fr;
     gap: 20px;
-    padding: 24px 0 30px
+    /* padding: 24px 0 30px */
 }
 
 .principle-grid article {
@@ -1130,7 +1130,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 .principle-grid article+article {
-    padding-left: 27px
+    padding-left: 20px
 }
 
 .principle-top {
@@ -1138,28 +1138,30 @@ input[type=range]::-moz-range-thumb {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px
-}
-
-.principle-top>span {
+    gap: 10px;
     font: 400 12px/14px var(--mono);
     color: var(--muted)
 }
 
+.principle-top>span {
+    font: inherit;
+    color: inherit
+}
+
 .principle-art {
-    flex-shrink: 0
+    display: none
 }
 
 .principle-grid h3 {
     font-size: 15px;
     line-height: 18px;
     font-weight: 500;
-    margin: 15px 0 9px
+    margin: 8px 0 8px
 }
 
 .principle-grid p {
     font-size: 13px;
-    line-height: 19px;
+    line-height: 18px;
     color: var(--muted);
     margin: 0
 }
@@ -1701,10 +1703,7 @@ input[type=range]::-moz-range-thumb {
         height: auto;
         align-items: flex-start;
         flex-direction: column;
-        gap: 16px
-    }
-
-    .principle-top>span {
+        gap: 16px;
         font-size: 8px;
         line-height: 12px;
         white-space: nowrap

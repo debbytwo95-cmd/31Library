@@ -83,10 +83,6 @@
     min-height: 210px
 }
 
-.principle-top {
-    margin-bottom: 22px
-}
-
 .guide {
     margin-top: 12px
 }
@@ -148,10 +144,6 @@
 
     .principle-grid article:last-child {
         border-bottom: 0
-    }
-
-    .principle-top {
-        margin-bottom: 12px
     }
 
     .section-heading h2 {
