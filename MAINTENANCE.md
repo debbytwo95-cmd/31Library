@@ -2,6 +2,8 @@
 
 执行依据为 [STANDARDS.md](./STANDARDS.md)、[DESIGN.md](./DESIGN.md) 与 [NAMING.md](./NAMING.md)。状态反馈及完整响应式规则仍待后续补充。
 
+每次让 AI 复刻效果时，可复制[效果复刻指令模板](./REPLICATION.md)，其中包含登记、同步索引、双入口跳转及仓库子路径验证要求。
+
 ## 新增项目
 
 1. 判断属于组件、区块或实验室，确定稳定英文标识；同结构的参数变化保留在项目内部。
@@ -35,6 +37,8 @@ node scripts/catalog-structure.test.mjs
 node scripts/check.mjs
 node scripts/runtime.test.cjs
 node scripts/tab-pill.test.cjs
+node scripts/word-roll.test.cjs
+node scripts/weight-wave.test.cjs
 node scripts/scrubber.test.cjs
 node scripts/delivery.test.cjs
 node scripts/prompt-copy.test.cjs

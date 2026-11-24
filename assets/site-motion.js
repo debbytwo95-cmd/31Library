@@ -21,7 +21,7 @@
         nodes.forEach((node, i) => {
             if (!node || typeof node.animate !== 'function') return;
             const animation = node.animate([
-                { opacity: 0, transform: 'translateY(8px)' },
+                { opacity: 0, transform: node.matches?.('.main > aside') ? 'translateX(-10px)' : 'translateY(8px)' },
                 { opacity: 1, transform: 'translateY(0)' }
             ], { duration, delay: Math.min(i * 30, 800 - duration), easing, fill: 'backwards' });
             running.set(node, animation);
@@ -39,7 +39,7 @@
             if (event.type !== 'pagereveal' || document.hidden || reduced.matches) return;
             if (navigationTransition && navigationTransition !== transition) return;
             navigationTransition = null;
-            requestAnimationFrame(() => reveal([...document.querySelectorAll('.main, .main-shell')]));
+            requestAnimationFrame(() => reveal([...document.querySelectorAll('.main > aside, .main > .content, .main-shell')]));
         });
         const done = () => { if (navigationTransition === transition) navigationTransition = null; };
         transition.finished.then(done, done);
@@ -52,7 +52,7 @@
         if (!event.persisted) return;
         settle();
         // The catalog restores scroll in its pageshow listener before this frame.
-        requestAnimationFrame(() => reveal([...document.querySelectorAll('.main, .main-shell')]));
+        requestAnimationFrame(() => reveal([...document.querySelectorAll('.main > aside, .main > .content, .main-shell')]));
     });
     reduced.addEventListener('change', () => {
         settle(); cancel();

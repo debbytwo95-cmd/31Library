@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Blur Reveal · 模糊显现，文字从左到右逐字由模糊变清晰，闲置自动播放，也支持真实悬停或点击重播。">
+  <title>Blur Reveal — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=text">文字</a><span class="slash">/</span><strong>Blur Reveal</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>BLUR REVEAL · 模糊显现</span><span class="tag">自动 / 悬停 / 点击</span></div>
+        <div class="title-row"><h1>Blur Reveal<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让想法，慢慢清晰。<span>一束柔焦从左向右掠过，文字逐字显现，轻盈落定。</span></p>
+      </section>
+      <section class="workspace" aria-label="模糊显现工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top">
+              <div class="stage-themes" role="group" aria-label="演示区主题">
+                <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+                <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+              </div>
+            </div>
+            <div class="field">
+              <div id="blur-reveal" class="library-blur-reveal" data-appearance="light">
+                <button class="library-blur-reveal-trigger" type="button" aria-label="Coming into focus，重新显现文字">Coming into focus</button>
+              </div>
+            </div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>blur-reveal.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>原生 CSS · JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="模糊显现参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+          <p class="settings-intro">无需点击，文字自动循环显现；悬停、点击或键盘可立即重播。</p>
+          <div class="range-control"><label for="text">展示文字</label><input id="text" type="text" value="Coming into focus" maxlength="160"></div>
+          <div class="range-control"><label for="fontSize">文字字号<output id="fontSize-output" for="fontSize">48<span>px</span></output></label><input id="fontSize" type="range" min="16" max="96" step="1" value="48"></div>
+          <div class="range-control"><label for="duration">单字时长<output id="duration-output" for="duration">400<span>ms</span></output></label><input id="duration" type="range" min="100" max="2000" step="50" value="400"></div>
+          <div class="range-control"><label for="stagger">逐字间隔<output id="stagger-output" for="stagger">30<span>ms</span></output></label><input id="stagger" type="range" min="0" max="150" step="5" value="30"></div>
+          <div class="range-control"><label for="blur">起始模糊<output id="blur-output" for="blur">8<span>px</span></output></label><input id="blur" type="range" min="0" max="24" step="1" value="8"></div>
+          <div class="settings-foot">所有参数实时生效</div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>从柔焦，到清晰<span>逐字显现的三个阶段</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / SOFTEN</div><h3>柔焦起笔</h3><p>每轮开始时，各字从透明与模糊状态开始；真实操作也可立即重新播放。</p></article>
+          <article><div class="principle-top">02 / REVEAL</div><h3>逐字显现</h3><p>从左到右错开启动，透明度与模糊同步恢复。缓动收住尾段，无位移或缩放。</p></article>
+          <article><div class="principle-top">03 / REST</div><h3>清晰停驻</h3><p>到达后清晰停驻 1400ms，再自动开始下一轮；窗口失焦或页面隐藏时暂停。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把模糊显现，带进你的项目</h2><p>复制独立组件代码、下载可运行 HTML，或复制包含当前参数的提示词。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>使用与接入</h2>
+        <p>无需点击即可自动播放，每轮完成后停驻 1400ms。悬停、点击、轻触或 Enter／空格立即重播；移出或取消后清晰复位，再继续循环。窗口失焦、页面隐藏或切换代码页签时暂停，恢复后继续。重置恢复默认参数并暂停，操作文字或切回预览恢复播放。参数调整后等待 1400ms 开始；减少动态效果时保持清晰文字，不播放模糊。支持中文、组合字符及长文本自然换行。</p>
+        <p>放置交付结构，引入一次 CSS 和脚本，调用 <code>LibraryBlurReveal.mount(root, config)</code>。实例提供 <code>play()</code>、<code>update(config)</code>、<code>reset()</code>、<code>resume()</code> 和 <code>destroy()</code>。多个实例独立运行，移除容器前调用 destroy 清理事件与动画；重复挂载会自动清理旧实例。</p>
+        <p>基于原生 HTML、CSS、JavaScript 与 Web Animations API，无第三方运行库。预览使用仓库 Inter Semibold，交付内嵌同一字体与许可；中文采用系统字体回退。下载 HTML 可直接打开，工作台通过 HTTP 使用。复制代码、示例与提示词均同步当前文字、字号、时长、间隔、模糊及主题。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="text"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.library-word-roll {
+    box-sizing:border-box;display:grid;place-items:center;width:100%;min-width:0;padding:12px 24px;
+    --word-roll-text:#17181a;--word-roll-muted:#6f6e68;
+}
+.library-word-roll[data-appearance=dark] { --word-roll-text:#fff;--word-roll-muted:#9a9a9a; }
+.library-word-roll-line {
+    display:flex;align-items:center;gap:.26em;margin:0;padding:0;border:0;border-radius:4px;
+    background:transparent;color:var(--word-roll-text);font-family:Inter,"Helvetica Neue",Arial,sans-serif;
+    font-size:44px;font-weight:600;letter-spacing:-.035em;line-height:1.25;white-space:nowrap;
+    cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.library-word-roll-line:focus-visible { outline:2px solid var(--word-roll-text);outline-offset:8px; }
+.library-word-roll-lead { color:var(--word-roll-muted); }
+.library-word-roll-slot { position:relative;display:block;height:1.25em;clip-path:inset(0 -.5em); }
+.library-word-roll-word { position:absolute;left:0;top:0;display:flex; }
+.library-word-roll-char { display:inline-block;white-space:pre; }
+.library-word-roll-slot[data-moving] .library-word-roll-char { will-change:transform,opacity; }

@@ -1,0 +1,36 @@
+@font-face {
+    font-family: LibraryWeightWaveInter;
+    src: url("../../../../assets/fonts/inter-variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+}
+.library-weight-wave {
+    --weight-wave-size: 54px;
+    --weight-wave-color: #17181a;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 120px;
+    padding: 24px;
+    box-sizing: border-box;
+    touch-action: pan-y;
+    user-select: none;
+    color: var(--weight-wave-color);
+}
+.library-weight-wave[data-appearance="dark"] { --weight-wave-color: #fff; }
+.library-weight-wave-line {
+    display: inline-block;
+    margin: 0;
+    max-width: 100%;
+    white-space: pre;
+    font-family: LibraryWeightWaveInter, "Noto Sans SC", system-ui, sans-serif;
+    font-size: var(--weight-wave-size);
+    line-height: 1.2;
+    letter-spacing: -.03em;
+    font-kerning: none;
+    font-synthesis: none;
+    cursor: default;
+}
+.library-weight-wave-char { display: inline-block; white-space: pre; }
+.library-weight-wave-line:focus-visible { outline: 2px solid currentColor; outline-offset: 10px; border-radius: 4px; }

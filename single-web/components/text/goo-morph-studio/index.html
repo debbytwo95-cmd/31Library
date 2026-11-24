@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Goo Morph · 液态文字变形，双层文字模糊融合，自动循环轮换，也可点击切换。">
+  <title>Goo Morph — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=text">文字</a><span class="slash">/</span><strong>Goo Morph</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>GOO MORPH · 液态文字变形</span><span class="tag">自动轮换</span></div>
+        <div class="title-row"><h1>Goo Morph<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让文字，融成下一个想法。<span>旧词模糊散开，新词凝聚成形，在同一个中心液态交融。</span></p>
+      </section>
+      <section class="workspace" aria-label="液态文字变形工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top">
+              <div class="stage-themes" role="group" aria-label="演示区主题">
+                <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+                <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+              </div>
+            </div>
+            <div class="field">
+              <div id="goo-morph" class="library-goo-morph" data-appearance="light">
+                <button class="library-goo-morph-trigger" type="button" aria-label="Ideas，切换下一个词组">
+                  <span class="library-goo-morph-layers" aria-hidden="true"><span class="library-goo-morph-word">Ideas</span><span class="library-goo-morph-word"></span></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>goo-morph.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>原生 CSS · JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="液态文字变形参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+          <p class="settings-intro">词组自动循环变形，无需点击；可调节停留时间与变形节奏。</p>
+          <div class="range-control"><label for="words">轮换词组（逗号分隔）</label><input id="words" type="text" value="Ideas, Sketches, Designs, Products" maxlength="500" aria-describedby="words-help"></div>
+          <p id="words-help">最多 12 个词组，每组 40 个字符；留空时保留上次内容。</p>
+          <div class="range-control"><label for="fontSize">文字字号<output id="fontSize-output" for="fontSize">64<span>px</span></output></label><input id="fontSize" type="range" min="24" max="96" step="1" value="64"></div>
+          <div class="range-control"><label for="duration">变形时长<output id="duration-output" for="duration">1050<span>ms</span></output></label><input id="duration" type="range" min="300" max="2400" step="50" value="1050"></div>
+          <div class="range-control"><label for="hold">停留时长<output id="hold-output" for="hold">1600<span>ms</span></output></label><input id="hold" type="range" min="400" max="5000" step="100" value="1600"></div>
+          <div class="range-control"><label for="blur">模糊强度<output id="blur-output" for="blur">8<span>px</span></output></label><input id="blur" type="range" min="2" max="16" step="1" value="8"></div>
+          <div class="range-control"><label for="threshold">融合阈值<output id="threshold-output" for="threshold">140</output></label><input id="threshold" type="range" min="80" max="200" step="5" value="140"></div>
+          <div class="settings-foot">所有参数实时生效</div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>一个词，三段变化<span>Blur into shape</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / BLUR</div><h3>模糊离场</h3><p>旧词逐渐模糊并淡出。变化使用 smoothstep 曲线，起止保持平滑。</p></article>
+          <article><div class="principle-top">02 / FUSE</div><h3>液态融合</h3><p>新词从模糊中显现；SVG 透明度阈值让重叠边缘融合成黏连的文字轮廓。</p></article>
+          <article><div class="principle-top">03 / REST</div><h3>清晰停驻</h3><p>到达后移除阈值滤镜，还原平滑文字边缘，停止动画帧，停留后自动进入下一次变形。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把液态文字，带进你的项目</h2><p>复制独立组件代码、下载可运行 HTML，或复制包含当前参数的提示词。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>使用与接入</h2>
+        <p>页面打开后自动循环轮换词组：默认停留 1600ms，再用 1050ms 液态变形。点击、轻触或 Enter／空格可立即切换，变形中不累积切换。移出文字区域后继续自动播放；取消时结束临时动效，失焦、页面隐藏或切换代码页签时暂停，返回后重新等待完整停留时间。索引封面仅在真实悬停时自动轮换，移出后回到首词并停止。参数调整与重置后回到首词，按当前停留时间继续轮换。减少动态效果时按相同停留间隔直接切换。窄容器按最长词组自适应字号。</p>
+        <p>放置交付结构，引入一次 CSS 与脚本，调用 <code>LibraryGooMorph.mount(root, config)</code>。实例提供 <code>next()</code>、<code>update(config)</code>、<code>reset()</code>、<code>finish()</code>、<code>play()</code>、<code>pause()</code>、<code>destroy()</code>；多实例独立，移除前调用 destroy。SVG 滤镜标识由实例自动生成。原生 HTML、CSS、JavaScript 与 SVG 滤镜，无第三方运行库。预览使用仓库 Inter Semibold，交付内嵌同一字体与许可；中文采用系统字体回退。下载 HTML 可直接打开，工作台需通过 HTTP 使用。</p>
+        <p>参考：<a href="https://designbookmark.com/motion#db-goo-morph" target="_blank" rel="noreferrer">DesignBookmark · Goo Morph</a>（用户提供的参考源码）。按仓库规则改为真实操作触发。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="text"></script>
+</body>
+</html>

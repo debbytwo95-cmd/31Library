@@ -207,6 +207,32 @@
 
 .main-shell .stage-themes button {
     border-radius: var(--library-radius-xs);
+    color: var(--library-theme-icon-color, var(--library-text-tertiary));
+}
+
+.main-shell .stage-themes button.selected {
+    color: var(--library-theme-selected-icon-color, var(--library-text-primary));
+}
+
+.main-shell .stage-themes button .library-icon {
+    display: none;
+}
+
+.main-shell .stage-themes button::before {
+    content: "";
+    display: block;
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    mask: var(--library-theme-icon) center / contain no-repeat;
+}
+
+.main-shell .stage-themes [data-stage-theme=light] {
+    --library-theme-icon: url("icons/sun.svg");
+}
+
+.main-shell .stage-themes [data-stage-theme=dark] {
+    --library-theme-icon: url("icons/moon.svg");
 }
 
 .main-shell .stage,
@@ -324,6 +350,23 @@
 .main-shell .settings-heading button:hover:not(:disabled),
 .main-shell .icon-button:hover:not(:disabled) {
     background: var(--library-bg-subtle);
+}
+
+.main-shell .settings-heading #reset {
+    color: var(--library-text-tertiary);
+}
+
+.main-shell .settings-heading #reset .library-icon {
+    display: none;
+}
+
+.main-shell .settings-heading #reset::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: currentColor;
+    mask: url("icons/reset.svg") center / contain no-repeat;
 }
 
 .library-button:focus-visible,

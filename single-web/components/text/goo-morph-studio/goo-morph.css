@@ -1,0 +1,10 @@
+/* Isolated reusable effect styles. */
+.library-goo-morph { width:100%;max-width:1000px;min-width:0;color:#17181a; }
+.library-goo-morph[data-appearance=dark] { color:#fff; }
+.library-goo-morph .library-goo-morph-trigger { display:block;position:relative;box-sizing:border-box;width:100%;height:1.2em;padding:0;border:0;border-radius:6px;background:transparent;color:inherit;font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-size:var(--goo-morph-size,64px);font-weight:600;letter-spacing:-.045em;line-height:1.2;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent; }
+.library-goo-morph .library-goo-morph-trigger:focus-visible { outline:2px solid currentColor;outline-offset:10px; }
+.library-goo-morph .library-goo-morph-layers { position:absolute;inset:0;pointer-events:none; }
+.library-goo-morph .library-goo-morph-word { position:absolute;inset:0;display:grid;place-items:center;white-space:nowrap; }
+.library-goo-morph .library-goo-morph-word:nth-child(2) { opacity:0; }
+.library-goo-morph .library-goo-morph-measure { position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;font:inherit;letter-spacing:inherit; }
+.library-goo-morph .library-goo-morph-defs { position:absolute;width:0;height:0;overflow:hidden;pointer-events:none; }

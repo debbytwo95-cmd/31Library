@@ -10,6 +10,17 @@
     html:not([data-cover])::view-transition-new(root) {
         animation: library-page-arrive var(--library-duration-content) var(--library-ease-page) both;
     }
+    html:not([data-cover]) .main > aside { view-transition-name: library-sidebar; }
+    html:not([data-cover])::view-transition-group(library-sidebar) {
+        animation-duration: var(--library-duration-content);
+        animation-timing-function: var(--library-ease-page);
+    }
+    html:not([data-cover])::view-transition-old(library-sidebar) {
+        animation: library-page-leave var(--library-duration-page) var(--library-ease-page) both;
+    }
+    html:not([data-cover])::view-transition-new(library-sidebar) {
+        animation: library-sidebar-arrive var(--library-duration-content) var(--library-ease-page) both;
+    }
 
     html:not([data-cover]):not([data-library-motion-settled]) :where(
         .library-header,
@@ -31,6 +42,9 @@
         animation-name: library-chrome-arrive;
         animation-duration: var(--library-duration-page);
     }
+    html:not([data-cover]):not([data-library-motion-settled]) .main > aside {
+        animation-name: library-sidebar-arrive;
+    }
     /* Do not translate the viewport-bottom footer and create a temporary scrollbar. */
     html:not([data-cover]):not([data-library-motion-settled]) body > footer { animation-name: library-page-arrive; }
     .content > .title, .main-shell main > .intro { animation-delay: 30ms; }
@@ -42,6 +56,10 @@
 @keyframes library-surface-arrive {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+@keyframes library-sidebar-arrive {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 @keyframes library-chrome-arrive {
     from { opacity: 0; transform: translateY(-4px); }

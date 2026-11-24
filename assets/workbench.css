@@ -42,9 +42,20 @@ html:not([data-cover]) .main-shell .workspace .stage > .field {
     background: transparent;
 }
 /* The gray module wraps the toolbar and themed preview. */
-html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes { background: var(--library-bg-subtle); }
-html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes button.selected { background: var(--library-bg-page); }
-html:not([data-cover]) .main-shell .workspace .stage-top [data-stage-theme=dark] img { filter: invert(1); }
+html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes {
+    --library-theme-switch-bg: var(--library-bg-subtle);
+    --library-theme-selected-bg: var(--library-bg-page);
+    --library-theme-icon-color: var(--library-text-tertiary);
+    --library-theme-selected-icon-color: var(--library-text-primary);
+    background: var(--library-theme-switch-bg);
+}
+html:not([data-cover]) .main-shell .workspace .stage[data-theme=dark] .stage-themes {
+    --library-theme-switch-bg: rgba(255, 255, 255, .06);
+    --library-theme-selected-bg: rgba(255, 255, 255, .12);
+    --library-theme-icon-color: var(--library-text-quaternary);
+    --library-theme-selected-icon-color: var(--library-text-on-inverse);
+}
+html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes button.selected { background: var(--library-theme-selected-bg); }
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage { min-height: 0; }
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage > .field { flex: none; min-height: 0; }
 /* Background effects fill the rounded preview; the gray module keeps its 20px gutter. */

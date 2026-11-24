@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Weight Wave · 字重波浪，指针经过时字母弹性增重，形成流动的字重波峰。">
+  <title>Weight Wave — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=text">文字</a><span class="slash">/</span><strong>Weight Wave</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>WEIGHT WAVE · 字重波浪</span><span class="tag">指针跟随</span></div>
+        <div class="title-row"><h1>Weight Wave<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让文字，感知你的靠近。<span>指针附近的字母变粗、变亮，弹簧带动波峰轻轻流过。</span></p>
+      </section>
+      <section class="workspace" aria-label="字重波浪工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top"><div class="stage-themes" role="group" aria-label="演示区主题">
+              <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+              <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+            </div></div>
+            <div class="field"><div id="weight-wave" class="library-weight-wave" data-appearance="light"><p class="library-weight-wave-line" role="img" tabindex="0" aria-label="Feel the weight"></p></div></div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>weight-wave.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>Inter Variable · 原生 JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="字重波浪参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="20" height="20" alt=""></button></div>
+          <p class="settings-intro">闲置时自动左右扫动，鼠标经过时跟随指针，移开后继续播放。</p>
+          <div class="range-control"><label for="text">展示文字</label><input id="text" type="text" value="Feel the weight" maxlength="80"></div>
+          <div class="range-control"><label for="fontSize">文字字号<output id="fontSize-output" for="fontSize">54<span>px</span></output></label><input id="fontSize" type="range" min="24" max="96" step="1" value="54"></div>
+          <div class="range-control"><label for="light">基础字重<output id="light-output" for="light">300</output></label><input id="light" type="range" min="100" max="900" step="10" value="300"></div>
+          <div class="range-control"><label for="bold">峰值字重<output id="bold-output" for="bold">820</output></label><input id="bold" type="range" min="100" max="900" step="10" value="820"></div>
+          <div class="range-control"><label for="spread">波峰宽度<output id="spread-output" for="spread">13<span>%</span></output></label><input id="spread" type="range" min="5" max="40" step="1" value="13"></div>
+          <div class="range-control"><label for="opacity">静止不透明度<output id="opacity-output" for="opacity">42<span>%</span></output></label><input id="opacity" type="range" min="20" max="100" step="1" value="42"></div>
+          <div class="range-control"><label for="stiffness">字重弹簧刚度<output id="stiffness-output" for="stiffness">260</output></label><input id="stiffness" type="range" min="100" max="600" step="10" value="260"></div>
+          <div class="range-control"><label for="damping">字重弹簧阻尼<output id="damping-output" for="damping">22</output></label><input id="damping" type="range" min="14" max="40" step="1" value="22"></div>
+          <div class="settings-foot">所有参数实时生效；峰值字重始终不小于基础字重</div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>字母之间，流动的重量<span>Weight in motion</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / DISTANCE</div><h3>距离决定字重</h3><p>按每个字母与指针的水平距离计算高斯曲线。靠近波峰时从 300 增重至 820，同时从 42% 不透明度渐亮。</p></article>
+          <article><div class="principle-top">02 / SPRING</div><h3>双层弹簧跟随</h3><p>波峰用 150 / 22 的弹簧追随指针，每个字母用独立弹簧改变字重。Inter 可变字体保留连续、细腻的粗细变化。</p></article>
+          <article><div class="principle-top">03 / FLOW</div><h3>闲置自动流动</h3><p>波峰以约 4.6 秒为周期往返扫动。指针进入时优先跟随操作，离开后从当前波峰平滑接续；减少动态效果时关闭自动扫动。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把字重波浪，带进你的项目</h2><p>交付包含当前参数、完整可变字体与许可，可离线运行。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>使用与接入</h2>
+        <p>没有鼠标经过时，波峰以约 4.6 秒为周期左右往返。鼠标在文字附近移动时接管波峰，移开后恢复自动播放。键盘 Tab 聚焦文字后，方向键移动波峰，Home / End 到达两端，Escape 或文字失焦后恢复自动播放。触屏按住并水平移动，松手、滚动取消后恢复扫动，保留纵向滚动。窗口失焦、隐藏、离页和代码页签暂停动画，返回后继续。重置恢复默认参数并暂停，保留主题与页签；再次操作文字或返回预览后恢复播放。</p>
+        <p>将组件结构放入页面，引入一次样式与脚本，再调用 <code>LibraryWeightWave.mount(root, config)</code>；实例提供 <code>update(config)</code>、<code>reset()</code>、<code>play()</code>、<code>pause()</code>、<code>destroy()</code>。多个实例独立工作，移除前销毁以清理监听、观察器与动画。原生 HTML / CSS / JavaScript，无运行库依赖；效果依赖完整字重轴的 Inter Variable，已随单文件 HTML 内嵌及附上 SIL OFL 许可。示例下载后可直接打开，无需构建。预览通过 HTTP 使用仓库字体，中文采用系统字体回退，字重连续性取决于回退字体。窄屏自动缩小长句。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="text"></script>
+</body>
+</html>

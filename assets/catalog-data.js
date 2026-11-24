@@ -1,6 +1,84 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "blur-reveal-studio",
+    "section": "components",
+    "category": "text",
+    "title": "Blur Reveal · 模糊显现",
+    "interactions": [
+      "hover",
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript",
+      "Web Animations API"
+    ],
+    "description": "文字自动从左向右逐字由模糊和透明变得清晰，停驻后循环；真实悬停或点击可立即重播。",
+    "source": "https://uibrik.com/components/blur-reveal",
+    "keywords": "文字 模糊 显现 逐字 柔焦 blur reveal text focus stagger",
+    "previewHeight": 252,
+    "href": "./single-web/components/text/blur-reveal-studio/index.html"
+  },
+  {
+    "id": "goo-morph-studio",
+    "section": "components",
+    "category": "text",
+    "href": "./single-web/components/text/goo-morph-studio/index.html",
+    "title": "Goo Morph · 液态文字变形",
+    "interactions": [
+      "hover",
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "SVG",
+      "JavaScript"
+    ],
+    "description": "词组自动通过模糊与透明度阈值液态交融，停稳后恢复清晰边缘，点击可立即切换。",
+    "source": "https://designbookmark.com/motion#db-goo-morph",
+    "keywords": "文字 液态 变形 融合 模糊 单词 阈值 goo morph text blur svg",
+    "previewHeight": 237
+  },
+  {
+    "id": "weight-wave-studio",
+    "section": "components",
+    "category": "text",
+    "href": "./single-web/components/text/weight-wave-studio/index.html",
+    "title": "Weight Wave · 字重波浪",
+    "interactions": [
+      "hover",
+      "press",
+      "drag"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "指针附近的字母弹性增重、渐亮，形成跟随指针流动的字重波峰；闲置时自动往返扫动。",
+    "source": "https://designbookmark.com/motion#db-weight-wave",
+    "keywords": "文字 字重 波浪 指针 跟随 可变字体 高斯 弹簧 weight wave text typography variable font spring",
+    "previewHeight": 225
+  },
+  {
+    "id": "word-roll-studio",
+    "section": "components",
+    "category": "text",
+    "href": "./single-web/components/text/word-roll-studio/index.html",
+    "title": "Word Roll · 单词滚动",
+    "interactions": [
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "词组自动逐字向上轮换，点击也可立即切换，文字槽宽度随内容弹性舒展。",
+    "source": "https://designbookmark.com/motion#db-word-roll",
+    "keywords": "文字 单词 滚动 逐字 词组 切换 弹簧 word roll text typography spring",
+    "previewHeight": 215
+  },
+  {
     "id": "copy-button-studio",
     "section": "components",
     "category": "button",

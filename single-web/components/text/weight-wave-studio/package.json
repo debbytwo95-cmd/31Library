@@ -1,0 +1,8 @@
+{
+  "name": "weight-wave-studio",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"import('../../../../scripts/serve.mjs').then(({serve}) => serve({entry:'single-web/components/text/weight-wave-studio/index.html'}))\"",
+    "check": "node --check app.js && node --check effect.js"
+  }
+}

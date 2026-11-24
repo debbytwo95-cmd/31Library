@@ -19,6 +19,8 @@
 
 ## 检查与维护
 
+复刻新效果时使用[效果复刻指令模板](./REPLICATION.md)，附上参考内容即可；模板包含分类入库、索引同步和链接验证的完整要求。
+
 运行 `node scripts/check.mjs` 检查项目登记及本地资源，运行 `node scripts/runtime.test.cjs` 检查交互、参数交付与实例清理，运行 `node scripts/delivery.test.cjs` 核对地球源码包、依赖、字体和 ZIP 数据。服务启动后可运行 `node scripts/check.mjs http://127.0.0.1:4173/31Library/` 检查子路径访问。
 
 组件按分类文件夹组织：现有 button（按钮）、background（背景）、label（标签）、text（文字）。新增分类时新建目录，登记项目后运行 `node scripts/sync-catalog.mjs`；自带预览服务启动时会自动同步。

@@ -537,10 +537,6 @@ h1 {
     background: rgba(23, 24, 26, .07)
 }
 
-.stage[data-theme=light] [data-stage-theme=dark] img {
-    filter: invert(1)
-}
-
 .field {
     position: absolute;
     inset: 65px 0 64px;
@@ -741,7 +737,7 @@ h1 {
 }
 
 .settings-intro {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 13px;
     color: var(--secondary);
     margin: 6px 0 19px
@@ -924,7 +920,7 @@ input[type=range]::-moz-range-thumb {
     padding-top: 14px;
     margin-top: 25px;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 12px;
     line-height: 13px
 }
 

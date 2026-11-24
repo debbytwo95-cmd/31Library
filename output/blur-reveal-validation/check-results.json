@@ -1,0 +1,57 @@
+[
+  {
+    "cmd": "node scripts/sync-catalog.mjs --check",
+    "exit": 0,
+    "output": "PASS: 5 category folders; 13 component projects.\n"
+  },
+  {
+    "cmd": "node scripts/catalog-structure.test.mjs",
+    "exit": 0,
+    "output": "✔ folder sync repairs moved entries and keeps empty categories visible (22.9142ms)\n✔ a new category folder is discovered, and moving a project keeps its identity (14.2634ms)\n✔ unregistered projects and duplicate project names fail visibly (5.9582ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 47.9209\n"
+  },
+  {
+    "cmd": "node scripts/check.mjs",
+    "exit": 0,
+    "output": "PASS: 15 projects; 123 pages and local resources.\n"
+  },
+  {
+    "cmd": "node scripts/runtime.test.cjs",
+    "exit": 0,
+    "output": "✔ magnetic instances settle, cancel and destroy independently (5.779ms)\n✔ touch does not simulate magnetic hover; reduced motion limits displacement (3.573ms)\n✔ icon instances release touch, cancellation and keyboard state (1.7019ms)\n✔ ZIP keeps binary resources and UTF-8 names; snippet omits document shell (1.6317ms)\n✔ fluid renderer preserves parameters and random widths without starting playback (52.3764ms)\n✔ workbench exports and prompts include edited parameters; reset preserves theme and tab (7.8097ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2687.1177\n"
+  },
+  {
+    "cmd": "node --check single-web/components/text/blur-reveal-studio/effect.js",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "cmd": "node --check single-web/components/text/blur-reveal-studio/app.js",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "cmd": "node scripts/blur-reveal.test.cjs",
+    "exit": 0,
+    "output": "✔ idle and updates stay still; explicit play produces the intended opacity, blur and stagger (15.1018ms)\n✔ rapid replay cancels old work; instances, cancellation and lifecycle remain independent (3.1416ms)\n✔ text remains text, graphemes stay intact, reduced motion stays clear and remount cleans the old instance (1.3556ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 23.5609\n"
+  },
+  {
+    "cmd": "node scripts/delivery.test.cjs",
+    "exit": 0,
+    "output": "✔ earth archive includes current code, local dependencies, fonts, licenses and startup script (761.1883ms)\nℹ 13 files, 20574005 bytes; binary payloads preserved.\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 765.8144\n"
+  },
+  {
+    "cmd": "node scripts/prompt-copy.test.cjs",
+    "exit": 0,
+    "output": "✔ prompt copy stays idle until a real click and preserves full, current multiline content (6.7949ms)\n✔ confirmed feedback persists through cancellation, tab switching and failed retries (1.4957ms)\n✔ pending writes cannot confirm early, duplicate, or leave stale feedback after cancellation (3.1761ms)\n✔ failed writes retain manual copying and never display a successful confirmation (0.9039ms)\n✔ reduced motion still copies and keeps confirmation without scheduling animation frames (1.6642ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 19.173\n"
+  },
+  {
+    "cmd": "node scripts/design.test.cjs",
+    "exit": 0,
+    "output": "✔ public styles reference valid, defined tokens without foundation cycles (2.2272ms)\n✔ feedback text meets the documented contrast target on its actual background (0.2979ms)\n✔ page motion follows tokens, stays within 800ms and honors reduced motion (1.666ms)\n✔ catalog sidebar enters from the left on return and stays still during category updates (0.9789ms)\n✔ reusable icon effect has its own variable namespace and no website token dependency (0.8455ms)\n✔ all live pages use shared header and footer placeholders without project overrides (6.6873ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 17.8027\n"
+  },
+  {
+    "cmd": "node scripts/check.mjs http://127.0.0.1:4173/31Library/",
+    "exit": 0,
+    "output": "PASS: 15 projects; 123 pages and local resources under http://127.0.0.1:4173/31Library/.\n"
+  }
+]

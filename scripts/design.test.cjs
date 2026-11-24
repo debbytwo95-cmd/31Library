@@ -53,6 +53,37 @@ test('page motion follows tokens, stays within 800ms and honors reduced motion',
     await Promise.resolve();
 });
 
+test('catalog sidebar enters from the left on return and stays still during category updates', () => {
+    const listeners = {}, mediaListeners = {}, animations = [];
+    const media = { matches: false, addEventListener: (name, fn) => mediaListeners[name] = fn };
+    const node = sidebar => ({ matches: selector => sidebar && selector === '.main > aside', animate(frames, options) {
+        const animation = { finished: Promise.resolve(), cancelled: false, cancel() { this.cancelled = true; } };
+        animations.push({ sidebar, frames, options, animation }); return animation;
+    } });
+    const sidebar = node(true), content = node(false), sections = [node(false), node(false), node(false)];
+    const context = {
+        window: { addEventListener: (name, fn) => listeners[name] = fn },
+        document: { documentElement: { hasAttribute: () => false, setAttribute() {} },
+            querySelectorAll: selector => {
+                if (selector.startsWith('.content >')) return sections;
+                assert.equal(selector, '.main > aside, .main > .content, .main-shell');
+                return [sidebar, content];
+            } },
+        matchMedia: () => media, getComputedStyle: () => ({ getPropertyValue: resolve }), requestAnimationFrame: fn => fn()
+    };
+    vm.runInNewContext(fs.readFileSync('assets/site-motion.js', 'utf8'), context);
+    listeners.pageshow({ persisted: true });
+    assert.equal(animations[0].frames[0].transform, 'translateX(-10px)');
+    assert.equal(animations[1].frames[0].transform, 'translateY(8px)');
+    assert.equal(animations[0].options.duration, 600);
+    context.window.LibraryMotion.updateCatalog(true);
+    assert.ok(animations.slice(2).every(item => !item.sidebar), 'category updates animate content only');
+    media.matches = true; mediaListeners.change();
+    listeners.pageshow({ persisted: true });
+    assert.equal(animations.length, 5, 'reduced motion schedules no sidebar or content animation');
+    assert.ok(animations.every(item => item.animation.cancelled));
+});
+
 test('reusable icon effect has its own variable namespace and no website token dependency', () => {
     const css=fs.readFileSync('single-web/components/button/icon-button-studio/button.css','utf8');
     assert.doesNotMatch(css,/var\(--library-/);
