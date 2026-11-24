@@ -1,0 +1,80 @@
+.library-scrubber {
+    --scrubber-width: 320px;
+    --scrubber-bg: #efefef;
+    --scrubber-fg: #18181c;
+    --scrubber-progress: 50%;
+    position: relative;
+    box-sizing: border-box;
+    width: var(--scrubber-width);
+    max-width: 100%;
+    height: 36px;
+    overflow: hidden;
+    outline: none;
+    border-radius: 8px;
+    background: var(--scrubber-bg);
+    color: var(--scrubber-fg);
+    font: 400 13px/1 Inter, Arial, sans-serif;
+    cursor: ew-resize;
+    user-select: none;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.library-scrubber[data-appearance=dark] {
+    --scrubber-bg: #262626;
+    --scrubber-fg: #fafafa;
+    color-scheme: dark;
+}
+.library-scrubber-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--scrubber-progress);
+    border-radius: 8px;
+    background: currentColor;
+    opacity: .14;
+    transition: width 150ms cubic-bezier(.23, 1, .32, 1);
+}
+.library-scrubber-ticks { position: absolute; inset: 0; }
+.library-scrubber-tick {
+    position: absolute;
+    top: 50%;
+    width: 1px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: .25;
+    transform: translate(-50%, -50%);
+}
+.library-scrubber-thumb-position {
+    position: absolute;
+    top: 50%;
+    left: var(--scrubber-progress);
+    margin-left: -5px;
+    transform: translate(-50%, -50%);
+    transition: left 150ms cubic-bezier(.23, 1, .32, 1);
+}
+.library-scrubber-thumb {
+    display: block;
+    width: 4px;
+    height: 22px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: .135;
+    transform: scale(.7);
+}
+.library-scrubber.is-dragging .library-scrubber-fill,
+.library-scrubber.is-dragging .library-scrubber-thumb-position { transition: none; }
+.library-scrubber-label,
+.library-scrubber-value {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    white-space: nowrap;
+}
+.library-scrubber-label { left: 12px; max-width: calc(100% - 90px); overflow: hidden; text-overflow: ellipsis; }
+.library-scrubber-value { right: 10px; font-variant-numeric: tabular-nums; }
+.library-scrubber > * { pointer-events: none; }
+@media(prefers-reduced-motion:reduce) {
+    .library-scrubber-fill,
+    .library-scrubber-thumb-position { transition: none; }
+}

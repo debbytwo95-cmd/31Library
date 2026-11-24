@@ -8,14 +8,13 @@
  const units={duration:'ms',arrowDelay:'ms',iconSize:'px',arrowTravel:'px',cornerRadius:'px'};
  const config={...defaults};
  const button=$('icon-cta'),stage=$('preview-panel');
- let slow=false,codeVisible=false,toastTimer;
+ let codeVisible=false,toastTimer;
  const runtime=LibraryButtons.mountIcon(button);
  const clearInteraction=()=>runtime.reset();
  let delivery;
  function notify(message){clearTimeout(toastTimer);$('toast').querySelector('span').textContent=message;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600);}
  function apply(){
-  const factor=slow?4:1;
-  const vars={'--icon-button-duration':config.duration*factor+'ms','--icon-button-arrow-delay':config.arrowDelay*factor+'ms','--icon-button-ease':curves[config.easing],'--icon-button-disc':config.iconSize+'px','--icon-button-corner':config.cornerRadius+'px','--icon-button-travel':config.arrowTravel+'px','--icon-button-icon-center':config.iconSize/2+7+'px'};
+  const vars={'--icon-button-duration':config.duration+'ms','--icon-button-arrow-delay':config.arrowDelay+'ms','--icon-button-ease':curves[config.easing],'--icon-button-disc':config.iconSize+'px','--icon-button-corner':config.cornerRadius+'px','--icon-button-travel':config.arrowTravel+'px','--icon-button-icon-center':config.iconSize/2+7+'px'};
   for(const [key,value] of Object.entries(vars))button.style.setProperty(key,value);
   for(const [key,unit] of Object.entries(units)){
    const input=$(key);input.value=config[key];input.style.setProperty('--progress',100*(config[key]-Number(input.min))/(Number(input.max)-Number(input.min))+'%');
@@ -28,8 +27,7 @@
  Object.keys(units).forEach(key=>$(key).addEventListener('input',e=>{config[key]=Number(e.target.value);apply();}));
  $('easing').addEventListener('change',e=>{config.easing=e.target.value;apply();});
  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{Object.assign(config,presets[b.dataset.preset]);apply();}));
- $('reset').addEventListener('click',()=>{Object.assign(config,defaults);slow=false;clearInteraction();$('slow-control').setAttribute('aria-pressed','false');$('speed-label').textContent='1×';apply();notify('已恢复默认参数');});
- $('slow-control').addEventListener('click',()=>{slow=!slow;$('slow-control').setAttribute('aria-pressed',String(slow));$('speed-label').textContent=slow?'0.25×':'1×';apply();});
+ $('reset').addEventListener('click',()=>{Object.assign(config,defaults);clearInteraction();apply();notify('已恢复默认参数');});
  function setStageTheme(theme){stage.dataset.theme=theme;button.dataset.appearance=theme;document.querySelectorAll('[data-stage-theme]').forEach(b=>{const selected=b.dataset.stageTheme===theme;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});if(codeVisible)delivery?.refresh();}
  document.querySelectorAll('[data-stage-theme]').forEach(b=>{const theme=b.dataset.stageTheme;b.setAttribute('aria-label',theme==='light'?'浅色演示区':'深色演示区');b.setAttribute('title',theme==='light'?'浅色':'深色');b.addEventListener('click',()=>setStageTheme(theme));});
  document.documentElement.dataset.theme='light';setStageTheme('light');
@@ -49,7 +47,7 @@
     background:theme==='dark'?'#171717':'#f7f7f8'};
   },
   prompt(){
-   return '实现 Icon Button · 扩散箭头按钮。原生 HTML / CSS / JavaScript；按钮高 64 px，文字 Inter Semibold 16 px，内联 SVG 箭头；白色圆盘从右侧扩散覆盖按钮，文字反色；第一支箭头右移，第二支从左侧进入。当前参数：时长 '+config.duration+' ms，箭头延迟 '+config.arrowDelay+' ms，圆盘直径 '+config.iconSize+' px，箭头位移 '+config.arrowTravel+' px，圆角 '+config.cornerRadius+' px，缓动 '+curves[config.easing]+'；演示主题 '+stage.dataset.theme+'。鼠标悬停、键盘可见聚焦展开，离开后收回；触屏真实按压展开、松手复位。Tab 聚焦，Enter/空格激活。取消、失焦、离页清除临时状态；prefers-reduced-motion 禁用位移过渡，保留状态切换。初始静止，只响应真实操作，不使用自动演示或虚拟光标。样式限定组件容器，多个实例独立，移除前调用 root.libraryComponent.destroy()；无第三方运行依赖，Inter 字体内嵌，图标内联。工作台慢速观察不带入交付；按目标技术栈接入，精确效果以组件代码为准。';
+   return '实现 Icon Button · 扩散箭头按钮。原生 HTML / CSS / JavaScript；按钮高 64 px，文字 Inter Semibold 16 px，内联 SVG 箭头；白色圆盘从右侧扩散覆盖按钮，文字反色；第一支箭头右移，第二支从左侧进入。当前参数：时长 '+config.duration+' ms，箭头延迟 '+config.arrowDelay+' ms，圆盘直径 '+config.iconSize+' px，箭头位移 '+config.arrowTravel+' px，圆角 '+config.cornerRadius+' px，缓动 '+curves[config.easing]+'；演示主题 '+stage.dataset.theme+'。鼠标悬停、键盘可见聚焦展开，离开后收回；触屏真实按压展开、松手复位。Tab 聚焦，Enter/空格激活。取消、失焦、离页清除临时状态；prefers-reduced-motion 禁用位移过渡，保留状态切换。初始静止，只响应真实操作，不使用自动演示或虚拟光标。样式限定组件容器，多个实例独立，移除前调用 root.libraryComponent.destroy()；无第三方运行依赖，Inter 字体内嵌，图标内联。按目标技术栈接入，精确效果以组件代码为准。';
   }
  });
  apply();

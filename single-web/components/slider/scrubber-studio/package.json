@@ -1,0 +1,10 @@
+{
+  "name": "scrubber-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "check": "node --check app.js && node --check effect.js && node --check ../../../../assets/delivery.js && node --check ../../../../assets/site-shell.js"
+  }
+}

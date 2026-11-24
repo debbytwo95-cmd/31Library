@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scrubber · 数值拖动滑块，刻度、实时数值与弹簧手柄组成的轻量参数控件。">
+  <title>Scrubber — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a
+          href="../../index.html?category=slider">滑块</a><span class="slash">/</span><strong>Scrubber</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>SCRUBBER · 数值拖动滑块</span><span class="tag">指针与键盘 · hover / press / drag / input</span>
+        </div>
+        <div class="title-row">
+          <h1>Scrubber<span class="title-period">.</span></h1>
+        </div>
+        <p class="intro-copy">把数值，放在指尖。<span>刻度轻轻铺开，手柄随真实操作弹性显现。</span></p>
+      </section>
+      <section class="workspace" aria-label="数值拖动滑块工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true"
+                aria-controls="preview-panel"><img class="library-icon design-icon"
+                  src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel"
+                tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16"
+                  height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon"
+                src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top">
+              <div class="stage-themes" role="group" aria-label="演示区主题">
+                <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img
+                    class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14"
+                    alt=""></button>
+                <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img
+                    class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14"
+                    alt=""></button>
+              </div>
+            </div>
+            <div class="field">
+              <div id="scrubber" class="library-scrubber" data-appearance="light" role="slider" tabindex="0"
+                aria-label="Value" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5"
+                aria-orientation="horizontal">
+                <span class="library-scrubber-fill" aria-hidden="true"></span>
+                <span class="library-scrubber-ticks" aria-hidden="true"></span>
+                <span class="library-scrubber-thumb-position" aria-hidden="true"><span
+                    class="library-scrubber-thumb"></span></span>
+                <span class="library-scrubber-label" aria-hidden="true">Value</span>
+                <span class="library-scrubber-value" aria-hidden="true">0.50</span>
+              </div>
+            </div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>scrubber.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>原生 CSS · JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="滑块参数">
+          <div class="settings-heading">
+            <h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img
+                class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="13" height="13"
+                alt=""></button>
+          </div>
+          <p class="settings-intro">范围决定边界，步长决定精度；小数位只影响显示，刻度只提供视觉参考。</p>
+          <div class="range-control"><label for="label">控件名称</label><input id="label" type="text" maxlength="32"
+              value="Value"></div>
+          <div class="range-control"><label for="value">当前数值 <output id="value-output"
+                for="value">0.50</output></label><input id="value" type="range" min="0" max="1" step="0.01" value="0.5">
+          </div>
+          <div class="range-control"><label for="min">最小值</label><input id="min" type="number" min="-1000000"
+              max="1000000" step="any" value="0" aria-describedby="parameter-status"></div>
+          <div class="range-control"><label for="max">最大值</label><input id="max" type="number" min="-1000000"
+              max="1000000" step="any" value="1" aria-describedby="parameter-status"></div>
+          <div class="range-control"><label for="step">数值步长</label><input id="step" type="number" min="0.000001"
+              max="1000000" step="any" value="0.01" aria-describedby="parameter-status"></div>
+          <div class="range-control"><label for="decimals">显示小数位 <output id="decimals-output"
+                for="decimals">2</output></label><input id="decimals" type="range" min="0" max="6" step="1" value="2">
+          </div>
+          <div class="range-control"><label for="ticks">内部刻度 <output id="ticks-output"
+                for="ticks">9</output></label><input id="ticks" type="range" min="0" max="30" step="1" value="9"></div>
+          <div class="range-control"><label for="width">控件宽度 <output id="width-output" for="width">320
+                px</output></label><input id="width" type="range" min="200" max="480" step="10" value="320"></div>
+          <p id="parameter-status" class="settings-status" role="status"></p>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading">
+          <h2>一条轨道，三层反馈<span>A value at your fingertips</span></h2>
+        </div>
+        <div class="principle-grid">
+          <article>
+            <div class="principle-top">01 / MAP</div>
+            <h3>位置映射数值</h3>
+            <p>点击或拖动轨道，将横向位置映射到数值范围，再按步长吸附。边缘始终能到达最小值和最大值。</p>
+          </article>
+          <article>
+            <div class="principle-top">02 / REVEAL</div>
+            <h3>弹性显现</h3>
+            <p>悬停或拖动时，4 × 22 px 的手柄从 70% 展开，透明度随弹簧变化。离开后收拢，静止时不计算动画。</p>
+          </article>
+          <article>
+            <div class="principle-top">03 / READ</div>
+            <h3>即时读数</h3>
+            <p>填充和数值跟随操作，刻度均匀分布。方向键逐步调整，Home／End 到达范围两端。</p>
+          </article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22"
+            height="22" alt=""></div>
+        <div>
+          <h2>把这条滑块，带进你的项目</h2>
+          <p>复制独立组件代码、下载可运行 HTML，或复制包含当前参数的提示词。</p>
+        </div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon"
+            src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes">
+        <h2>使用与接入</h2>
+        <p>支持鼠标点击、拖动、触屏和触笔。Tab 聚焦后，方向键按步长调整，Home／End 到达首尾；手柄展开提供键盘聚焦反馈，操作时不显示外描边。触屏不模拟悬停；取消、失焦和切换后台会清理临时状态。开启“减少动态效果”时立即更新。</p>
+        <p>放置组件 HTML、引入隔离样式，再调用 <code>LibraryScrubber.mount(root, config)</code>。配置支持
+          <code>label / min / max / step / decimals / ticks / width / value</code> 和
+          <code>onValueChange(value)</code>。返回实例提供
+          <code>value</code>、<code>setValue(value)</code>、<code>update(config)</code>、<code>settle()</code>、<code>reset()</code>、<code>destroy()</code>；多实例独立，移除前调用
+          <code>destroy()</code>。程序配置更新不触发数值回调，<code>setValue</code> 默认触发。</p>
+        <p>无第三方运行库；下载示例内嵌 Inter 字体与 OFL 许可，可直接打开。重置恢复默认参数及 0.50，保留主题与预览／代码页签。工作台通过 HTTP 访问以读取交付资源。</p>
+        
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="slider"></script>
+</body>
+
+</html>

@@ -10,9 +10,9 @@
         onComplete: isCover ? () => window.parent.postMessage({ type: 'library:cover-open' }, location.origin) : undefined
     });
     button.libraryComponent = runtime;
-    let slow = false, codeVisible = false, delivery;
+    let codeVisible = false, delivery;
     function sync() {
-        runtime.update({ ...config, holdMs: slow ? config.holdMs * 4 : config.holdMs, doneMs: slow ? config.doneMs * 4 : config.doneMs });
+        runtime.update(config);
         for (const key of ['holdMs', 'doneMs', 'rebound']) {
             const input = $(key);
             if (!input) continue;
@@ -31,15 +31,6 @@
     }
     $('reset').addEventListener('click', () => {
         Object.assign(config, defaults);
-        slow = false;
-        $('speed-label').textContent = '1×';
-        $('slow-control').setAttribute('aria-pressed', 'false');
-        sync();
-    });
-    $('slow-control').addEventListener('click', () => {
-        slow = !slow;
-        $('speed-label').textContent = slow ? '0.25×' : '1×';
-        $('slow-control').setAttribute('aria-pressed', String(slow));
         sync();
     });
     document.querySelectorAll('[data-stage-theme]').forEach(item => {
@@ -104,7 +95,7 @@
                 };
             },
             prompt() {
-                return '制作 Hold Button · 长按确认按钮。实现为可重复使用的独立按钮组件，深浅主题由 data-appearance 控制。外形是宽 ' + config.width + ' px、高 ' + config.height + ' px 的圆角胶囊；中心包含上传图标及 Hold to publish 文案，按住后底层填充条从左至右线性增长，填充经过文字时文字颜色精准反转；提前松开时以弹簧动画回退并轻微摇晃，完成后胶囊收缩为直径 ' + config.height + ' px 的成功绿色圆形，SVG 勾选线条绘制出现。当前参数：确认时间 ' + config.holdMs + ' ms、完成态持续 ' + config.doneMs + ' ms、回弹阻尼 ' + config.rebound + '；当前主题 ' + stage.dataset.theme + '。使用原生 CSS 和 JavaScript，不依赖第三方动画库。必须支持鼠标、触屏、键盘 Enter/空格按住，防误触，pointercancel、失焦、离页复位，prefers-reduced-motion，以及多实例独立运行。提供 update()、reset()、destroy() 和 onComplete 回调。初始静止，不自动演示，工作台慢速观察不进入交付代码。';
+                return '制作 Hold Button · 长按确认按钮。实现为可重复使用的独立按钮组件，深浅主题由 data-appearance 控制。外形是宽 ' + config.width + ' px、高 ' + config.height + ' px 的圆角胶囊；中心包含上传图标及 Hold to publish 文案，按住后底层填充条从左至右线性增长，填充经过文字时文字颜色精准反转；提前松开时以弹簧动画回退并轻微摇晃，完成后胶囊收缩为直径 ' + config.height + ' px 的成功绿色圆形，SVG 勾选线条绘制出现。当前参数：确认时间 ' + config.holdMs + ' ms、完成态持续 ' + config.doneMs + ' ms、回弹阻尼 ' + config.rebound + '；当前主题 ' + stage.dataset.theme + '。使用原生 CSS 和 JavaScript，不依赖第三方动画库。必须支持鼠标、触屏、键盘 Enter/空格按住，防误触，pointercancel、失焦、离页复位，prefers-reduced-motion，以及多实例独立运行。提供 update()、reset()、destroy() 和 onComplete 回调。初始静止，不自动演示。';
             }
         });
     }

@@ -8,7 +8,7 @@
 - `button.css`：隔离样式；`../../../assets/button-runtime.js`：预览与交付共用的交互。
 - `app.js`：当前参数、主题、预设、重置和交付登记；公共导航来自 `../../../assets/site-shell.js`，旧 `shell.js` 不再加载。
 
-“复制组件代码”提供可嵌入的 HTML / CSS / JavaScript；“下载示例”提供可直接打开的单文件 HTML；“复制提示词”提供当前参数与接入约束。当前演示主题同步交付，工作台慢速观察不带入交付。Inter Semibold 字体、SVG 与字体许可已内嵌。
+“复制组件代码”提供可嵌入的 HTML / CSS / JavaScript；“下载示例”提供可直接打开的单文件 HTML；“复制提示词”提供当前参数与接入约束。当前演示主题同步交付。Inter Semibold 字体、SVG 与字体许可已内嵌。
 
 多个完整按钮容器可独立初始化；实例位于 `root.libraryComponent`，支持 `reset()` 与 `destroy()`，移除前调用 `destroy()`。样式不修改目标页面的所有按钮或 body。
 

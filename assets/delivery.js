@@ -37,6 +37,81 @@
         const input = document.createElement('textarea'); input.value = text; input.style.cssText = 'position:fixed;left:-9999px'; document.body.append(input); input.select();
         const ok = document.execCommand('copy'); input.remove(); if (!ok) throw new Error('Clipboard unavailable');
     }
+    // Copy Button's three springs, applied only to the delivery button's contents.
+    function mountPromptCopy(button, copyPrompt) {
+        const roll = button.querySelector('.delivery-copy-roll'), words = button.querySelector('.delivery-copy-words');
+        const original = button.querySelector('.delivery-copy-original'), success = button.querySelector('.delivery-copy-success');
+        const [label, doneLabel] = words.children;
+        const media = matchMedia('(prefers-reduced-motion: reduce)');
+        const spring = (k, c) => ({ x: 0, v: 0, t: 0, k, c });
+        const row = spring(260, 20), icon = spring(420, 18), width = spring(300, 24), springs = [row, icon, width];
+        let frame = 0, previous = 0, generation = 0, pending = false, copied = false, rowHeight = label.getBoundingClientRect().height;
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        function render() {
+            roll.style.width = Math.max(0, width.x).toFixed(2) + 'px';
+            words.style.transform = `translateY(${(-rowHeight * row.x).toFixed(2)}px)`;
+            const i = clamp(icon.x, -.2, 1.2), bounded = clamp(i, 0, 1);
+            original.style.opacity = clamp(1 - i * 1.6, 0, 1).toFixed(3);
+            original.style.transform = `scale(${(1 - .5 * bounded).toFixed(3)}) rotate(${(-40 * bounded).toFixed(1)}deg)`;
+            success.style.opacity = clamp(i * 1.6 - .4, 0, 1).toFixed(3);
+            success.style.transform = `scale(${(.4 + .6 * i).toFixed(3)})`;
+        }
+        function settle() {
+            cancelAnimationFrame(frame); frame = 0;
+            springs.forEach(s => { s.x = s.t; s.v = 0; }); render();
+        }
+        function loop(now) {
+            frame = 0;
+            const dt = Math.min(Math.max((now - previous) / 1000, 0), 1 / 30) / 4;
+            previous = now;
+            for (let n = 0; n < 4; n++) springs.forEach(s => {
+                s.v += (-s.k * (s.x - s.t) - s.c * s.v) * dt;
+                s.x += s.v * dt;
+            });
+            if (springs.every(s => Math.abs(s.x - s.t) < .001 && Math.abs(s.v) < .01)) { settle(); return; }
+            render(); frame = requestAnimationFrame(loop);
+        }
+        function setCopied(value) {
+            copied = value; row.t = icon.t = value ? 1 : 0;
+            width.t = (value ? doneLabel : label).getBoundingClientRect().width;
+            button.dataset.copyState = value ? 'copied' : 'idle';
+            button.setAttribute('aria-label', value ? '已复制提示词，再次复制' : '复制提示词');
+            if (media.matches) settle();
+            else if (!frame) { previous = performance.now(); frame = requestAnimationFrame(loop); }
+        }
+        function measure() {
+            rowHeight = label.getBoundingClientRect().height;
+            width.t = (copied ? doneLabel : label).getBoundingClientRect().width;
+            if (!frame) settle();
+        }
+        function interrupt() {
+            generation++; pending = false;
+            button.removeAttribute('aria-busy'); settle();
+        }
+        button.addEventListener('click', async event => {
+            if (!event.isTrusted || pending) return;
+            pending = true;
+            const current = ++generation;
+            button.setAttribute('aria-busy', 'true');
+            try {
+                const ok = await copyPrompt();
+                if (current !== generation) return;
+                if (ok) setCopied(true);
+            } catch {
+                if (current === generation) interrupt();
+            } finally {
+                if (current === generation) { pending = false; button.removeAttribute('aria-busy'); }
+            }
+        });
+        button.addEventListener('pointercancel', interrupt);
+        window.addEventListener('blur', interrupt);
+        window.addEventListener('pagehide', interrupt);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) interrupt(); });
+        media.addEventListener('change', () => { if (media.matches) settle(); });
+        const observer = new ResizeObserver(measure); observer.observe(label); observer.observe(doneLabel);
+        document.fonts?.ready.then(measure);
+        setCopied(false); settle();
+    }
     function download(blob, filename) {
         const url = URL.createObjectURL(blob), link = document.createElement('a'); link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
     }
@@ -66,7 +141,8 @@
         const downloadLabel = downloadButton.querySelector('span') || downloadButton;
         downloadLabel.textContent = options.archive ? '下载示例（源码包）' : '下载示例';
         const promptButton = document.createElement('button'); promptButton.id = 'copy-prompt'; promptButton.className = 'delivery-secondary';
-        promptButton.innerHTML = `<img class="library-icon design-icon" data-library-icon="copy" src="${new URL('assets/icons/copy.svg', root).href}" width="16" height="16" alt=""><span>复制提示词</span>`;
+        promptButton.type = 'button';
+        promptButton.innerHTML = `<span class="delivery-copy-icons" aria-hidden="true"><img class="library-icon design-icon delivery-copy-original" data-library-icon="copy" src="${new URL('assets/icons/copy.svg', root).href}" width="16" height="16" alt=""><span class="delivery-copy-success"></span></span><span class="delivery-copy-roll" aria-hidden="true"><span class="delivery-copy-words"><span>复制提示词</span><span>已复制</span></span></span>`;
         downloadButton.before(promptButton);
         const status = document.createElement('p'); status.className = 'delivery-status'; status.setAttribute('role', 'status'); downloadButton.closest('.guide').after(status);
         const fallback = document.createElement('dialog'); fallback.className = 'delivery-dialog';
@@ -74,8 +150,8 @@
         document.body.append(fallback);
         const notify = (message, state = 'info') => { status.dataset.state = state; status.textContent = message; };
         async function copyText(text, message) {
-            try { await copy(text); notify(message, 'success'); }
-            catch { fallback.querySelector('textarea').value = text; fallback.showModal(); fallback.querySelector('textarea').select(); notify('请在弹窗中手动复制', 'warning'); }
+            try { await copy(text); notify(message, 'success'); return true; }
+            catch { fallback.querySelector('textarea').value = text; fallback.showModal(); fallback.querySelector('textarea').select(); notify('请在弹窗中手动复制', 'warning'); return false; }
         }
         copyButton.addEventListener('click', async () => {
             copyButton.disabled = true; copyButton.setAttribute('aria-busy', 'true'); notify('正在准备组件代码…');
@@ -83,7 +159,7 @@
             catch { notify('资源读取失败，请通过本地服务打开页面后重试', 'danger'); }
             finally { copyButton.disabled = false; copyButton.setAttribute('aria-busy', 'false'); }
         });
-        promptButton.addEventListener('click', () => copyText(options.prompt(), '已复制提示词，包含当前参数'));
+        mountPromptCopy(promptButton, () => copyText(options.prompt(), '已复制提示词，包含当前参数'));
         downloadButton.addEventListener('click', async () => {
             downloadButton.disabled = true;
             downloadButton.setAttribute('aria-busy', 'true'); notify('正在准备示例…');

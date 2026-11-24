@@ -1,6 +1,45 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "copy-button-studio",
+    "section": "components",
+    "category": "button",
+    "href": "./single-web/components/button/copy-button-studio/index.html",
+    "title": "Copy Button · 复制按钮",
+    "interactions": [
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "复制成功后文字向上滚动、勾选弹入，按钮宽度随内容弹性舒展。",
+    "source": "https://designbookmark.com/motion#db-copy-button",
+    "keywords": "复制 命令 按钮 剪贴板 确认 滚动 弹簧 copy button clipboard command spring",
+    "previewHeight": 196
+  },
+  {
+    "id": "scrubber-studio",
+    "section": "components",
+    "category": "slider",
+    "href": "./single-web/components/slider/scrubber-studio/index.html",
+    "title": "Scrubber · 数值拖动滑块",
+    "interactions": [
+      "hover",
+      "press",
+      "drag",
+      "input"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "带标签、实时数值与刻度的轻量滑块，真实悬停和拖动时弹性显现手柄。",
+    "source": "https://smoothui.dev/docs/components/scrubber",
+    "keywords": "滑块 数值 拖动 刻度 弹簧 参数 scrubber slider value spring",
+    "previewHeight": 196
+  },
+  {
     "id": "tab-pill-studio",
     "section": "components",
     "category": "tabs",

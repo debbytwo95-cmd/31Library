@@ -96,10 +96,10 @@ test('supported parameter extremes remain finite and settle even at high simulat
     }
 });
 
-test('workbench exports current parameters and theme, excludes slow mode, and resets without changing theme or code tab', async () => {
+test('workbench exports current parameters and theme and resets without changing theme or code tab', async () => {
     const env = environment(), a = markup(), nodes = {};
     const keys = ['leadStiffness', 'leadDamping', 'trailStiffness', 'trailDamping'];
-    for (const id of ['preview-panel', 'code-panel', 'preview-tab', 'code-tab', 'reset', 'slow-control', 'speed-label', ...keys, ...keys.map(key => key + '-output')]) nodes[id] = new Node();
+    for (const id of ['preview-panel', 'code-panel', 'preview-tab', 'code-tab', 'reset', ...keys, ...keys.map(key => key + '-output')]) nodes[id] = new Node();
     nodes['tab-pill'] = a.root; a.root.dataset.appearance = 'light';
     const themes = ['light', 'dark'].map(theme => { const node = new Node(); node.dataset.stageTheme = theme; return node; });
     env.document.documentElement = { hasAttribute: () => false };
@@ -124,7 +124,7 @@ test('workbench exports current parameters and theme, excludes slow mode, and re
     a.root.cloneNode = () => { clone.root.dataset = { ...a.root.dataset }; return clone.root; };
     vm.runInContext(fs.readFileSync(directory + 'app.js', 'utf8'), env.context);
     nodes.leadStiffness.emit('input', { target: { value: '870' } });
-    themes[1].emit('click'); nodes['slow-control'].emit('click');
+    themes[1].emit('click');
     assert.match(delivery.prompt(), /870/); assert.match(delivery.prompt(), /dark/);
     const pending = delivery.bundle();
     nodes.leadStiffness.emit('input', { target: { value: '880' } });
@@ -134,7 +134,7 @@ test('workbench exports current parameters and theme, excludes slow mode, and re
     assert.doesNotMatch(bundle.html, /main-shell|library-header|settings/);
     nodes['code-tab'].emit('click'); nodes.reset.emit('click');
     assert.equal(a.root.dataset.appearance, 'dark'); assert.equal(nodes['code-panel'].hidden, false);
-    assert.equal(nodes.leadStiffness.value, 620); assert.equal(nodes['speed-label'].textContent, '1×');
+    assert.equal(nodes.leadStiffness.value, 620);
     assert.equal(a.root.libraryComponent.selectedIndex, 0); assert.equal(env.frames.size, 0);
     a.root.libraryComponent.destroy();
 });

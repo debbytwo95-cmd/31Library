@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Copy Button · 复制按钮，复制成功后图标弹出切换，文字向上滚动，按钮宽度弹性展开。">
+  <title>Copy Button — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=button">按钮</a><span class="slash">/</span><strong>Copy Button</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>COPY BUTTON · 复制按钮</span><span class="tag">按压交互 · press</span></div>
+        <div class="title-row"><h1>Copy Button<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让复制，有一个清晰的回应。<span>文字向上滚动，勾选轻轻弹出，按钮随内容舒展。</span></p>
+      </section>
+      <section class="workspace" aria-label="复制按钮工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top">
+              <div class="stage-themes" role="group" aria-label="演示区主题">
+                <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+                <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+              </div>
+            </div>
+            <div class="field">
+              <div id="copy-command" class="library-copy-command" data-appearance="light">
+                <button class="library-copy-button" type="button" aria-label="复制内容">
+                  <span class="library-copy-icons" aria-hidden="true"><span class="library-copy-icon library-copy-original"></span><span class="library-copy-icon library-copy-success"></span></span>
+                  <span class="library-copy-roll" aria-hidden="true"><span class="library-copy-words"><span class="library-copy-word">Copy</span><span class="library-copy-word">Copied</span></span></span>
+                </button>
+                <span class="library-copy-status" role="status" aria-live="polite"></span>
+              </div>
+            </div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>copy-button.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>原生 CSS · JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="复制按钮参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+          <p class="settings-intro">调整完成态停留时间与文字的回弹节奏。</p>
+          <div class="range-control"><label for="doneMs">完成态停留<output id="doneMs-output" for="doneMs">1800<span>ms</span></output></label><input id="doneMs" type="range" min="500" max="4000" step="100" value="1800"></div>
+          <div class="range-control"><label for="stiffness">文字弹簧刚度<output id="stiffness-output" for="stiffness">260</output></label><input id="stiffness" type="range" min="120" max="600" step="10" value="260"></div>
+          <div class="range-control"><label for="damping">文字弹簧阻尼<output id="damping-output" for="damping">20</output></label><input id="damping" type="range" min="12" max="36" step="1" value="20"></div>
+          <div class="settings-foot">所有参数实时生效</div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>一次复制，三层反馈<span>Copy &amp; confirmation</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / COPY</div><h3>真实复制</h3><p>鼠标点击、触屏轻触或键盘激活后，将示例内容 npm i motion-kit 写入剪贴板。</p></article>
+          <article><div class="principle-top">02 / CONFIRM</div><h3>滚动与弹出</h3><p>写入成功后，复制图标缩小转出，绿色勾选弹入；Copy 滚动为 Copied，文字容器宽度同步弹性展开。</p></article>
+          <article><div class="principle-top">03 / RETURN</div><h3>自然回到初态</h3><p>完成态停留后，文字、宽度与图标回到原位；再次复制会重新计时，移出封面或重置时立即复位。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把复制反馈，带进你的项目</h2><p>复制独立组件代码、下载可运行 HTML，或复制包含当前参数的提示词。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>使用与接入</h2>
+        <p>支持鼠标、触屏，以及 Tab 聚焦后的 Enter／空格激活。演示区只展示按钮，示例复制内容为 npm i motion-kit，接入时可通过配置中的 command 修改。默认静止；系统开启“减少动态效果”时直接切换状态。复制失败时通过状态提示告知。剪贴板 API 需要 HTTPS 或 localhost，其他环境尝试浏览器的传统复制能力。</p>
+        <p>将交付代码的结构放入目标页面，引入一次样式和脚本，再调用 <code>LibraryCopyButton.mount(root, config)</code>。多实例独立运行，支持 <code>update(config)</code>、<code>reset()</code> 与 <code>destroy()</code>，移除实例前请销毁。修改参数、页面失焦或离开会清理临时状态。复制及下载中内嵌仓库的 copy.svg、check.svg 和 Inter 字体，无外部运行库。</p>
+        <p>参考来源：<a href="https://designbookmark.com/motion#db-copy-button" target="_blank" rel="noreferrer">DesignBookmark · Copy Button</a>，根据用户提供的单页代码复刻，并适配 31Library 规范。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="button"></script>
+</body>
+</html>

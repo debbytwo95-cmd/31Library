@@ -9,6 +9,10 @@ window.LibraryCategories = [
     "label": "背景"
   },
   {
+    "id": "slider",
+    "label": "滑块"
+  },
+  {
     "id": "tabs",
     "label": "标签页"
   },

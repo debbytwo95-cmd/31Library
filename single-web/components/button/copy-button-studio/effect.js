@@ -1,0 +1,130 @@
+/* Copy Button, adapted from the user-supplied DesignBookmark reference.
+   Unit-mass springs; no animation frame is scheduled while idle. */
+(() => {
+    'use strict';
+    function mount(root, options = {}) {
+        const button = root.querySelector('.library-copy-button');
+        const roll = root.querySelector('.library-copy-roll');
+        const words = root.querySelector('.library-copy-words');
+        const copyIcon = root.querySelector('.library-copy-original');
+        const checkIcon = root.querySelector('.library-copy-success');
+        const status = root.querySelector('.library-copy-status');
+        const [label, doneLabel] = words.children;
+        const media = matchMedia('(prefers-reduced-motion: reduce)');
+        const events = new AbortController();
+        const config = { command: 'npm i motion-kit', doneMs: 1800, stiffness: 260, damping: 20 };
+        const spring = (x, k, c) => ({ x, v: 0, t: x, k, c });
+        const row = spring(0, 260, 20), icon = spring(0, 420, 18), width = spring(0, 300, 24);
+        const springs = [row, icon, width];
+        let frame = 0, timer = 0, previous = 0, generation = 0, destroyed = false, copied = false, pending = false;
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const listen = (target, type, fn) => target.addEventListener(type, fn, { signal: events.signal });
+        function render() {
+            roll.style.width = Math.max(0, width.x).toFixed(2) + 'px';
+            words.style.transform = `translateY(${(-18 * row.x).toFixed(2)}px)`;
+            const i = clamp(icon.x, -.2, 1.2), bounded = clamp(i, 0, 1);
+            copyIcon.style.opacity = clamp(1 - i * 1.6, 0, 1).toFixed(3);
+            copyIcon.style.transform = `scale(${(1 - .5 * bounded).toFixed(3)}) rotate(${(-40 * bounded).toFixed(1)}deg)`;
+            checkIcon.style.opacity = clamp(i * 1.6 - .4, 0, 1).toFixed(3);
+            checkIcon.style.transform = `scale(${(.4 + .6 * i).toFixed(3)})`;
+        }
+        function settle() {
+            cancelAnimationFrame(frame); frame = 0;
+            springs.forEach(s => { s.x = s.t; s.v = 0; }); render();
+        }
+        function loop(now) {
+            frame = 0;
+            const dt = Math.min(Math.max((now - previous) / 1000, 0), 1 / 30) / 4;
+            previous = now;
+            for (let n = 0; n < 4; n++) springs.forEach(s => {
+                s.v += (-s.k * (s.x - s.t) - s.c * s.v) * dt;
+                s.x += s.v * dt;
+            });
+            if (springs.every(s => Math.abs(s.x - s.t) < .001 && Math.abs(s.v) < .01)) { settle(); return; }
+            render(); frame = requestAnimationFrame(loop);
+        }
+        function animate() {
+            if (media.matches) { settle(); return; }
+            if (!frame) { previous = performance.now(); frame = requestAnimationFrame(loop); }
+        }
+        function measure() {
+            if (destroyed) return;
+            width.t = (copied ? doneLabel : label).getBoundingClientRect().width;
+            // A hidden code panel has no measurable text; remeasure when shown.
+            if (!width.t) return;
+            if (!frame) settle();
+        }
+        function setCopied(value) {
+            copied = value; row.t = icon.t = value ? 1 : 0;
+            width.t = (value ? doneLabel : label).getBoundingClientRect().width;
+            button.setAttribute('aria-label', value ? '已复制，再次复制' : '复制内容');
+            root.dataset.state = value ? 'copied' : 'idle';
+            animate();
+        }
+        function reset() {
+            generation++; pending = false; clearTimeout(timer); timer = 0;
+            button.removeAttribute('aria-busy'); status.textContent = '';
+            setCopied(false); settle();
+        }
+        function fallbackCopy(text) {
+            const active = document.activeElement, selection = document.getSelection();
+            const ranges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+            const input = document.createElement('textarea');
+            input.value = text; input.setAttribute('readonly', '');
+            input.style.cssText = 'position:fixed;left:-9999px;top:0';
+            document.body.append(input); input.select();
+            try { if (!document.execCommand('copy')) throw new Error('Clipboard unavailable'); }
+            finally {
+                input.remove(); active?.focus({ preventScroll: true });
+                if (selection) { selection.removeAllRanges(); ranges.forEach(range => selection.addRange(range)); }
+            }
+        }
+        async function copy(event) {
+            if (!event.isTrusted || destroyed || pending) return;
+            pending = true;
+            const current = ++generation, text = config.command;
+            clearTimeout(timer); timer = 0;
+            button.setAttribute('aria-busy', 'true'); status.textContent = '';
+            try {
+                if (navigator.clipboard?.writeText && window.isSecureContext) await navigator.clipboard.writeText(text);
+                else fallbackCopy(text);
+                if (destroyed || current !== generation) return;
+                status.textContent = '已复制：' + text;
+                setCopied(true);
+                timer = setTimeout(() => { timer = 0; status.textContent = ''; setCopied(false); }, config.doneMs);
+            } catch {
+                if (destroyed || current !== generation) return;
+                setCopied(false); root.dataset.state = 'error';
+                status.textContent = '复制失败，请检查浏览器剪贴板权限后重试。';
+            } finally {
+                if (!destroyed && current === generation) { pending = false; button.removeAttribute('aria-busy'); }
+            }
+        }
+        function update(next = {}) {
+            if (destroyed) return;
+            if (next.command !== undefined) config.command = String(next.command).replace(/[\r\n]+/g, ' ').slice(0, 500);
+            for (const [key, min, max] of [['doneMs', 500, 4000], ['stiffness', 120, 600], ['damping', 12, 36]]) {
+                if (Number.isFinite(Number(next[key]))) config[key] = clamp(Number(next[key]), min, max);
+            }
+            row.k = config.stiffness; row.c = config.damping;
+            reset();
+        }
+        listen(button, 'click', copy);
+        listen(button, 'pointercancel', reset);
+        listen(window, 'blur', reset);
+        listen(window, 'pagehide', reset);
+        listen(document, 'visibilitychange', () => { if (document.hidden) reset(); });
+        listen(media, 'change', () => { if (media.matches) settle(); });
+        const observer = new ResizeObserver(measure); observer.observe(label); observer.observe(doneLabel);
+        document.fonts?.ready.then(measure);
+        update(options);
+        return {
+            update, reset,
+            destroy() {
+                if (destroyed) return;
+                reset(); destroyed = true; events.abort(); observer.disconnect();
+            }
+        };
+    }
+    window.LibraryCopyButton = { mount };
+})();

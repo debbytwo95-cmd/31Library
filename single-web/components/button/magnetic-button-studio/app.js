@@ -4,7 +4,7 @@
   const $ = id => document.getElementById(id);
   const defaults = { radius: 130, strength: 32, stiffness: 170, damping: 13, cornerRadius: 28 };
   const presets = { default: { radius: 130, strength: 32, stiffness: 170, damping: 13 }, soft: { radius: 170, strength: 38, stiffness: 100, damping: 10 }, snappy: { radius: 110, strength: 25, stiffness: 340, damping: 25 } };
-  const config = { ...defaults, slow: false };
+  const config = { ...defaults };
   const field = $('field'), stage = $('preview-panel');
   const runtime = LibraryButtons.mountMagnetic(field, config);
   let delivery;
@@ -26,12 +26,9 @@
   Object.keys(defaults).forEach(key => $(key).addEventListener('input', event => { config[key] = Number(event.target.value); updateControls(); }));
   document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => { Object.assign(config, presets[button.dataset.preset]); updateControls(); }));
   $('show-radius').addEventListener('change', event => $('attraction-ring').classList.toggle('visible', event.target.checked));
-  $('slow-control').addEventListener('click', () => {
-    config.slow = !config.slow; $('slow-control').setAttribute('aria-pressed', String(config.slow)); $('speed-label').textContent = config.slow ? '0.25×' : '1×'; runtime.update(config);
-  });
   $('reset').addEventListener('click', () => {
-    Object.assign(config, defaults, { slow: false }); $('show-radius').checked = false; $('attraction-ring').classList.remove('visible');
-    $('slow-control').setAttribute('aria-pressed', 'false'); $('speed-label').textContent = '1×'; runtime.reset(); updateControls();
+    Object.assign(config, defaults); $('show-radius').checked = false; $('attraction-ring').classList.remove('visible');
+    runtime.reset(); updateControls();
   });
   document.querySelectorAll('[data-stage-theme]').forEach(button => button.addEventListener('click', () => setTheme(button.dataset.stageTheme)));
   function setTheme(theme) {

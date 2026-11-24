@@ -1,0 +1,62 @@
+/* Icons are the unchanged shared assets/icons resources. */
+.library-copy-command {
+    --copy-fill: rgba(23,24,26,.07);
+    --copy-text: #17181a;
+    --copy-green: #15803d;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    color: var(--copy-text);
+    font-family: Inter,"Noto Sans SC","Helvetica Neue",Arial,sans-serif;
+    text-align: left;
+    color-scheme: light;
+}
+.library-copy-command[data-appearance=dark] {
+    --copy-fill: rgba(255,255,255,.09);
+    --copy-text: #fff;
+    --copy-green: #3ce085;
+    color-scheme: dark;
+}
+.library-copy-command .library-copy-button {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: 6px;
+    height: 36px;
+    margin: 0;
+    padding: 0 12px 0 10px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--copy-fill);
+    color: var(--copy-text);
+    font: 600 13px/18px Inter,"Noto Sans SC","Helvetica Neue",Arial,sans-serif;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+.library-copy-command .library-copy-button:focus-visible { outline: 2px solid var(--copy-text);outline-offset: 4px; }
+.library-copy-command .library-copy-button:active { background: color-mix(in srgb,var(--copy-text) 14%,transparent); }
+.library-copy-command .library-copy-icons { position: relative;display: block;width: 18px;height: 18px;flex: none; }
+.library-copy-command .library-copy-icon {
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    mask: url("../../../../assets/icons/copy.svg") center / contain no-repeat;
+}
+.library-copy-command .library-copy-success {
+    color: var(--copy-green);
+    mask-image: url("../../../../assets/icons/check.svg");
+    opacity: 0;
+    transform: scale(.4);
+}
+.library-copy-command .library-copy-roll { display: block;position: relative;height: 18px;overflow: hidden; }
+.library-copy-command .library-copy-words { display: flex;flex-direction: column;align-items: flex-start; }
+.library-copy-command .library-copy-word { display: block;flex: none;height: 18px;line-height: 18px;white-space: nowrap;font-weight: 600; }
+.library-copy-command .library-copy-word + .library-copy-word { color: var(--copy-green); }
+.library-copy-command .library-copy-status { position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip-path: inset(50%);white-space: nowrap; }
+.library-copy-command[data-state=error] .library-copy-status { top:calc(100% + 12px);left:50%;width:240px;max-width:calc(100vw - 48px);height:auto;margin:0;transform:translateX(-50%);clip-path:none;white-space:normal;text-align:center;font:400 12px/18px Inter,"Noto Sans SC",Arial,sans-serif;color:var(--copy-text); }

@@ -158,13 +158,13 @@
     gap: var(--library-space-1);
     height: var(--library-control-md);
     padding: var(--library-space-1);
-    border-radius: var(--library-radius-xl);
+    border-radius: var(--library-radius-sm);
     background: var(--library-bg-surface);
 }
 
 .main-shell .tabs :is(.tab, .tab.selected) {
     padding: var(--library-space-1) var(--library-space-3);
-    border-radius: var(--library-radius-full);
+    border-radius: var(--library-radius-sm);
     color: var(--library-text-secondary);
     font: 400 var(--library-text-sm)/var(--library-leading-sm) var(--library-font);
 }
@@ -263,6 +263,19 @@
 .main-shell .delivery-secondary {
     border-radius: var(--library-radius-full);
 }
+
+.delivery-copy-icons { position: relative; display: block; flex: none; width: 16px; height: 16px; }
+.delivery-copy-original, .delivery-copy-success { position: absolute; inset: 0; }
+.delivery-copy-success {
+    background: var(--library-status-success);
+    mask: url("icons/check.svg") center / contain no-repeat;
+    opacity: 0;
+    transform: scale(.4);
+}
+.delivery-copy-roll { display: block; flex: none; height: var(--library-leading-sm); overflow: hidden; }
+.delivery-copy-words { display: flex; flex-direction: column; align-items: flex-start; }
+.delivery-copy-words > span { display: block; flex: none; height: var(--library-leading-sm); line-height: var(--library-leading-sm); white-space: nowrap; }
+.delivery-copy-words > span + span { color: var(--library-status-success); }
 
 .main-shell .lab-actions button[aria-pressed=true] {
     background: var(--library-bg-inverse);

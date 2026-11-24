@@ -5,7 +5,7 @@
 ## 新增项目
 
 1. 判断属于组件、区块或实验室，确定稳定英文标识；同结构的参数变化保留在项目内部。
-2. 组件放在 `single-web/components/<分类>/<项目>/`；新分类先建立分类目录。当前分类为 `button`、`background`、`tabs`、`text`，空分类保留 `.gitkeep`。在项目内建立入口 `index.html`、独立交互实现和必要资源；预览与导出调用同一实现。
+2. 组件放在 `single-web/components/<分类>/<项目>/`；新分类先建立分类目录。当前分类为 `button`、`background`、`slider`、`tabs`、`text`，空分类保留 `.gitkeep`。在项目内建立入口 `index.html`、独立交互实现和必要资源；预览与导出调用同一实现。
 3. 在 `assets/catalog-data.js` 登记项目名称、实际交互和技术标签、简介、来源及初始封面高度，再运行 `node scripts/sync-catalog.mjs`，按文件夹同步路径、分类及 `assets/catalog-categories.js`；新分类可在生成清单中补充中文展示名，下一次同步会保留。项目自带预览服务启动时自动同步。无法确认的来源如实标记。
 4. 通过 `assets/cover.js`、`assets/cover.css` 与 `assets/site-shell.js` 接入封面、公共导航和页脚。页面仅保留 `.library-header`、`.library-footer` 占位，公共外框样式统一引用 `assets/site.css`，不在项目内另写导航或页脚间距。封面只保留主体，真实操作触发，移出后静止。
 5. 通过 `assets/delivery.js` 登记交付：`bundle()` 在异步读取资源前取得当前参数，返回组件结构、隔离样式和初始化逻辑；`prompt()` 描述同一组参数、单位、依赖和操作约束。下载为源码包时，`bundle(true)` 同时返回必要文件及许可。
@@ -29,12 +29,15 @@
 npm --prefix single-web/components/button/magnetic-button-studio run check
 npm --prefix single-web/components/button/icon-button-studio run check
 npm --prefix single-web/components/button/curve-fill-button-studio run check
+npm --prefix single-web/components/slider/scrubber-studio run check
 node scripts/sync-catalog.mjs --check
 node scripts/catalog-structure.test.mjs
 node scripts/check.mjs
 node scripts/runtime.test.cjs
 node scripts/tab-pill.test.cjs
+node scripts/scrubber.test.cjs
 node scripts/delivery.test.cjs
+node scripts/prompt-copy.test.cjs
 node scripts/curve-fill.test.cjs
 node scripts/ascii-field.test.cjs
 node scripts/design.test.cjs

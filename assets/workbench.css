@@ -26,13 +26,12 @@ html:not([data-cover]) .main-shell .workspace .stage {
 }
 html:not([data-cover]) .main-shell .workspace .stage[data-theme=light] { --stage-bg: var(--library-bg-page); }
 html:not([data-cover]) .main-shell .workspace .stage[data-theme=dark] { background: var(--stage-bg); }
-html:not([data-cover]) .main-shell .workspace .stage > .stage-top,
-html:not([data-cover]) .main-shell .workspace .stage > .stage-bottom {
-    position: relative;
-    inset: auto;
+html:not([data-cover]) .main-shell .workspace .stage > .stage-top {
+    position: absolute;
+    inset: var(--library-space-5) var(--library-space-5) auto auto;
     flex: none;
-    width: 100%;
-    color: var(--library-text-secondary);
+    width: auto;
+    justify-content: flex-end;
 }
 html:not([data-cover]) .main-shell .workspace .stage > .field {
     position: relative;
@@ -42,13 +41,10 @@ html:not([data-cover]) .main-shell .workspace .stage > .field {
     min-height: 260px;
     background: transparent;
 }
-/* The gray module wraps the toolbar, themed preview and technical caption. */
+/* The gray module wraps the toolbar and themed preview. */
 html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes { background: var(--library-bg-subtle); }
 html:not([data-cover]) .main-shell .workspace .stage-top .stage-themes button.selected { background: var(--library-bg-page); }
 html:not([data-cover]) .main-shell .workspace .stage-top [data-stage-theme=dark] img { filter: invert(1); }
-html:not([data-cover]) .main-shell .workspace .live-label,
-html:not([data-cover]) .main-shell .workspace .stage-bottom { color: var(--stage-muted); }
-html:not([data-cover]) .main-shell .workspace .live-label > span { background: var(--stage-inverse); }
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage { min-height: 0; }
 html:not([data-cover]) .main-shell .workspace.lab-workspace .stage > .field { flex: none; min-height: 0; }
 /* Background effects fill the rounded preview; the gray module keeps its 20px gutter. */
@@ -76,5 +72,4 @@ html:not([data-cover]) .main-shell .workspace .settings .preset-group { width: m
     html:not([data-cover]) .main-shell .workspace .settings { grid-template-columns: minmax(0, 1fr); }
     html:not([data-cover]) .main-shell .workspace .stage { min-height: 365px; }
     html:not([data-cover]) .main-shell .workspace .stage > .field { min-height: 220px; }
-    html:not([data-cover]) .main-shell .workspace .stage > .stage-bottom { flex-wrap: wrap; }
 }
