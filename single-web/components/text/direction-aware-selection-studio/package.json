@@ -1,0 +1,10 @@
+{
+  "name": "direction-aware-selection-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "check": "node --check effect.js && node --check app.js && node --check server.mjs && node --check ../../../../assets/delivery.js && node --check ../../../../assets/site-shell.js"
+  }
+}

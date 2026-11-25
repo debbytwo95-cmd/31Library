@@ -6,6 +6,7 @@ const vm = require('node:vm');
 class Element extends EventTarget {
     constructor() { super();this.children=[];this.style={setProperty(key,value){this[key]=value;}};this.dataset={};this.attributes={};this.clientWidth=600;this.textContent=''; }
     append(node) { this.children.push(node);node.parent=this; }
+    replaceChildren(...nodes) { this.children=nodes; }
     remove() { if(this.parent)this.parent.children=this.parent.children.filter(node=>node!==this); }
     setAttribute(name,value) { this.attributes[name]=value; }
     getBoundingClientRect() { return {width:this.textContent.length*32}; }
@@ -14,12 +15,13 @@ class Element extends EventTarget {
 function environment(reduce=false) {
     const window=new Element(),document=new Element(),media=new Element(),frames=new Map(),timers=new Map(),observers=[];
     let now=0,id=0;media.matches=reduce;document.createElement=document.createElementNS=()=>new Element();
-    vm.runInNewContext(fs.readFileSync('single-web/components/text/goo-morph-studio/effect.js','utf8'),{
+    const context={
         window,document,matchMedia:()=>media,AbortController,performance:{now:()=>now},
         requestAnimationFrame:fn=>{frames.set(++id,fn);return id;},cancelAnimationFrame:id=>frames.delete(id),
         setTimeout:(fn,delay)=>{timers.set(++id,{fn,due:now+delay});return id;},clearTimeout:id=>timers.delete(id),
         ResizeObserver:class{constructor(fn){this.fn=fn;observers.push(this);}observe(){}disconnect(){this.disconnected=true;}}
-    });
+    };
+    vm.runInNewContext(fs.readFileSync('single-web/components/text/goo-morph-studio/effect.js','utf8'),context);
     const tick=ms=>{now+=ms;for(const [id,timer] of [...timers])if(timer.due<=now){timers.delete(id);timer.fn();}const jobs=[...frames.values()];frames.clear();jobs.forEach(fn=>fn(now));};
     function create(config) {
         const root=new Element(),button=new Element(),layers=new Element(),a=new Element(),b=new Element();
@@ -28,7 +30,7 @@ function environment(reduce=false) {
         const runtime=root.libraryComponent=window.LibraryGooMorph.mount(root,{autoplay:false,...config});
         return {root,button,layers,a,b,runtime};
     }
-    return {window,document,media,frames,timers,observers,tick,create};
+    return {window,document,media,frames,timers,observers,tick,create,context};
 }
 test('idle has no scheduled work; input melts both layers and removes filtering on arrival',()=>{
     const env=environment(),a=env.create();assert.equal(env.frames.size,0);env.tick(10000);assert.equal(a.root.dataset.word,'Ideas');
@@ -83,7 +85,8 @@ test('autoplay waits for hold, morphs without input, wraps and cleans up on dest
 test('manual changes restart hold; pause, focus and hidden state do not duplicate timers',()=>{
     const env=environment(),a=env.create({autoplay:true}),b=env.create();env.tick(1000);a.button.emit('click');env.tick(1050);
     env.tick(1599);assert.equal(a.root.dataset.word,'Sketches');assert.equal(a.root.dataset.melting,'false');env.tick(1);assert.equal(a.root.dataset.melting,'true');
-    env.window.emit('blur');assert.equal(env.timers.size,0);assert.equal(env.frames.size,0);env.tick(9000);
+    env.window.emit('blur');assert.equal(env.timers.size,1);assert.equal(env.frames.size,0);
+    env.tick(1600);env.tick(1050);assert.equal(a.root.dataset.word,'Products');assert.equal(env.timers.size,1);
     env.window.emit('focus');env.window.emit('focus');assert.equal(env.timers.size,1);
     env.document.hidden=true;env.document.emit('visibilitychange');assert.equal(env.timers.size,0);
     env.document.hidden=false;env.document.emit('visibilitychange');assert.equal(env.timers.size,1);
@@ -92,10 +95,34 @@ test('manual changes restart hold; pause, focus and hidden state do not duplicat
     env.tick(400);env.tick(1050);assert.equal(a.root.dataset.word,'Sketches');assert.equal(b.root.dataset.word,'Ideas');
     a.runtime.destroy();b.runtime.destroy();assert.equal(env.timers.size,0);
 });
+test('visible unfocused autoplay survives pointer entry, exit and focus events without restarting hold',()=>{
+    const env=environment(),a=env.create({autoplay:true});
+    a.root.emit('pointerenter',{pointerType:'mouse'});a.root.emit('pointerleave');env.window.emit('blur');
+    env.tick(1000);env.window.emit('focus');env.tick(600);env.tick(1050);
+    assert.equal(a.root.dataset.word,'Sketches');assert.equal(env.timers.size,1);
+    env.window.emit('pagehide');assert.equal(env.timers.size,0);assert.equal(env.frames.size,0);
+    env.tick(10000);assert.equal(a.root.dataset.word,'Sketches');
+    env.window.emit('pageshow');assert.equal(env.timers.size,1);env.tick(1600);env.tick(1050);
+    assert.equal(a.root.dataset.word,'Designs');a.runtime.destroy();assert.equal(env.timers.size,0);
+});
 test('reduced motion autoplay changes directly; reset and single-word lists stay bounded',()=>{
     const env=environment(true),a=env.create({autoplay:true,hold:400});env.tick(400);assert.equal(a.root.dataset.word,'Sketches');assert.equal(env.frames.size,0);
     a.runtime.reset();assert.equal(a.root.dataset.word,'Ideas');assert.equal(env.timers.size,1);
     a.runtime.update({words:['Only']});assert.equal(env.timers.size,0);env.tick(10000);assert.equal(a.root.dataset.word,'Only');
     a.runtime.update({words:['One','Two'],autoplay:false});assert.equal(env.timers.size,0);
     a.runtime.destroy();
+});
+test('catalog cover app starts autoplay without trusted pointer or click events',()=>{
+    const env=environment(),a=env.create(),nodes=new Map([['goo-morph',a.root]]);
+    const get=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
+    env.document.documentElement={hasAttribute:()=>true};
+    env.document.getElementById=get;env.document.querySelector=()=>get('tabs');env.document.querySelectorAll=()=>[];
+    env.document.createTextNode=text=>Object.assign(new Element(),{textContent:String(text)});
+    env.context.LibraryGooMorph=env.window.LibraryGooMorph;
+    vm.runInNewContext(fs.readFileSync('single-web/components/text/goo-morph-studio/app.js','utf8'),env.context);
+    assert.equal(env.timers.size,1);assert.equal(env.frames.size,0);
+    env.tick(1600);env.tick(1050);assert.equal(a.root.dataset.word,'Sketches');
+    get('preview-panel').emit('pointerleave');env.document.emit('pointerleave');env.window.emit('blur');
+    assert.equal(env.timers.size,1);env.tick(1600);env.tick(1050);assert.equal(a.root.dataset.word,'Designs');
+    a.root.libraryComponent.destroy();assert.equal(env.timers.size,0);
 });

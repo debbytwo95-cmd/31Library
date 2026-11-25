@@ -1,2 +1,6 @@
 /* Compatibility entry; shared workbench styles live in assets/. */
 @import url("../../../../assets/workbench-base.css");
+
+/* Match the explanation and delivery spacing used by Icon Button. */
+.principles { min-height: 232px; }
+.guide { margin-top: 12px; }

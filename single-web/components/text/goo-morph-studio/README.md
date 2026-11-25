@@ -11,7 +11,7 @@
 <http://127.0.0.1:4173/31Library/single-web/components/text/goo-morph-studio/index.html>
 
 - 页面打开后自动循环，默认每词停留 1600ms，再用 1050ms 完成变形。点击、轻触、Enter 或空格可立即切换，变形中忽略重复输入。
-- 详情移出后继续轮换；封面仅在真实悬停时循环，移出后回到首词并停止。失焦、隐藏或代码页签时暂停，恢复后重新等待完整停留时间。
+- 封面、详情及导出示例在可见时自动轮换，鼠标进入、移出及窗口失焦不暂停播放；页面隐藏或代码页签时暂停，恢复后重新等待完整停留时间。
 - 减少动态效果时直接切换。窄容器按最长词组缩小字号。
 - 参数更新与重置恢复首词，按当前停留时长继续循环；保留演示主题与预览／代码页签。
 
@@ -43,7 +43,7 @@
 - `node scripts/check.mjs http://127.0.0.1:4173/31Library/`
 - `node --check single-web/components/text/goo-morph-studio/effect.js`
 - `node --check single-web/components/text/goo-morph-studio/app.js`
-- `node scripts/goo-morph.test.cjs`（8 项：手动模式、融合收尾、多实例、取消清理、减少动态效果、尺寸、重复挂载、自动循环与计时器生命周期）
+- `node scripts/goo-morph.test.cjs`（10 项：手动模式、融合收尾、多实例、取消清理、减少动态效果、尺寸、重复挂载、自动循环与计时器生命周期）
 - `node scripts/delivery.test.cjs`
 - `node scripts/prompt-copy.test.cjs`
 - `node scripts/design.test.cjs`
@@ -63,3 +63,9 @@
 ## 自动播放更新验证
 
 2026-11-24：按用户要求增加自动循环与停留时长参数。浏览器刷新后未点击或悬停组件，连续观察到 Ideas → Sketches → Designs；复制代码、提示词和下载示例均同步自动播放与停留参数。原有双索引验证记录保留。
+
+## 可见时自动播放修复
+
+2026-11-25：取消封面的悬停启动限制，并移除可见窗口对焦点的依赖。封面、详情和导出示例无需点击或悬停即可自动循环；页面隐藏及代码页签仍暂停。回归测试补充无焦点、指针进出和页面隐藏／恢复场景。
+
+此次浏览器验证在根索引、组件索引和详情页中，均未操作组件即连续观察到 Sketches → Designs；下载后的示例确认包含自动播放及可见性判断，不再依赖窗口焦点。10 项效果测试、规定四项检查、两份项目脚本语法检查、交付／提示词／设计测试与 HTTP 资源检查均通过（15 个项目、123 项页面与资源）。

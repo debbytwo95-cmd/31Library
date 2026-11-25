@@ -1,0 +1,15 @@
+@import url("../../../../assets/workbench-base.css");
+@import url("selection.css");
+.title-row { height:auto;padding:18px 0 0; }
+.intro h1 { white-space:normal;font-size:clamp(36px,4.8vw,64px);line-height:1.16; }
+.field { display:grid;grid-template-columns:minmax(0,1fr);place-items:center;inset:0;padding:60px 24px; }
+.stage[data-theme=dark] { --stage-bg:#171717;--stage-muted:#9a9a9a;--stage-inverse:#fff; }
+.settings { height:auto;min-height:0; }
+.settings-intro { margin:0 0 18px; }
+.principles { height:auto;min-height:230px; }
+html[data-cover] .stage { --cover-component-height:255px; }
+@media(max-width:600px) {
+    .intro h1 { font-size:36px;letter-spacing:-1.6px; }
+    .field { padding:54px 12px; }
+    .principle-grid { display:grid;grid-template-columns:1fr;gap:20px; }
+}

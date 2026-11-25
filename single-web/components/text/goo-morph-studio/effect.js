@@ -17,7 +17,7 @@
     function mount(root, options = {}) {
         root.libraryComponent?.destroy();
         let config = normalize(options), index = 0, target = 0, frame = 0, started = 0, destroyed = false;
-        let playing = config.autoplay, timer = 0, blurred = false;
+        let playing = config.autoplay, timer = 0, pageHidden = false;
         const button = root.querySelector('.library-goo-morph-trigger'), layers = root.querySelector('.library-goo-morph-layers');
         const [a,b] = layers.children, controller = new AbortController(), signal = controller.signal;
         const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -39,7 +39,7 @@
         function clearTimer() { clearTimeout(timer);timer = 0; }
         function schedule() {
             clearTimer();
-            if (!destroyed && playing && !blurred && !document.hidden && !frame && config.words.length > 1) {
+            if (!destroyed && playing && !pageHidden && !document.hidden && !frame && config.words.length > 1) {
                 timer = setTimeout(() => { timer = 0;next(); }, config.hold);
             }
         }
@@ -80,10 +80,10 @@
         button.addEventListener('click', next, {signal});
         root.addEventListener('pointerenter', event => { if (!playing && event.pointerType !== 'touch') next(); }, {signal});
         root.addEventListener('pointerleave', () => { if (!playing) reset(); }, {signal});root.addEventListener('pointercancel', finish, {signal});
-        window.addEventListener('blur', () => { blurred = true;finish(); }, {signal});
-        window.addEventListener('focus', () => { blurred = false;schedule(); }, {signal});
-        window.addEventListener('pagehide', () => { blurred = true;finish(); }, {signal});
-        window.addEventListener('pageshow', () => { blurred = false;schedule(); }, {signal});
+        // A visible iframe or window need not have focus to keep autoplay running.
+        window.addEventListener('blur', finish, {signal});
+        window.addEventListener('pagehide', () => { pageHidden = true;finish(); }, {signal});
+        window.addEventListener('pageshow', () => { pageHidden = false;schedule(); }, {signal});
         document.addEventListener('visibilitychange', finish, {signal});
         media.addEventListener('change', finish, {signal});
         const observer = new ResizeObserver(fit);observer.observe(root);document.fonts?.ready.then(fit);

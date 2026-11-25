@@ -1,6 +1,25 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "direction-aware-selection-studio",
+    "section": "components",
+    "category": "text",
+    "title": "Direction Aware Selection · 方向感知选择",
+    "interactions": [
+      "hover",
+      "press"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "手写 hover here 与箭头指向 Evelyn Gao，经过姓名和 31Library 时显示透明弹性选框、四角手柄和尺寸标签。",
+    "source": "https://ui.aceternity.com/interactions/direction-aware-selection",
+    "keywords": "文字 选择 方向 选框 透明 图层 手写 箭头 Hi I'm Evelyn Gao 31Library direction aware selection text spring hover here",
+    "previewHeight": 415,
+    "href": "./single-web/components/text/direction-aware-selection-studio/index.html"
+  },
+  {
     "id": "blur-reveal-studio",
     "section": "components",
     "category": "text",
@@ -27,7 +46,6 @@ window.LibraryCatalog = [
     "href": "./single-web/components/text/goo-morph-studio/index.html",
     "title": "Goo Morph · 液态文字变形",
     "interactions": [
-      "hover",
       "press"
     ],
     "technologies": [
@@ -35,7 +53,7 @@ window.LibraryCatalog = [
       "SVG",
       "JavaScript"
     ],
-    "description": "词组自动通过模糊与透明度阈值液态交融，停稳后恢复清晰边缘，点击可立即切换。",
+    "description": "封面与详情自动循环播放液态文字变形，无需鼠标操作，点击可立即切换。",
     "source": "https://designbookmark.com/motion#db-goo-morph",
     "keywords": "文字 液态 变形 融合 模糊 单词 阈值 goo morph text blur svg",
     "previewHeight": 237
