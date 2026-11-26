@@ -1,0 +1,4 @@
+.spectral-stage{position:relative}
+.spectral-stage .stage-top{z-index:3}
+html[data-cover] .spectral-stage .stage-themes{display:none}
+html[data-cover] .library-spectral-logo{border-radius:0}

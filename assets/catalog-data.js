@@ -1,6 +1,26 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "spectral-logo",
+    "section": "lab",
+    "category": "all",
+    "href": "./single-web/motion-lab/spectral-logo/index.html",
+    "title": "Spectral Logo · 光谱字标",
+    "interactions": [
+      "hover",
+      "press",
+      "input"
+    ],
+    "technologies": [
+      "WebGL",
+      "Canvas 2D"
+    ],
+    "description": "31Library 镂空字标、蓝色体积光拖影与细线追踪框，真实悬停流动，点击锁定播放。",
+    "source": "用户提供的 secondeight 视频（10.1 秒）视觉研究",
+    "keywords": "31Library logo 光谱 字标 蓝色 体积光 轮廓 拖影 波动 追踪 spectral logo typography glow trail",
+    "previewHeight": 240
+  },
+  {
     "id": "direction-aware-selection-studio",
     "section": "components",
     "category": "text",

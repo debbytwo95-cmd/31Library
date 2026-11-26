@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Spectral Logo — 31Library</title>
+  <meta name="description" content="31Library 字标的蓝色体积光拖影、波动轮廓与矢量追踪框实验。">
+  <link rel="icon" href="../../../assets/favicon.png">
+  <script src="../../../assets/cover.js" data-kind="lab"></script>
+  <script src="../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="../../../assets/workbench-base.css">
+  <link rel="stylesheet" href="../../../assets/site.css">
+  <link rel="stylesheet" href="../../../assets/lab-workbench.css">
+  <link rel="stylesheet" href="effect.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../../../index.html?section=lab">实验室</a><span>/</span><strong>Spectral Logo</strong></nav></header>
+    <main>
+      <section class="intro"><div class="eyebrow"><span class="tag">技术实现 · WebGL</span></div><div class="title-row"><h1>Spectral Logo</h1></div><p class="intro-copy">镂空字标、蓝色光带与细线追踪框，在光的褶皱中流动。</p></section>
+      <section class="workspace lab-workspace" aria-label="Spectral Logo 工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div><button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button></div>
+          <div class="stage spectral-stage" id="preview-panel" data-theme="dark" role="tabpanel" aria-labelledby="preview-tab">
+            <div class="stage-top"><div class="stage-themes" role="group" aria-label="演示主题"><button type="button" data-stage-theme="light" aria-label="浅色演示" aria-pressed="false"><img class="library-icon design-icon" data-library-icon="sun" src="../../../assets/icons/sun.svg" width="14" height="14" alt=""></button><button type="button" class="selected" data-stage-theme="dark" aria-label="深色演示" aria-pressed="true"><img class="library-icon design-icon" data-library-icon="moon" src="../../../assets/icons/moon.svg" width="14" height="14" alt=""></button></div></div>
+            <div class="field"><div id="spectral-logo" class="library-spectral-logo" data-theme="dark" role="button" tabindex="0" aria-label="31Library 蓝色光谱字标，悬停流动，点击锁定或暂停"><canvas class="spectral-surface" aria-hidden="true"></canvas><canvas class="spectral-tracking" aria-hidden="true"></canvas></div></div>
+          </div>
+          <div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading">Spectral Logo · HTML / CSS / JavaScript</div><pre><code id="source-code"></code></pre><div class="code-bottom">代码同步当前参数</div></div>
+        </div>
+        <aside class="settings" aria-label="光谱字标参数">
+          <div class="settings-heading"><h2>光谱字标参数</h2><button id="reset" type="button" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../assets/icons/reset.svg" width="20" height="20" alt=""></button></div>
+          <p id="state" role="status">静止 · 悬停预览，点击锁定播放</p>
+          <div class="lab-actions"><button id="play" type="button" aria-pressed="false">播放光效</button></div>
+          <label for="logo-text">字标文字<input id="logo-text" type="text" maxlength="24" value="31Library" autocomplete="off"></label>
+          <label for="depth">拖影深度<output id="depth-value" for="depth"></output><input id="depth" type="range" min="0" max="2" step="0.01" value="1"></label>
+          <label for="wave">波动幅度<output id="wave-value" for="wave"></output><input id="wave" type="range" min="0" max="2" step="0.01" value="1"></label>
+          <label for="glow">发光强度<output id="glow-value" for="glow"></output><input id="glow" type="range" min="0.2" max="2" step="0.01" value="1"></label>
+          <label for="speed">流动速度<output id="speed-value" for="speed"></output><input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"></label>
+          <label for="color">光带颜色<output id="color-value" for="color">#73B6FF</output><input id="color" type="color" value="#73b6ff"></label>
+          <label for="tracking">轮廓追踪框<input id="tracking" type="checkbox" checked></label>
+        </aside>
+      </section>
+      <section class="integration-notes"><h2>原理与使用</h2><p>先把 31Library 字标转为有符号距离场，再由 WebGL 在 56 个深度切片中叠加波动、轮廓光和柔光，形成蓝色体积拖影。黑色字面保持清晰，细线框跟随字形边界。原始视频为视觉参考，效果由代码实时生成，不使用视频或逐帧图片播放。</p><p>初始静止。鼠标悬停时流动，移出复位；点击字标或“播放光效”可锁定播放，再次点击暂停。触屏轻触与键盘 Enter／空格支持播放切换。调整参数只重绘，不自动播放；系统设置减少动态效果时保持静态并缩短拖影。切换代码、窗口失焦和页面隐藏会停止播放。</p><p>复制组件代码后放置容器、引入样式并初始化；下载的单文件 HTML 内嵌 Inter 字体与许可，可直接打开。多个实例独立运行，通过 <code>root.libraryComponent.update({...})</code> 调参，<code>reset()</code> 恢复默认并保留主题，移除前调用 <code>destroy()</code>。需要浏览器支持 WebGL；不可用时显示静态字标。</p><p>视觉参考：用户提供的 secondeight 视频（10.1 秒）。保留蓝色轮廓拖影与追踪框的视觉语言，将原字标替换为 31Library；属于视觉近似复刻，不代表原作者的技术实现。</p></section>
+      <section class="guide"><div class="guide-icon"><img class="library-icon design-icon" src="../../../assets/icons/code.svg" width="22" height="22" alt=""></div><div><h2>带进你的项目</h2><p>复制代码接入页面，或下载包含当前参数的独立示例。</p></div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../assets/icons/download.svg" width="13" height="13" alt=""></button></section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="../../../assets/delivery.js"></script>
+  <script src="../../../assets/lab-workbench.js"></script>
+  <script src="effect.js"></script><script src="app.js"></script>
+  <script src="../../../assets/site-shell.js" data-section="lab"></script>
+</body>
+</html>

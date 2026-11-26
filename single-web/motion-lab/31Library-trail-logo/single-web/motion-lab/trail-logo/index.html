@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Trail Logo — 31Library</title><meta name="description" content="31Library 标志沿流动路径挤出蓝色缎面拖尾，叠加字形分区标注与胶片颗粒；WebGL2 实时渲染，支持指针拖拽与参数导出。">
+  <link rel="icon" href="../../../assets/favicon.png">
+  <script src="../../../assets/cover.js" data-kind="lab"></script>
+  <script src="../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="../../../assets/workbench-base.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../../../assets/site.css">
+  <link rel="stylesheet" href="../../../assets/lab-workbench.css">
+  <link rel="stylesheet" href="../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar"><nav class="breadcrumbs" aria-label="面包屑"><a href="../../../index.html?section=lab">实验室</a><span>/</span><strong>Trail Logo</strong></nav></header>
+    <main>
+      <section class="intro"><div class="eyebrow"><span class="tag">技术实现 · WebGL2</span></div><div class="title-row"><h1>Trail Logo</h1></div><p class="intro-copy">让标志拖出一道流光。字标沿流动路径挤出缎面拖尾，分区标注随之跳动。</p></section>
+      <section class="workspace lab-workspace" aria-label="Trail Logo 工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar"><div class="tabs" role="tablist" aria-label="展示模式"><button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" data-library-icon="preview" src="../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button><button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" data-library-icon="code" src="../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button></div><button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" data-library-icon="copy" src="../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button></div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab"><div class="field"><div class="library-trail-logo" id="trail-logo" role="img" aria-label="31Library 拖尾标志，移动指针拖动拖尾"><canvas></canvas><canvas class="library-trail-logo-hud"></canvas></div></div></div>
+          <div class="code-panel" id="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden><div class="code-heading">trail-logo.html · HTML / CSS / JavaScript</div><pre><code id="source-code"></code></pre><div class="code-bottom">代码同步当前参数 · 原生 WebGL2，无第三方依赖</div></div>
+        </div>
+        <aside class="settings" aria-label="拖尾标志参数">
+          <div class="settings-heading"><h2>标志参数<span id="state" class="settings-state">已暂停 · WebGL2</span></h2><button id="reset" type="button" aria-label="重置所有参数"><img class="library-icon design-icon" data-library-icon="reset" src="../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+          <div class="lab-actions"><button id="play" type="button" aria-pressed="false">播放流动</button></div>
+          <div class="trail-controls">
+            <label for="text">标志文字</label><input id="text" type="text" value="31Library" maxlength="24" spellcheck="false">
+            <label for="color">拖尾颜色</label><input id="color" type="color" value="#5990df">
+            <label for="icon">显示图标</label><input id="icon" type="checkbox" checked>
+            <label for="hud">分区标注</label><input id="hud" type="checkbox" checked>
+            <label for="speed">流动速度<output id="speed-value" for="speed"></output><input id="speed" type="range" min="0.1" max="2.5" step="0.05" value="1"></label>
+            <label for="length">拖尾长度<output id="length-value" for="length"></output><input id="length" type="range" min="0.2" max="2" step="0.05" value="1"></label>
+            <label for="sway">摆动幅度<output id="sway-value" for="sway"></output><input id="sway" type="range" min="0" max="2" step="0.05" value="1"></label>
+            <label for="spread">字间相位差<output id="spread-value" for="spread"></output><input id="spread" type="range" min="0" max="2" step="0.05" value="1"></label>
+            <label for="depth">挤出深度<output id="depth-value" for="depth"></output><input id="depth" type="range" min="0.3" max="3" step="0.05" value="1"></label>
+            <label for="gloss">缎面光泽<output id="gloss-value" for="gloss"></output><input id="gloss" type="range" min="0" max="2" step="0.05" value="1"></label>
+            <label for="glow">辉光<output id="glow-value" for="glow"></output><input id="glow" type="range" min="0" max="2" step="0.05" value="1"></label>
+            <label for="focus">景深模糊<output id="focus-value" for="focus"></output><input id="focus" type="range" min="0" max="2" step="0.05" value="1"></label>
+            <label for="grain">胶片颗粒<output id="grain-value" for="grain"></output><input id="grain" type="range" min="0" max="0.2" step="0.005" value="0.08"></label>
+            <label for="pointer">指针拖拽<output id="pointer-value" for="pointer"></output><input id="pointer" type="range" min="0" max="2" step="0.05" value="1"></label>
+          </div>
+        </aside>
+      </section>
+      <section class="integration-notes"><h2>原理与使用</h2><p>先用画布排出 31Library 图标与字标，把蒙版转换为有符号距离场。片元着色器沿每个像素向画面深处步进，标志在每一层深度按流动路径平移，首次相交处就是挤出侧壁；路径由一个朝向平滑转动的运动体积分得到，每个字形按横向位置错开相位，于是拖尾时而下垂、时而上扬或横扫。侧壁法线由距离场梯度和路径切向合成，近正面主光与顶光给出缎面高光；第二遍按深度做景深模糊，正面保持清晰，再叠加辉光与胶片颗粒。分区标注用独立的 2D 画布绘制，随流动时间确定性地出现、跳号与淡出。</p><p>页面打开时停在静止构图。点击“播放流动”开始连续流动，再次点击暂停；鼠标在画面上移动会拖动拖尾，停下后约一秒收回，触屏按住拖动，松手或取消后收回，页面仍可纵向滚动。播放按钮支持 Tab 聚焦与 Enter／空格；拖尾拖拽依赖指针，键盘不模拟指针。切到代码页签时暂停，系统开启减少动态效果时流动降为三成速度、指针拖拽降为四分之一。没有 WebGL2 时降级为 Canvas 2D 静态叠层。</p><p>复制组件代码放入页面，容器宽高决定画面尺寸；交付内嵌 Inter Semibold 与许可，标注字体使用系统等宽字体。多实例各自独立，通过 <code>root.libraryComponent.update({...})</code> 更新参数，<code>play(true|false)</code> 播放或暂停，<code>reset()</code> 回到静止构图，移除前调用 <code>destroy()</code> 清理事件、观察器、动画帧与 WebGL 资源。视觉参考：secondeight_ 发布的 Sixfold 标志动效视频，标志已替换为 31Library；这是根据画面建立的模型，不代表原作者的技术实现。</p></section>
+      <section class="guide"><div class="guide-icon"><img class="library-icon design-icon" data-library-icon="code-guide" src="../../../assets/icons/code.svg" width="22" height="22" alt=""></div><div><h2>带进你的项目</h2><p>复制组件代码接入已有页面，下载示例验证效果；提示词用于辅助改编，精确效果以代码为准。</p></div><button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" data-library-icon="download" src="../../../assets/icons/download.svg" width="13" height="13" alt=""></button></section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="../../../assets/delivery.js"></script>
+  <script src="../../../assets/lab-workbench.js"></script>
+  <script src="effect.js"></script><script src="app.js"></script>
+  <script src="../../../assets/site-shell.js" data-section="lab"></script>
+</body>
+</html>

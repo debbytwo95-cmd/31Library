@@ -1,0 +1,12 @@
+/* Workbench layout only; component styles are exported separately by app.js. */
+.library-trail-logo{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:16/9;min-height:300px;border-radius:var(--library-radius-md);background:#020204;touch-action:pan-y;cursor:crosshair}
+.library-trail-logo>canvas{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
+.trail-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 8px;margin-top:16px}
+.settings-heading{display:flex;align-items:center;justify-content:space-between}
+.settings-heading h2{display:flex;align-items:baseline;gap:12px;margin:0}
+.settings-state{font-size:12px;font-weight:400;color:var(--library-text-tertiary)}
+.lab-workspace .settings .lab-actions{margin:16px 0 0}
+.integration-notes code{font-size:.92em}
+html[data-cover] .library-trail-logo{min-height:0;aspect-ratio:16/10;border-radius:0}
+@media(max-width:959px){.trail-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.trail-controls{grid-template-columns:minmax(0,1fr)}.library-trail-logo{min-height:0;aspect-ratio:1/1}.settings-heading h2{flex-wrap:wrap;gap:4px}}
