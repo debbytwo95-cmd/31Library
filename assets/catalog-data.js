@@ -1,6 +1,25 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "pixel-word-swap-studio",
+    "section": "components",
+    "category": "text",
+    "title": "Pixel Word Swap · 像素换词",
+    "interactions": [
+      "hover",
+      "press"
+    ],
+    "technologies": [
+      "Canvas 2D",
+      "JavaScript"
+    ],
+    "description": "句中关键词经像素马赛克替换，前后文字随词宽平滑让位；悬停标题循环换词，点击立即切换下一个词。",
+    "source": "https://www.melius.com/",
+    "keywords": "文字 像素 马赛克 换词 轮换 词组 标题 衬线 画布 pixel mosaic pixelate word swap rotate headline serif canvas",
+    "previewHeight": 352,
+    "href": "./single-web/components/text/pixel-word-swap-studio/index.html"
+  },
+  {
     "id": "spectral-logo",
     "section": "lab",
     "category": "all",

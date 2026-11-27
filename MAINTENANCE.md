@@ -38,6 +38,7 @@ node scripts/check.mjs
 node scripts/runtime.test.cjs
 node scripts/tab-pill.test.cjs
 node scripts/word-roll.test.cjs
+node scripts/pixel-word-swap.test.cjs
 node scripts/weight-wave.test.cjs
 node scripts/scrubber.test.cjs
 node scripts/delivery.test.cjs

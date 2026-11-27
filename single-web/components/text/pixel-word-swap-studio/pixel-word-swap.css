@@ -1,0 +1,16 @@
+@font-face { font-family:LibraryPixelSerif;src:url("../../../../assets/fonts/source-serif-4-latin-variable.woff2") format("woff2");font-weight:200 900;font-display:swap; }
+.library-pixel-word-swap {
+    --pixel-word-swap-size:56px;--pixel-word-swap-text:#0e0e0e;
+    box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;width:100%;min-width:0;padding:12px min(24px,4%);
+}
+.library-pixel-word-swap[data-appearance=dark] { --pixel-word-swap-text:#f4f4f5; }
+.library-pixel-word-swap-title {
+    position:relative;display:block;width:min(960px,100%);margin:0;padding:0;border:0;border-radius:4px;
+    background:transparent;color:var(--pixel-word-swap-text);text-align:center;
+    font:450 var(--pixel-word-swap-size)/1 LibraryPixelSerif,"Source Serif 4",Georgia,"Times New Roman","Noto Serif SC","Songti SC",serif;
+    font-optical-sizing:auto;letter-spacing:-.015em;
+    cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:none;
+}
+.library-pixel-word-swap-title:focus-visible { outline:2px solid var(--pixel-word-swap-text);outline-offset:10px; }
+.library-pixel-word-swap-sizer { display:block;visibility:hidden; }
+.library-pixel-word-swap-canvas { position:absolute;left:0;top:0;pointer-events:none; }
