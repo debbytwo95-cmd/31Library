@@ -1,0 +1,8 @@
+{
+  "name": "orbit-gallery-studio",
+  "private": true,
+  "scripts": {
+    "dev": "node server.mjs",
+    "check": "node --check effect.js && node --check app.js && node --check server.mjs && node --check ../../../../assets/site-shell.js && node --check ../../../../assets/delivery.js && node --check ../../../../assets/cover.js"
+  }
+}

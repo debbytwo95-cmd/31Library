@@ -1,0 +1,14 @@
+@import url("../../../../assets/workbench-base.css");
+@import url("pixel-swap.css");
+.title-row{height:auto;padding:18px 0 0}
+.field{display:grid;place-items:center;inset:0;padding:64px 40px}
+.stage[data-theme=light]{--stage-bg:var(--library-bg-surface)}
+.stage[data-theme=dark]{--stage-bg:#18181c;--stage-muted:#9999a4;--stage-inverse:#fff}
+.stage-themes{margin-left:auto}
+.settings{height:auto;min-height:0}
+.settings-intro{margin:0 0 18px}
+.principles{height:auto;min-height:230px}
+html[data-cover] .stage{--cover-component-height:116px}
+html[data-cover] .field{padding:32px 20px}
+@media(max-width:759px){.intro h1{white-space:normal;font-size:clamp(34px,8vw,64px)}.title-row{padding:19px 0 16px}.field{padding:64px 24px}.settings{grid-template-columns:1fr}}
+@media(max-width:600px){.principle-grid{display:grid;grid-template-columns:1fr;gap:20px}}

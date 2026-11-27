@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Elliptical Gallery · 椭圆环绕画廊，纯色块沿椭圆轨道旋转，前景清晰、后景柔化，支持悬停与拖拽。">
+  <title>Elliptical Gallery — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=gallery">画廊</a><span class="slash">/</span><strong>Elliptical Gallery</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>ELLIPTICAL GALLERY · 椭圆环绕画廊</span><span class="tag">自动 / 悬停 / 拖拽</span></div>
+        <div class="title-row"><h1>Elliptical Gallery<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让色彩，环绕而行。<span>沿椭圆穿过前景与后景，每一块色彩始终朝向你。</span></p>
+      </section>
+      <section class="workspace" aria-label="椭圆环绕画廊工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top"><div class="stage-themes" role="group" aria-label="演示区主题">
+              <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+              <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+            </div></div>
+            <div class="field"><div id="elliptical-gallery" class="library-elliptical-gallery" data-appearance="light"></div></div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>elliptical-gallery.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">组件代码同步当前参数<span>CSS · JavaScript</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="椭圆环绕画廊参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="13" height="13" alt=""></button></div>
+          <p class="settings-intro">默认自动环绕，悬停减速放大，拖动改变位置。重置后保持暂停。</p>
+          <div class="range-control"><label for="count">色块数量<output id="count-output" for="count">17<span>块</span></output></label><input id="count" type="range" min="6" max="24" step="1" value="17"></div>
+          <div class="range-control"><label for="speed">旋转速度<output id="speed-output" for="speed">8<span>°/s</span></output></label><input id="speed" type="range" min="2" max="24" step="1" value="8"></div>
+          <div class="range-control"><label for="spread">水平展开<output id="spread-output" for="spread">88<span>%</span></output></label><input id="spread" type="range" min="50" max="94" step="1" value="88"></div>
+          <div class="range-control"><label for="ellipse">椭圆比例<output id="ellipse-output" for="ellipse">40<span>%</span></output></label><input id="ellipse" type="range" min="20" max="70" step="1" value="40"></div>
+          <div class="range-control"><label for="size">色块宽度<output id="size-output" for="size">104<span>px</span></output></label><input id="size" type="range" min="56" max="150" step="1" value="104"></div>
+          <div class="range-control"><label for="depth">透视强度<output id="depth-output" for="depth">36<span>%</span></output></label><input id="depth" type="range" min="0" max="50" step="1" value="36"></div>
+          <div class="range-control"><label for="blur">后景模糊<output id="blur-output" for="blur">2.2<span>px</span></output></label><input id="blur" type="range" min="0" max="5" step="0.1" value="2.2"></div>
+          <div class="select-control"><label for="palette">色块配色</label><select id="palette"><option value="spectrum">柔和彩谱</option><option value="vivid">明亮撞色</option><option value="mineral">矿物灰彩</option></select></div>
+          <div class="select-control"><label for="direction">旋转方向</label><select id="direction"><option value="-1">逆时针</option><option value="1">顺时针</option></select></div>
+          <div class="settings-actions"><button id="play" class="library-button" data-variant="secondary" type="button">继续旋转</button><button id="pause" class="library-button" data-variant="ghost" type="button">暂停旋转</button></div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>在椭圆里，感受纵深<span>色块始终朝向屏幕</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / ORBIT</div><h3>一条椭圆</h3><p>不同长宽比的色块等角排列，持续沿同一轨道环绕，中心保持留白。</p></article>
+          <article><div class="principle-top">02 / DEPTH</div><h3>近清远柔</h3><p>前景放大且清晰，后景缩小、淡出并轻微模糊。层级随深度变化。</p></article>
+          <article><div class="principle-top">03 / INTERACT</div><h3>停驻与牵引</h3><p>悬停使轨道减速停驻，当前色块放大；拖动改变角度，松开继续旋转。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把椭圆环绕，带进你的项目</h2><p>复制独立代码、下载可离线打开的 HTML，或复制当前参数提示词。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>交互与接入</h2>
+        <p>默认自动旋转。悬停或 Tab 聚焦色块使轨道减速停驻，当前块放大；移出恢复。鼠标或触屏水平拖拽改变相位，触屏纵向仍可滚动页面。点击色块或空格切换暂停与继续，左右键步进，Home／Escape 复位并暂停。重置恢复默认参数、保留主题与页签，点击参数区“继续旋转”恢复。</p>
+        <p>页面失焦、隐藏、代码页签或滚出视口时暂停；恢复可见后继续。减少动态效果时停止自动旋转和放大过渡，保留拖动和键盘操作。图片和视频全部替换为纯色块，没有中央文案、图标、卡片标签或图片资源。</p>
+        <p>放置 <code>.library-elliptical-gallery</code> 容器，引入一次 CSS 和脚本，调用 <code>LibraryEllipticalGallery.mount(root,config)</code>。提供 <code>update/reset/pause/resume/getConfig/destroy</code>，多实例独立；删除节点前调用 destroy 清理事件、动画和观察器。重复挂载自动销毁旧实例。</p>
+        <p>原生 HTML、CSS、JavaScript、ResizeObserver 与 IntersectionObserver，无第三方运行库和外部资源。复制代码、提示词与下载示例同步当前参数、方向、配色及主题。下载 HTML 可直接打开；工作台通过 HTTP 访问。</p>
+        <p>参考来源：<a href="https://www.melius.com/?ref=minimal.gallery" target="_blank" rel="noreferrer">Melius 首页图片旋转</a>。沿用本次会话已要求的自动播放，以纯色块复刻轨道与纵深。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="gallery"></script>
+</body>
+</html>
