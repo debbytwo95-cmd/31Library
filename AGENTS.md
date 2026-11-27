@@ -7,7 +7,7 @@
 - `index.html` 和 `single-web/components/index.html` 是索引入口；`assets/catalog.js` 和 `assets/catalog.css` 提供共用交互与样式。
 - `single-web/components/<category>/<project>/` 按分类目录存放独立组件工作台（新分类建立新目录），包含项目专用脚本、样式等资源；图标统一从仓库根目录的 `assets/icons/` 调用。
 - `single-web/motion-lab/` 存放动效实验。地球实验的可部署文件位于 `earth-replica/dist/`；流体光效项目包含分析资料和历史参考。
-- `NAMING.md` 定义命名与组织规范。`test.html` 是占位页面，不是测试套件。
+- `NAMING.md` 定义命名与组织规范。
 
 ## 构建、测试与开发命令
 

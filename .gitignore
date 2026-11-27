@@ -1,0 +1,15 @@
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python / Node 缓存
+__pycache__/
+*.pyc
+node_modules/
+
+# 临时文件与个人传输记录（可能含令牌，不要提交）
+temp-favicon-transfer/
+*.log
+.env
+.env.*
