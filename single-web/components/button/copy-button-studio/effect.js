@@ -1,5 +1,5 @@
 /* Copy Button, adapted from the user-supplied DesignBookmark reference.
-   Unit-mass springs; no animation frame is scheduled while idle. */
+   Spring motion comes from assets/copy-springs.js, loaded before this file. */
 (() => {
     'use strict';
     function mount(root, options = {}) {
@@ -10,49 +10,17 @@
         const checkIcon = root.querySelector('.library-copy-success');
         const status = root.querySelector('.library-copy-status');
         const [label, doneLabel] = words.children;
-        const media = matchMedia('(prefers-reduced-motion: reduce)');
         const events = new AbortController();
         const config = { command: 'npm i motion-kit', doneMs: 1800, stiffness: 260, damping: 20 };
-        const spring = (x, k, c) => ({ x, v: 0, t: x, k, c });
-        const row = spring(0, 260, 20), icon = spring(0, 420, 18), width = spring(0, 300, 24);
-        const springs = [row, icon, width];
-        let frame = 0, timer = 0, previous = 0, generation = 0, destroyed = false, copied = false, pending = false;
-        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const { row, icon, width, media, clamp, settle, animate, idle } = window.LibraryCopySprings({ roll, words, original: copyIcon, success: checkIcon });
+        let timer = 0, generation = 0, destroyed = false, copied = false, pending = false;
         const listen = (target, type, fn) => target.addEventListener(type, fn, { signal: events.signal });
-        function render() {
-            roll.style.width = Math.max(0, width.x).toFixed(2) + 'px';
-            words.style.transform = `translateY(${(-18 * row.x).toFixed(2)}px)`;
-            const i = clamp(icon.x, -.2, 1.2), bounded = clamp(i, 0, 1);
-            copyIcon.style.opacity = clamp(1 - i * 1.6, 0, 1).toFixed(3);
-            copyIcon.style.transform = `scale(${(1 - .5 * bounded).toFixed(3)}) rotate(${(-40 * bounded).toFixed(1)}deg)`;
-            checkIcon.style.opacity = clamp(i * 1.6 - .4, 0, 1).toFixed(3);
-            checkIcon.style.transform = `scale(${(.4 + .6 * i).toFixed(3)})`;
-        }
-        function settle() {
-            cancelAnimationFrame(frame); frame = 0;
-            springs.forEach(s => { s.x = s.t; s.v = 0; }); render();
-        }
-        function loop(now) {
-            frame = 0;
-            const dt = Math.min(Math.max((now - previous) / 1000, 0), 1 / 30) / 4;
-            previous = now;
-            for (let n = 0; n < 4; n++) springs.forEach(s => {
-                s.v += (-s.k * (s.x - s.t) - s.c * s.v) * dt;
-                s.x += s.v * dt;
-            });
-            if (springs.every(s => Math.abs(s.x - s.t) < .001 && Math.abs(s.v) < .01)) { settle(); return; }
-            render(); frame = requestAnimationFrame(loop);
-        }
-        function animate() {
-            if (media.matches) { settle(); return; }
-            if (!frame) { previous = performance.now(); frame = requestAnimationFrame(loop); }
-        }
         function measure() {
             if (destroyed) return;
             width.t = (copied ? doneLabel : label).getBoundingClientRect().width;
             // A hidden code panel has no measurable text; remeasure when shown.
             if (!width.t) return;
-            if (!frame) settle();
+            if (idle()) settle();
         }
         function setCopied(value) {
             copied = value; row.t = icon.t = value ? 1 : 0;

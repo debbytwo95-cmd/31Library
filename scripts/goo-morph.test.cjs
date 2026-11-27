@@ -119,6 +119,7 @@ test('catalog cover app starts autoplay without trusted pointer or click events'
     env.document.getElementById=get;env.document.querySelector=()=>get('tabs');env.document.querySelectorAll=()=>[];
     env.document.createTextNode=text=>Object.assign(new Element(),{textContent:String(text)});
     env.context.LibraryGooMorph=env.window.LibraryGooMorph;
+    vm.runInNewContext(fs.readFileSync('assets/studio-controls.js','utf8'),env.context);
     vm.runInNewContext(fs.readFileSync('single-web/components/text/goo-morph-studio/app.js','utf8'),env.context);
     assert.equal(env.timers.size,1);assert.equal(env.frames.size,0);
     env.tick(1600);env.tick(1050);assert.equal(a.root.dataset.word,'Sketches');

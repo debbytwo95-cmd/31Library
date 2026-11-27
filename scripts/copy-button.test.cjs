@@ -22,6 +22,7 @@ function environment({ reduced = false, clipboard = async () => {} } = {}) {
         AbortController, performance: { now: () => now }, ResizeObserver: class { observe() {} disconnect() {} },
         requestAnimationFrame: fn => { frames.set(++id, fn);return id; },cancelAnimationFrame: key => frames.delete(key),
         setTimeout: (fn, ms) => { timers.set(++id, { fn, end: now + ms });return id; },clearTimeout: key => timers.delete(key) });
+    vm.runInContext(fs.readFileSync('assets/copy-springs.js', 'utf8'), context);
     vm.runInContext(fs.readFileSync('single-web/components/button/copy-button-studio/effect.js', 'utf8'), context);
     function tick(ms) {
         const end = now + ms;
