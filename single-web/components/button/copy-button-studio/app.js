@@ -59,8 +59,9 @@
                 const button = clone.querySelector('.library-copy-button');
                 button.removeAttribute('aria-busy'); button.setAttribute('aria-label', '复制内容');
                 clone.querySelector('.library-copy-status').textContent = '';
-                const [styles, effect, font, copy, check] = await Promise.all([
+                const [styles, springs, effect, font, copy, check] = await Promise.all([
                     LibraryDelivery.read(new URL('button.css', location.href).href),
+                    LibraryDelivery.read(new URL('../../../../assets/copy-springs.js', location.href).href),
                     LibraryDelivery.read(new URL('effect.js', location.href).href),
                     LibraryDelivery.fontCSS(),
                     LibraryDelivery.read(new URL('../../../../assets/icons/copy.svg', location.href).href),
@@ -72,7 +73,7 @@
                 return {
                     html: clone.outerHTML,
                     css: font.replaceAll('LibraryButtonInter', 'LibraryCopyInter') + '\n' + css,
-                    js: effect + '\n(() => {\n const config = ' + JSON.stringify(snapshot) + ';\n document.querySelectorAll(".library-copy-command").forEach(root => {\n  root.libraryComponent?.destroy();\n  root.libraryComponent = LibraryCopyButton.mount(root, config);\n });\n})();',
+                    js: springs + '\n' + effect + '\n(() => {\n const config = ' + JSON.stringify(snapshot) + ';\n document.querySelectorAll(".library-copy-command").forEach(root => {\n  root.libraryComponent?.destroy();\n  root.libraryComponent = LibraryCopyButton.mount(root, config);\n });\n})();',
                     background: appearance === 'dark' ? '#171717' : '#f7f7f8'
                 };
             },

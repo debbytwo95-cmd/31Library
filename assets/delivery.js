@@ -37,52 +37,24 @@
         const input = document.createElement('textarea'); input.value = text; input.style.cssText = 'position:fixed;left:-9999px'; document.body.append(input); input.select();
         const ok = document.execCommand('copy'); input.remove(); if (!ok) throw new Error('Clipboard unavailable');
     }
-    // Copy Button's three springs, applied only to the delivery button's contents.
+    // Copy Button's three springs (assets/copy-springs.js), applied only to the delivery button's contents.
     function mountPromptCopy(button, copyPrompt) {
         const roll = button.querySelector('.delivery-copy-roll'), words = button.querySelector('.delivery-copy-words');
         const original = button.querySelector('.delivery-copy-original'), success = button.querySelector('.delivery-copy-success');
         const [label, doneLabel] = words.children;
-        const media = matchMedia('(prefers-reduced-motion: reduce)');
-        const spring = (k, c) => ({ x: 0, v: 0, t: 0, k, c });
-        const row = spring(260, 20), icon = spring(420, 18), width = spring(300, 24), springs = [row, icon, width];
-        let frame = 0, previous = 0, generation = 0, pending = false, copied = false, rowHeight = label.getBoundingClientRect().height;
-        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-        function render() {
-            roll.style.width = Math.max(0, width.x).toFixed(2) + 'px';
-            words.style.transform = `translateY(${(-rowHeight * row.x).toFixed(2)}px)`;
-            const i = clamp(icon.x, -.2, 1.2), bounded = clamp(i, 0, 1);
-            original.style.opacity = clamp(1 - i * 1.6, 0, 1).toFixed(3);
-            original.style.transform = `scale(${(1 - .5 * bounded).toFixed(3)}) rotate(${(-40 * bounded).toFixed(1)}deg)`;
-            success.style.opacity = clamp(i * 1.6 - .4, 0, 1).toFixed(3);
-            success.style.transform = `scale(${(.4 + .6 * i).toFixed(3)})`;
-        }
-        function settle() {
-            cancelAnimationFrame(frame); frame = 0;
-            springs.forEach(s => { s.x = s.t; s.v = 0; }); render();
-        }
-        function loop(now) {
-            frame = 0;
-            const dt = Math.min(Math.max((now - previous) / 1000, 0), 1 / 30) / 4;
-            previous = now;
-            for (let n = 0; n < 4; n++) springs.forEach(s => {
-                s.v += (-s.k * (s.x - s.t) - s.c * s.v) * dt;
-                s.x += s.v * dt;
-            });
-            if (springs.every(s => Math.abs(s.x - s.t) < .001 && Math.abs(s.v) < .01)) { settle(); return; }
-            render(); frame = requestAnimationFrame(loop);
-        }
+        let generation = 0, pending = false, copied = false, rowHeight = label.getBoundingClientRect().height;
+        const { row, icon, width, media, settle, animate, idle } = window.LibraryCopySprings({ roll, words, original, success, rowHeight: () => rowHeight });
         function setCopied(value) {
             copied = value; row.t = icon.t = value ? 1 : 0;
             width.t = (value ? doneLabel : label).getBoundingClientRect().width;
             button.dataset.copyState = value ? 'copied' : 'idle';
             button.setAttribute('aria-label', value ? '已复制提示词，再次复制' : '复制提示词');
-            if (media.matches) settle();
-            else if (!frame) { previous = performance.now(); frame = requestAnimationFrame(loop); }
+            animate();
         }
         function measure() {
             rowHeight = label.getBoundingClientRect().height;
             width.t = (copied ? doneLabel : label).getBoundingClientRect().width;
-            if (!frame) settle();
+            if (idle()) settle();
         }
         function interrupt() {
             generation++; pending = false;
