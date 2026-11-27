@@ -4,9 +4,7 @@
 
 ## 本地预览
 
-安装 Node.js 后，在仓库根目录运行 `node scripts/serve.mjs`，打开终端显示的地址。无需安装项目依赖，也可继续使用 `live-server`。
-
-组件工作台仍可分别运行 `npm --prefix single-web/components/button/magnetic-button-studio run dev` 或 `npm --prefix single-web/components/button/icon-button-studio run dev`；服务同时提供仓库共用字体、脚本和样式。
+在仓库根目录运行 `live-server`（需 Node.js，首次使用前执行 `npm install -g live-server`），浏览器会打开 `http://127.0.0.1:8080/`。各项目在该地址下按仓库路径访问。
 
 ## 当前交付
 
@@ -21,7 +19,7 @@
 
 复刻新效果时使用[效果复刻指令模板](./REPLICATION.md)，附上参考内容即可；模板包含分类入库、索引同步和链接验证的完整要求。
 
-运行 `node scripts/check.mjs` 检查项目登记及本地资源，运行 `node scripts/runtime.test.cjs` 检查交互、参数交付与实例清理，运行 `node scripts/delivery.test.cjs` 核对地球源码包、依赖、字体和 ZIP 数据。服务启动后可运行 `node scripts/check.mjs http://127.0.0.1:4173/31Library/` 检查子路径访问。
+运行 `node scripts/check.mjs` 检查项目登记及本地资源，运行 `node scripts/runtime.test.cjs` 检查交互、参数交付与实例清理，运行 `node scripts/delivery.test.cjs` 核对地球源码包、依赖、字体和 ZIP 数据。子路径访问检查见 [维护清单](./MAINTENANCE.md#发布前检查)。
 
 组件按分类文件夹组织：现有 button（按钮）、background（背景）、label（标签）、text（文字）。新增分类时新建目录，登记项目后运行 `node scripts/sync-catalog.mjs`；自带预览服务启动时会自动同步。
 

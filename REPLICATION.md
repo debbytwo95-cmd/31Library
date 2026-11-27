@@ -60,14 +60,14 @@ node scripts/runtime.test.cjs
 检查失败时定位原因；本次引入的问题修复后重新检查，已有问题单独说明。
 
 8. HTTP 与浏览器验证
-启动或复用 node scripts/serve.mjs 提供的本地服务。
+启动或复用 live-server（仓库根目录运行 live-server --port=8181 --no-browser --mount=/31Library:.）提供的本地服务。
 默认端口下运行：
-node scripts/check.mjs http://127.0.0.1:4173/31Library/
+node scripts/check.mjs http://127.0.0.1:8181/31Library/
 端口变化时使用实际地址。
 
 在浏览器中分别从以下两个入口找到新增项目并点击进入：
-http://127.0.0.1:4173/31Library/index.html
-http://127.0.0.1:4173/31Library/single-web/components/index.html
+http://127.0.0.1:8181/31Library/index.html
+http://127.0.0.1:8181/31Library/single-web/components/index.html
 
 实际验证分类、搜索、封面交互和跳转、详情返回、刷新及资源加载，确认目标正确、没有 404。
 同时检查真实交互、参数、重置、复制、下载及小屏布局。

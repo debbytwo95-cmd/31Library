@@ -15,14 +15,11 @@
 
 ```powershell
 live-server
-npm --prefix single-web/components/button/magnetic-button-studio run dev
-npm --prefix single-web/components/button/icon-button-studio run dev
 npm --prefix single-web/components/button/magnetic-button-studio run check
 npm --prefix single-web/components/button/icon-button-studio run check
-node single-web/motion-lab/earth-replica/serve.cjs
 ```
 
-`live-server` 用于预览整个资源库，需单独安装；也可运行无需依赖的 `node scripts/serve.mjs`。组件工作台命令需要 Node.js，无需安装项目依赖：`dev` 启动本地服务，`check` 检查项目及共用脚本语法。各本地服务以仓库为根目录，并显示对应项目的入口地址，以便访问共用资源。包含 ES 模块的页面应通过 HTTP 访问。
+本地预览统一在仓库根目录运行 `live-server`（需全局安装：`npm install -g live-server`），默认地址为 `http://127.0.0.1:8080/`，各项目在该地址下按仓库路径访问，例如 `http://127.0.0.1:8080/single-web/components/button/magnetic-button-studio/index.html`。包含 ES 模块或需要读取交付资源的页面必须通过 HTTP 打开，不能直接双击。组件的 `check` 命令只做语法检查，需要 Node.js，无需安装项目依赖。
 
 ## 代码风格与命名规范
 

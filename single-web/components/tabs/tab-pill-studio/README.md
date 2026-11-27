@@ -2,9 +2,9 @@
 
 基于用户提供的 [DesignBookmark Tab Pill](https://designbookmark.com/motion#db-tab-pill) 源码复刻。前缘弹簧为 620 / 40，后缘为 170 / 19，单位质量为 1；根据移动方向交换两侧参数。保留弹性拉伸与滑动，去掉原参考的自动演示及常驻动画循环。
 
-从仓库根目录运行 `node scripts/serve.mjs`，访问：
+在仓库根目录运行 `live-server`，访问：
 
-`http://127.0.0.1:4173/31Library/single-web/components/tabs/tab-pill-studio/index.html`
+`http://127.0.0.1:8080/single-web/components/tabs/tab-pill-studio/index.html`
 
 索引分类：`single-web/components/index.html?section=components&category=tabs`。索引封面使用同一页面和默认参数；真实指针进入标签时切换，移出后复位，点击进入详情。
 

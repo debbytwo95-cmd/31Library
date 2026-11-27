@@ -4,8 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.mjs",
-    "start": "node server.mjs",
     "check": "node --check app.js && node --check ../../../../assets/button-runtime.js && node --check ../../../../assets/delivery.js && node --check ../../../../assets/site-shell.js"
   }
 }

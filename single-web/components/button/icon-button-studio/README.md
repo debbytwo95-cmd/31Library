@@ -2,7 +2,7 @@
 
 圆形底色扩散、文字反色和箭头穿梭的原生按钮，支持时长、箭头延迟、圆盘大小、箭头位移、圆角与缓动调节。
 
-在仓库根目录运行 `npm --prefix single-web/components/button/icon-button-studio run dev`，打开终端显示的地址。无需安装依赖，服务同时提供共用字体、导航和交付脚本。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/button/icon-button-studio/index.html`。无需安装项目依赖，共用字体、导航和交付脚本按仓库路径加载。
 
 - `index.html`、`styles.css` 与 `studio.css`：工作台页面。
 - `button.css`：隔离样式；`../../../../assets/button-runtime.js`：预览与交付共用的交互。

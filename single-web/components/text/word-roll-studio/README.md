@@ -4,7 +4,7 @@
 
 逐字向上滚动切换词组，保留独立字母弹簧、错峰、透明度和文字槽宽度弹簧。默认每 2400ms 自动循环轮换，点击、轻触或 Enter／空格可立即切换，手动切换后重新计算完整轮换间隔。索引封面在真实悬停期间循环轮换，移出暂停并复位。
 
-在仓库根目录运行 `node scripts/serve.mjs`，访问 `http://127.0.0.1:4173/31Library/single-web/components/text/word-roll-studio/`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/text/word-roll-studio/`。
 
 页面提供前缀、词组、轮换间隔、字号、错峰、刚度和阻尼调节，复制组件代码、下载单文件 HTML 与复制提示词均使用当前配置。字体通过公共交付工具内嵌 Inter 及 OFL 许可，无外部运行库。
 

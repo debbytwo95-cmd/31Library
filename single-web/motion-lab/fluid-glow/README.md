@@ -2,7 +2,7 @@
 
 使用原生 Canvas 2D，将 18 根参数曲线、相位波动和离屏画布三层辉光合成为光带。视觉参考为 uiuxarih 视频研究；实现为近似模型，不推断原作者使用的技术。
 
-在仓库根目录运行 `node scripts/serve.mjs`，进入实验室或打开终端地址下的 `single-web/motion-lab/fluid-glow/index.html`。
+在仓库根目录运行 `live-server`，进入实验室或访问 `http://127.0.0.1:8080/single-web/motion-lab/fluid-glow/index.html`。
 
 - `index.html`：统一实验室详情与实际参数面板。
 - `effect.js`：预览及交付共用的 Canvas 渲染器，提供 update/play/reset/getConfig/destroy。

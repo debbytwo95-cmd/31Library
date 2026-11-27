@@ -9,7 +9,7 @@
 - 封面与详情共用实现和初始参数。点击封面按钮由公共外框跳转详情；封面悬停不模拟复制，移出复位。
 - 复制代码、下载单文件 HTML 与复制提示词同步当前参数及主题；图标使用仓库 `assets/icons/copy.svg`、`check.svg`，导出内嵌同一源文件及 Inter 字体（附 OFL 许可）。
 
-在仓库根目录运行 `node scripts/serve.mjs`，访问 `http://127.0.0.1:4173/31Library/single-web/components/button/copy-button-studio/index.html`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/button/copy-button-studio/index.html`。
 
 接入：放置 `.library-copy-command` 完整结构，引入 `button.css` 与 `effect.js`，调用 `root.libraryComponent = LibraryCopyButton.mount(root, { command: 'npm i motion-kit', doneMs: 1800, stiffness: 260, damping: 20 })`。每个实例独立，修改参数用 `update(config)`，复位用 `reset()`，移除前用 `destroy()`。复制代码包含初始化逻辑，无需重复挂载。
 

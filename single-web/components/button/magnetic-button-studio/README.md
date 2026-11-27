@@ -2,7 +2,7 @@
 
 磁吸、分层跟随、弹簧回弹和按压反馈均由真实用户操作触发；没有自动演示、虚拟光标或闲置运动。
 
-在仓库根目录运行 `npm --prefix single-web/components/button/magnetic-button-studio run dev`，打开终端显示的地址。无需安装依赖，服务同时提供仓库共用资源。GitHub Pages 继续使用原有相对路径。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/button/magnetic-button-studio/index.html`。无需安装项目依赖，共用资源按仓库路径加载。GitHub Pages 继续使用原有相对路径。
 
 - `index.html`、`styles.css`：详情布局及项目实际参数。
 - `button.css`：隔离的按钮样式；`../../../../assets/button-runtime.js`：预览和交付共用的交互实现。

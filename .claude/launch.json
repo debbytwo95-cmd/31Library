@@ -3,9 +3,11 @@
   "configurations": [
     {
       "name": "library",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/serve.mjs"],
-      "port": 4173
+      "runtimeExecutable": "live-server",
+      "runtimeArgs": [
+        "--no-browser"
+      ],
+      "port": 8080
     }
   ]
 }

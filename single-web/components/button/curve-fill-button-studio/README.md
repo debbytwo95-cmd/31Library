@@ -2,7 +2,7 @@
 
 参考 https://annnimate.com/api/sandbox/iframe/curve-fill-button 。沿用四向最近边缘判断、八组 SVG 二次贝塞尔路径、500ms / power3.out 默认节奏；默认悬停填充为 #525252，暗色演示区使用白底黑字，悬停后白字，字体按 31Library 规范使用 Inter Semibold。
 
-在仓库根目录运行 `npm --prefix single-web/components/button/curve-fill-button-studio run dev`，打开终端显示的地址。无需安装依赖。工作台使用仓库共用导航、字体、布局、封面和交付脚本。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/button/curve-fill-button-studio/index.html`。无需安装依赖。工作台使用仓库共用导航、字体、布局、封面和交付脚本。
 
 - 只响应真实鼠标、键盘与触屏输入，默认静止。
 - 可调时长、圆角、方向、缓动和颜色；预设只调整节奏。

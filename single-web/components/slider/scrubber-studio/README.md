@@ -9,11 +9,11 @@
 在仓库根目录运行：
 
 ```powershell
-npm --prefix single-web/components/slider/scrubber-studio run dev
+live-server
 npm --prefix single-web/components/slider/scrubber-studio run check
 ```
 
-访问 `http://127.0.0.1:4176/31Library/single-web/components/slider/scrubber-studio/index.html`。工作台需 HTTP 以读取交付资源；下载的 `scrubber.html` 自包含，可直接打开。
+访问 `http://127.0.0.1:8080/single-web/components/slider/scrubber-studio/index.html`。工作台需 HTTP 以读取交付资源；下载的 `scrubber.html` 自包含，可直接打开。
 
 ## 复用
 

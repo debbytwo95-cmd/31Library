@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.mjs",
     "check": "node --check effect.js && node --check app.js && node effect.test.cjs"
   }
 }

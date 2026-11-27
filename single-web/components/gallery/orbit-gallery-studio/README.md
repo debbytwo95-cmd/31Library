@@ -7,7 +7,7 @@
 - 参考：https://www.gionatannese.com/?ref=minimal.gallery
 - 无第三方运行库，不需要安装依赖或构建。
 
-在仓库根目录执行 `node scripts/serve.mjs`，访问 `http://127.0.0.1:4173/31Library/single-web/components/gallery/orbit-gallery-studio/index.html`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/gallery/orbit-gallery-studio/index.html`。
 
 ## 操作
 
