@@ -21,24 +21,23 @@ window.LibraryCatalog = [
     "href": "./single-web/components/gallery/elliptical-gallery-studio/index.html"
   },
   {
-    "id": "pixel-swap-studio",
+    "id": "pixel-word-swap-studio",
     "section": "components",
     "category": "text",
-    "title": "Pixel Swap · 像素换词",
+    "title": "Pixel Word Swap · 像素换词",
     "interactions": [
       "hover",
       "press"
     ],
     "technologies": [
       "Canvas 2D",
-      "JavaScript",
-      "CSS"
+      "JavaScript"
     ],
-    "description": "前后文字保持清晰，中间词自动经像素化轮换，词槽宽度平滑舒展；真实悬停或点击可立即切换。",
-    "source": "https://www.melius.com/?ref=minimal.gallery",
-    "keywords": "文字 标题 像素 换词 轮换 马赛克 重排 Melius pixel swap text typography canvas",
-    "previewHeight": 228,
-    "href": "./single-web/components/text/pixel-swap-studio/index.html"
+    "description": "句中关键词经像素马赛克自动轮换，前后文字随词宽平滑让位；悬停、点击或 Enter／空格立即切换下一个词。",
+    "source": "https://www.melius.com/",
+    "keywords": "文字 标题 像素 马赛克 换词 轮换 词组 衬线 画布 Melius pixel mosaic pixelate word swap rotate headline serif canvas",
+    "previewHeight": 352,
+    "href": "./single-web/components/text/pixel-word-swap-studio/index.html"
   },
   {
     "id": "orbit-gallery-studio",
