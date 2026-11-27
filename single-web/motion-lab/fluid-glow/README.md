@@ -7,7 +7,7 @@
 - `index.html`：统一实验室详情与实际参数面板。
 - `effect.js`：预览及交付共用的 Canvas 渲染器，提供 update/play/reset/getConfig/destroy。
 - `light.js`：参数、重置和三种交付登记。
-- `uiuxarih.mp4`、旧 `style.css` 及 `versions/`：原有参考资料，保留用于研究。
+- `uiuxarih.mp4`、旧 `style.css` 及 `versions/`：原有参考资料，保留用于研究。`versions/v1/` 直接引用上层的 `uiuxarih.mp4`，预览图见 `analysis/preview.jpg`。
 
 参数包含流速、交织、辉光、间距、弯曲、粗细模式、随机宽度、颜色与位移；重置恢复默认值并暂停。随机模式交付保留当前每根光线的宽度。初始静止，真实点击播放后运动；封面响应真实指针进入，移出恢复静态。
 
