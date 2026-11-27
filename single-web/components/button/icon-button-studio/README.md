@@ -5,8 +5,8 @@
 在仓库根目录运行 `npm --prefix single-web/components/button/icon-button-studio run dev`，打开终端显示的地址。无需安装依赖，服务同时提供共用字体、导航和交付脚本。
 
 - `index.html`、`styles.css` 与 `studio.css`：工作台页面。
-- `button.css`：隔离样式；`../../../assets/button-runtime.js`：预览与交付共用的交互。
-- `app.js`：当前参数、主题、预设、重置和交付登记；公共导航来自 `../../../assets/site-shell.js`，旧 `shell.js` 不再加载。
+- `button.css`：隔离样式；`../../../../assets/button-runtime.js`：预览与交付共用的交互。
+- `app.js`：当前参数、主题、预设、重置和交付登记；公共导航来自 `../../../../assets/site-shell.js`。
 
 “复制组件代码”提供可嵌入的 HTML / CSS / JavaScript；“下载示例”提供可直接打开的单文件 HTML；“复制提示词”提供当前参数与接入约束。当前演示主题同步交付。Inter Semibold 字体、SVG 与字体许可已内嵌。
 

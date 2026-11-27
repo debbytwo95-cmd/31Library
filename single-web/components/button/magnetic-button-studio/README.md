@@ -5,9 +5,9 @@
 在仓库根目录运行 `npm --prefix single-web/components/button/magnetic-button-studio run dev`，打开终端显示的地址。无需安装依赖，服务同时提供仓库共用资源。GitHub Pages 继续使用原有相对路径。
 
 - `index.html`、`styles.css`：详情布局及项目实际参数。
-- `button.css`：隔离的按钮样式；`../../../assets/button-runtime.js`：预览和交付共用的交互实现。
-- `app.js`：参数、预设、主题、重置及交付登记；公共导航来自 `../../../assets/site-shell.js`。
-- `reference/`：原始资料与布局参考；旧 `shell.js` 已由公共导航替代。
+- `button.css`：隔离的按钮样式；`../../../../assets/button-runtime.js`：预览和交付共用的交互实现。
+- `app.js`：参数、预设、主题、重置及交付登记；公共导航来自 `../../../../assets/site-shell.js`。
+- `reference/`：原始资料与布局参考。
 
 “复制组件代码”提供必要的 HTML / CSS / JavaScript；“下载示例”提供可直接打开的 HTML；“复制提示词”描述当前参数与接入约束。三者使用当前参数与演示主题，吸附辅助线不带入交付。字体、SVG 和字体许可包含在示例内，不需要网络。
 
