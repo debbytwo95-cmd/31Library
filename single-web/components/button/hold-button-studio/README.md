@@ -11,6 +11,6 @@
 - 交付：复制组件代码、下载单文件 HTML、复制提示词，均同步当前参数；无第三方运行依赖。
 - 浏览：`single-web/components/button/hold-button-studio/index.html`。封面使用同一组件且不自动演示，长按完成后可跳转详情。
 
-在仓库根目录启动 `node scripts/serve.mjs`，打开 `http://127.0.0.1:4173/31Library/single-web/components/button/hold-button-studio/index.html`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/button/hold-button-studio/index.html`。
 
 部署路径使用相对链接，兼容 GitHub Pages 的 `/31Library/` 子路径。

@@ -2,7 +2,7 @@
 
 以 https://www.connected.earth/ 的地球视觉为参考，使用本地 Three.js、OrbitControls 与地图采样构建点阵大陆、地点标记、关联弧线和环绕卡片。地点为本地演示数据，不连接原网站的录音数据库。
 
-在本目录运行 `node serve.cjs`，或在仓库根目录运行 `node scripts/serve.mjs`，访问终端显示的地址。服务同时提供公共导航与字体；ES 模块需要 HTTP，不能直接双击页面。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/motion-lab/earth-replica/dist/index.html`。公共导航与字体按仓库路径加载；ES 模块需要 HTTP，不能直接双击页面。
 
 - `dist/index.html`：实验室详情，包含公共介绍、预览／代码页签、交付和使用说明；没有参数时不显示下方空面板。
 - `dist/effect.js`、`dist/effect.css`：容器隔离的地球实现，预览与交付共用。
