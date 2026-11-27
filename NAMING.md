@@ -59,7 +59,7 @@
 
 ## 5. 文件、资源与代码命名
 
-- 沿用现有文件职责：`index.html` 为入口，`app.js` 为组件交互，`shell.js` 为页面外壳交互，`styles.css` 为页面样式，`button.css` 为独立按钮样式。按实际需要拆分，不要求创建全部文件。
+- 沿用现有文件职责：`index.html` 为入口，`app.js` 为组件交互，公共导航与页脚统一由 `assets/site-shell.js` 提供，`styles.css` 为页面样式，`button.css` 为独立按钮样式。按实际需要拆分，不要求创建全部文件。
 - 新增资源使用用途明确的 kebab-case 名称，如 `arrow-right.svg`、`earth-texture.jpg`、`cover.webp`。交互封面无需额外生成静态图。
 - 保留工具固定名称，如 `README.md`、`AGENTS.md`、`NAMING.md`；第三方文件、许可证和已有哈希资源保持原名。
 - JavaScript 变量与函数沿用 camelCase，如 `cornerRadius`、`wireButton`。新增 CSS 类和自定义属性使用小写短横线，如 `.preview-panel`、`--arrow-delay`，状态类可沿用 `.is-active`。
