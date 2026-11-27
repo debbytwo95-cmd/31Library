@@ -1,0 +1,9 @@
+{
+  "name": "pixel-word-swap-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check effect.js && node --check app.js"
+  }
+}

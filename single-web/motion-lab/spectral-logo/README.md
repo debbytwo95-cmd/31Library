@@ -2,7 +2,7 @@
 
 实验室中的 31Library 蓝色体积光字标。参考用户提供的 secondeight 视频（1080×1080，10.1 秒），以代码近似重建镂空字面、波动拖影与细线追踪框。没有使用视频贴图，也没有复制参考中的品牌图形。
 
-在仓库根运行 `node scripts/serve.mjs`，访问 `http://127.0.0.1:4173/31Library/single-web/motion-lab/spectral-logo/index.html`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/motion-lab/spectral-logo/index.html`。
 
 - 原生 WebGL + Canvas 2D，无第三方运行依赖。字形距离场仅在字体就绪及文字变化时重建，56 层光体积由片元着色器合成。
 - 初始静止；真实悬停播放、移出复位；点击或 Enter／空格锁定播放，再次点击暂停。触屏使用轻触。失焦、取消、隐藏和切换代码时停止。

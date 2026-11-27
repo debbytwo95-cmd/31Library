@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Orbit Gallery · 环绕画廊，散布的作品图组成空间球面，真实指针、拖拽与键盘旋转，点击居中聚焦。">
+  <title>Orbit Gallery — 31Library</title>
+  <link rel="icon" href="../../../../assets/favicon.png">
+  <script src="../../../../assets/cover.js"></script>
+  <script src="../../../../assets/site-motion.js"></script>
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="../../../../assets/site.css">
+  <link rel="stylesheet" href="../../../../assets/cover.css">
+</head>
+<body>
+  <header class="library-header"></header>
+  <div class="main-shell">
+    <header class="topbar">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="../../index.html">组件</a><span class="slash">/</span><a href="../../index.html?category=gallery">画廊</a><span class="slash">/</span><strong>Orbit Gallery</strong></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span>ORBIT GALLERY · 环绕画廊</span><span class="tag">悬停 / 点击 / 拖拽 / 滚动</span></div>
+        <div class="title-row"><h1>Orbit Gallery<span class="title-period">.</span></h1></div>
+        <p class="intro-copy">让作品，拥有自己的空间。<span>图像散布成球，随指尖转向，点击后成为视线的中心。</span></p>
+      </section>
+      <section class="workspace" aria-label="环绕画廊工作台">
+        <div class="demo-column">
+          <div class="demo-toolbar">
+            <div class="tabs" role="tablist" aria-label="展示模式">
+              <button id="preview-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="preview-panel"><img class="library-icon design-icon" src="../../../../assets/icons/preview.svg" width="14" height="16" alt="">实时预览</button>
+              <button id="code-tab" class="tab" role="tab" aria-selected="false" aria-controls="code-panel" tabindex="-1"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="16" height="16" alt="">代码</button>
+            </div>
+            <button class="toolbar-copy" id="copy-code"><img class="library-icon design-icon" src="../../../../assets/icons/copy.svg" width="16" height="16" alt=""><span>复制组件代码</span></button>
+          </div>
+          <div class="stage" id="preview-panel" role="tabpanel" aria-labelledby="preview-tab" data-theme="light">
+            <div class="stage-top"><div class="stage-themes" role="group" aria-label="演示区主题">
+              <button class="selected" data-stage-theme="light" aria-label="浅色演示区" aria-pressed="true"><img class="library-icon design-icon" src="../../../../assets/icons/sun.svg" width="14" height="14" alt=""></button>
+              <button data-stage-theme="dark" aria-label="深色演示区" aria-pressed="false"><img class="library-icon design-icon" src="../../../../assets/icons/moon.svg" width="14" height="14" alt=""></button>
+            </div></div>
+            <div class="field"><div id="orbit-gallery" class="library-orbit-gallery" data-appearance="light"></div></div>
+          </div>
+          <div id="code-panel" class="code-panel" role="tabpanel" aria-labelledby="code-tab" hidden>
+            <div class="code-heading"><span>orbit-gallery.html</span><span>HTML · CSS · JavaScript</span></div>
+            <pre><code id="source-code"></code></pre>
+            <div class="code-bottom">代码同步当前参数<span>图片与字体内嵌，可离线使用</span></div>
+          </div>
+        </div>
+        <aside class="settings" aria-label="环绕画廊参数">
+          <div class="settings-heading"><h2>调试你的参数</h2><button class="icon-button" id="reset" aria-label="重置所有参数"><img class="library-icon design-icon" src="../../../../assets/icons/reset.svg" width="20" height="20" alt=""></button></div>
+          <p class="settings-intro">调整空间密度、作品尺寸与纵深。画廊初始静止，操作后平滑停驻。</p>
+          <div class="range-control"><label for="count">作品数量<output id="count-output" for="count">18<span>张</span></output></label><input id="count" type="range" min="6" max="24" value="18" step="1"></div>
+          <div class="range-control"><label for="spread">空间展开<output id="spread-output" for="spread">82<span>%</span></output></label><input id="spread" type="range" min="50" max="100" value="82" step="1"></div>
+          <div class="range-control"><label for="size">作品宽度<output id="size-output" for="size">84<span>px</span></output></label><input id="size" type="range" min="50" max="130" value="84" step="1"></div>
+          <div class="range-control"><label for="depth">透视纵深<output id="depth-output" for="depth">42<span>%</span></output></label><input id="depth" type="range" min="0" max="80" value="42" step="1"></div>
+          <div class="range-control"><label for="sensitivity">指针灵敏度<output id="sensitivity-output" for="sensitivity">55<span>%</span></output></label><input id="sensitivity" type="range" min="0" max="100" value="55" step="1"></div>
+          <div class="range-control"><label for="duration">聚焦时长<output id="duration-output" for="duration">600<span>ms</span></output></label><input id="duration" type="range" min="150" max="1200" value="600" step="50"></div>
+          <div class="settings-foot">宽度为桌面基准值，小屏按可用空间缩放。</div>
+        </aside>
+      </section>
+      <section class="principles">
+        <div class="section-heading"><h2>在平面里，构造空间<span>作品始终朝向视线</span></h2></div>
+        <div class="principle-grid">
+          <article><div class="principle-top">01 / SPACE</div><h3>分散成球</h3><p>黄金角将图像分配到球面。根据远近改变图像大小与遮挡顺序，保留竖幅作品和大面积留白。</p></article>
+          <article><div class="principle-top">02 / ORBIT</div><h3>指尖转向</h3><p>鼠标移动产生轻微视差，拖拽或方向键旋转。鼠标离开时收回临时视差，保留主动旋转后的角度。</p></article>
+          <article><div class="principle-top">03 / FOCUS</div><h3>一张成为焦点</h3><p>点击作品后放大到中央，周围图像淡出。再次点击、点击空白、关闭按钮或 Escape 返回画廊。</p></article>
+        </div>
+      </section>
+      <section class="guide">
+        <div class="guide-icon"><img class="library-icon design-icon" src="../../../../assets/icons/code.svg" width="22" height="22" alt=""></div>
+        <div><h2>把环绕画廊，带进你的项目</h2><p>独立代码和 HTML 示例包含当前参数、图片及字体。</p></div>
+        <button id="download" class="download-button"><span>下载示例</span><img class="library-icon design-icon" src="../../../../assets/icons/download.svg" width="13" height="13" alt=""></button>
+      </section>
+      <section class="integration-notes"><h2>交互与接入</h2>
+        <p>鼠标移动产生视差；鼠标或触屏水平拖拽旋转，触屏仍可纵向滚动页面。Tab 选择图像，Enter／空格放大；方向键旋转，Home 回到初始角度。画廊取得焦点后可用滚轮旋转，未聚焦时滚轮正常滚动页面。Escape 或关闭按钮退出聚焦；失焦、取消和隐藏页面会清理拖拽。系统减少动态效果时关闭悬停视差与过渡，拖拽、键盘及聚焦功能仍可使用。没有自动旋转、自动演示或闲置循环。</p>
+        <p>放入 <code>.library-orbit-gallery</code> 容器，引入一次 CSS 和脚本，调用 <code>LibraryOrbitGallery.mount(root, config, items)</code>；每项包含 <code>src</code>、<code>title</code> 和可选 <code>category</code>。提供 <code>update(config)</code>、<code>reset()</code>、<code>close()</code>、<code>getConfig()</code> 和 <code>destroy()</code>。同页多个实例独立，移除容器前调用 destroy 清理事件、观察器及动画。重复挂载自动销毁旧实例。</p>
+        <p>原生 HTML、CSS、JavaScript、ResizeObserver 与 Web Animations API，无第三方运行库。封面、预览及交付共用同一实现，重置保留主题与页签。下载单文件 HTML 可直接打开；仓库工作台通过 HTTP 使用。图片与 Inter 字体内嵌，字体附 SIL OFL 许可。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="library-footer"></footer>
+  <script src="effect.js"></script>
+  <script src="../../../../assets/copy-springs.js"></script><script src="../../../../assets/delivery.js"></script>
+  <script src="app.js"></script>
+  <script src="../../../../assets/site-shell.js" data-section="components" data-category="gallery"></script>
+</body>
+</html>

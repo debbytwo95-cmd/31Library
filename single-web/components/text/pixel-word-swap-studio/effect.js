@@ -1,5 +1,6 @@
 /* Pixel Word Swap, rebuilt from a study of the melius.com hero headline.
    Canvas text: the slot word swaps through a pixel mosaic while the sentence reflows.
+   Rotates on its own by default (autoplay); hover, click, Enter or Space swap at once.
    Animation frames run only during a swap; holds use one timer while hovered or playing. */
 (() => {
     'use strict';
@@ -20,7 +21,7 @@
         const media = matchMedia('(prefers-reduced-motion: reduce)');
         const events = new AbortController();
         const listen = (target, type, fn) => target.addEventListener(type, fn, { signal:events.signal });
-        const config = { prefix:'Create any', words:['image', 'audio', 'video', 'campaign', 'movie'], suffix:'you imagine', fontSize:56, hold:1300, duration:650, pixel:12.5, autoplay:false };
+        const config = { prefix:'Create any', words:['image', 'audio', 'video', 'campaign', 'movie'], suffix:'you imagine', fontSize:56, hold:1300, duration:650, pixel:12.5, autoplay:true };
         const m = { w:0, h:0, bleed:0, dpr:1, font:'', spacing:'0px', color:'', size:0, lineHeight:0, ascent:0, descent:0, space:0, widths:new Map(), widest:'', maxSlot:0, maxBlock:2 };
         let index = 0, swap = null, queued = false, hovering = false, playing = false, suspended = false, destroyed = false;
         let frame = 0, timer = 0, drawn = '';
@@ -199,7 +200,7 @@
         listen(title, 'click', next);
         listen(title, 'pointerenter', event => {
             if (event.pointerType === 'touch') return;
-            hovering = true;if (!swap && !timer) begin();
+            hovering = true;if (!swap) begin();
         });
         listen(title, 'pointerleave', event => {
             if (event.pointerType === 'touch') return;

@@ -48,7 +48,7 @@ node scripts/ascii-field.test.cjs
 node scripts/design.test.cjs
 ```
 
-启动 `node scripts/serve.mjs` 后，运行 `node scripts/check.mjs http://127.0.0.1:4173/31Library/`。核对真实地址及资源状态，避免依赖域名根路径。
+检查仓库子路径时，另开终端在仓库根目录运行 `live-server --port=8181 --no-browser --mount=/31Library:.`，再运行 `node scripts/check.mjs http://127.0.0.1:8181/31Library/`。核对真实地址及资源状态，避免依赖域名根路径。
 
 浏览器手动检查：
 

@@ -1,0 +1,17 @@
+@import url("../../../../assets/workbench-base.css");
+@import url("gallery.css");
+.title-row { height:auto; padding:18px 0 0; }
+.stage-themes { margin-left:auto; }
+.field { display:grid; place-items:center; }
+.settings { height:auto; min-height:0; }
+.settings-intro { margin:8px 0 20px; line-height:1.7; }
+.principles { height:auto; padding-bottom:30px; }
+.integration-notes { padding-top:28px; }
+.integration-notes h2 { font-size:16px; font-weight:500; }
+.integration-notes p { max-width:1000px; font-size:13px; line-height:1.9; color:var(--secondary); }
+.integration-notes a { text-decoration:underline; text-underline-offset:3px; }
+html[data-cover] .stage { --cover-component-height:220px; }
+html[data-cover] .library-orbit-gallery { height:100%; background:#fff; }
+html[data-cover] .orbit-caption, html[data-cover] .orbit-close { display:none !important; }
+@media(max-width:759px) { .intro h1 { white-space:normal; font-size:clamp(34px,8vw,64px); } }
+@media(max-width:600px) { .principle-grid { grid-template-columns:1fr; gap:20px; } }

@@ -6,9 +6,9 @@
 
 ## 预览与交互
 
-在仓库根目录运行 `node scripts/serve.mjs`，访问：
+在仓库根目录运行 `live-server`，访问：
 
-<http://127.0.0.1:4173/31Library/single-web/components/text/goo-morph-studio/index.html>
+<http://127.0.0.1:8080/single-web/components/text/goo-morph-studio/index.html>
 
 - 页面打开后自动循环，默认每词停留 1600ms，再用 1050ms 完成变形。点击、轻触、Enter 或空格可立即切换，变形中忽略重复输入。
 - 封面、详情及导出示例在可见时自动轮换，鼠标进入、移出及窗口失焦不暂停播放；页面隐藏或代码页签时暂停，恢复后重新等待完整停留时间。
@@ -40,7 +40,7 @@
 - `node scripts/catalog-structure.test.mjs`
 - `node scripts/check.mjs`
 - `node scripts/runtime.test.cjs`
-- `node scripts/check.mjs http://127.0.0.1:4173/31Library/`
+- `node scripts/check.mjs http://127.0.0.1:8181/31Library/`（子路径服务见 MAINTENANCE.md）
 - `node --check single-web/components/text/goo-morph-studio/effect.js`
 - `node --check single-web/components/text/goo-morph-studio/app.js`
 - `node scripts/goo-morph.test.cjs`（10 项：手动模式、融合收尾、多实例、取消清理、减少动态效果、尺寸、重复挂载、自动循环与计时器生命周期）

@@ -4,7 +4,7 @@
 
 ## 运行
 
-在仓库根目录运行 `node scripts/serve.mjs`，访问 `http://127.0.0.1:4173/31Library/single-web/motion-lab/trail-logo/index.html`。页面需要通过 HTTP 打开，以便读取公共字体与交付资源。无 npm 依赖。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/motion-lab/trail-logo/index.html`。页面需要通过 HTTP 打开，以便读取公共字体与交付资源。无 npm 依赖。
 
 ## 交互
 

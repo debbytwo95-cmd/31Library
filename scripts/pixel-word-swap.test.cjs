@@ -53,11 +53,11 @@ function environment({ reduce = false } = {}) {
             const jobs = [...frames.values()];frames.clear();jobs.forEach(fn => fn(now));
         }
     }
-    function create(options = {}, width = 960) {
+    function create(options = {}, width = 960, raw = false) {
         const root = new Element(), title = new Element(), sizer = new Element(), view = canvas();
         view.view = true;sizer.root = root;sizer.offsetWidth = width;
         root.querySelector = selector => ({ '.library-pixel-word-swap-title':title, '.library-pixel-word-swap-sizer':sizer, '.library-pixel-word-swap-canvas':view })[selector];
-        const runtime = window.LibraryPixelWordSwap.mount(root, options);
+        const runtime = window.LibraryPixelWordSwap.mount(root, raw ? options : { autoplay:false, ...options });
         return { root, title, sizer, view, runtime };
     }
     // Operations since the view was last cleared, i.e. the latest composed frame and the layers drawn just before it.
@@ -164,4 +164,15 @@ test('destroy releases listeners, observers and frames; remounting starts clean'
     assert.equal(a.root.dataset.word, 'one');
     a.title.emit('click');env.tick(45);assert.equal(a.root.dataset.word, 'two');
     again.destroy();assert.equal(env.frames.size, 0);
+});
+
+test('mounts with autoplay by default; hover during a hold swaps at once and keeps rotating', () => {
+    const env = environment(), a = env.create({}, 960, true);
+    assert.equal(a.root.dataset.word, 'image');assert.equal(env.timers.size, 1, 'hold timer from the start');assert.equal(env.frames.size, 0);
+    env.tick(30);assert.equal(env.frames.size, 0, 'still holding the first word');
+    a.title.emit('pointerenter', { pointerType:'mouse' });assert.equal(env.frames.size, 1, 'hover swaps without waiting for the hold');
+    env.tick(42);assert.equal(a.root.dataset.word, 'audio');assert.equal(env.timers.size, 1);
+    a.title.emit('pointerleave', { pointerType:'mouse' });assert.equal(env.timers.size, 1, 'autoplay keeps its timer after leaving');
+    env.tick(82 + 42);assert.equal(a.root.dataset.word, 'video');
+    a.runtime.destroy();assert.equal(env.timers.size, 0);
 });

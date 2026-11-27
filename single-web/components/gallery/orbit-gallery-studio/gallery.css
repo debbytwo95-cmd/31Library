@@ -1,0 +1,65 @@
+.library-orbit-gallery {
+    --orbit-background: #fff;
+    --orbit-foreground: #18181c;
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    min-width: 0;
+    height: 560px;
+    overflow: hidden;
+    background: var(--orbit-background);
+    color: var(--orbit-foreground);
+    font-family: Inter, Arial, sans-serif;
+    touch-action: pan-y;
+    user-select: none;
+    cursor: grab;
+    border-radius: inherit;
+}
+.library-orbit-gallery[data-appearance=dark] { --orbit-background:#171717; --orbit-foreground:#f4f4f5; }
+.library-orbit-gallery *, .library-orbit-gallery *::before, .library-orbit-gallery *::after { box-sizing:border-box; }
+.library-orbit-gallery:focus-visible { outline:2px solid var(--orbit-foreground); outline-offset:-3px; }
+.library-orbit-gallery[data-dragging=true] { cursor:grabbing; }
+.library-orbit-gallery .orbit-card {
+    position:absolute;
+    left:50%;
+    top:50%;
+    display:block;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity var(--orbit-duration, 600ms) ease;
+    will-change:transform;
+}
+.library-orbit-gallery .orbit-card img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+.library-orbit-gallery .orbit-card:focus-visible { outline:2px solid var(--orbit-foreground); outline-offset:5px; }
+.library-orbit-gallery .orbit-caption {
+    position:absolute;
+    inset:auto 16px 18px;
+    z-index:200;
+    margin:0;
+    text-align:center;
+    font:400 12px/1.5 Inter,Arial,sans-serif;
+    pointer-events:none;
+}
+.library-orbit-gallery .orbit-caption span { margin-left:10px; opacity:.55; }
+.library-orbit-gallery .orbit-close {
+    position:absolute;
+    left:16px;
+    top:16px;
+    z-index:201;
+    padding:8px 14px;
+    border:1px solid currentColor;
+    border-radius:999px;
+    background:var(--orbit-background);
+    color:var(--orbit-foreground);
+    font:400 12px/1.4 Inter,Arial,sans-serif;
+    cursor:pointer;
+}
+.library-orbit-gallery [hidden] { display:none !important; }
+.library-orbit-gallery .orbit-close:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
+@media (max-width:600px) { .library-orbit-gallery { height:440px; } }
+@media (prefers-reduced-motion:reduce) { .library-orbit-gallery .orbit-card { transition:none; } }

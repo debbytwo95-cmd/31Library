@@ -45,6 +45,7 @@ function environment({ reduced = false, write = async () => {} } = {}) {
         matchMedia: () => media, ResizeObserver: class { observe() {} }, performance: { now: () => now },
         requestAnimationFrame: fn => { frames.set(++id, fn); return id; }, cancelAnimationFrame: key => frames.delete(key),
         setTimeout: (fn, delay) => { timers.set(++id, { fn, at: now + delay }); return id; }, clearTimeout: key => timers.delete(key) });
+    vm.runInContext(fs.readFileSync('assets/copy-springs.js', 'utf8'), context);
     vm.runInContext(fs.readFileSync('assets/delivery.js', 'utf8'), context);
     window.LibraryDelivery.register({ title: 'Example', prompt: () => prompt });
     const button = ids.get('download').beforeNode;

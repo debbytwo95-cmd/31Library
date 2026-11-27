@@ -2,7 +2,7 @@
 
 参考 https://uibrik.com/components/ascii-field 的公开预览与属性说明（源码为付费内容，未参考）。使用原生 Canvas 2D，按画面与属性描述建立近似实现，不代表原作者代码。
 
-在仓库根目录运行 `node scripts/serve.mjs`，进入“组件 → 背景”分类，或打开终端地址下的 `single-web/components/background/ascii-field/index.html`。按分类调整不改变稳定路径的约定，保留原页面地址。
+在仓库根目录运行 `live-server`，进入“组件 → 背景”分类，或访问 `http://127.0.0.1:8080/single-web/components/background/ascii-field/index.html`。按分类调整不改变稳定路径的约定，保留原页面地址。
 
 - `index.html`：背景组件详情；演示区在上，参数面板在下（宽屏三列、中屏两列、窄屏单列），参数行由公共 property-controls 统一样式。沿用公共 lab-workbench 与 lab 封面尺寸样式，界面归属为组件。
 - `effect.js`：预览、封面与交付共用的渲染器 `mountAsciiField(root, config)`，提供 `update`、`play`、`reset`、`getConfig`、`destroy`。

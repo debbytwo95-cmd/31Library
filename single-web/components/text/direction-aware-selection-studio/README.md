@@ -8,9 +8,9 @@
 
 ## 运行
 
-仓库根目录运行 `node scripts/serve.mjs`，打开 `http://127.0.0.1:4173/31Library/single-web/components/text/direction-aware-selection-studio/index.html`。
+在仓库根目录运行 `live-server`，访问 `http://127.0.0.1:8080/single-web/components/text/direction-aware-selection-studio/index.html`。
 
-无安装或构建依赖。`npm run dev` 可启动同一服务；`npm run check` 检查项目和关联公共脚本语法。
+无安装或构建依赖。`npm run check` 检查项目和关联公共脚本语法。
 
 ## 交互
 

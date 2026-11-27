@@ -5,50 +5,17 @@
     const config = { ...defaults, words:[...defaults.words] }, root = $('goo-morph'), stage = $('preview-panel');
     const cover = document.documentElement.hasAttribute('data-cover');
     const runtime = root.libraryComponent = LibraryGooMorph.mount(root, config);
-    let codeVisible = false, delivery;
-    function sync() {
-        runtime.update(config);
-        for (const [key, unit] of [['fontSize','px'], ['duration','ms'], ['hold','ms'], ['blur','px'], ['threshold','']]) {
-            const input = $(key);input.value = config[key];
-            input.style.setProperty('--progress', (100 * (config[key] - Number(input.min)) / (Number(input.max) - Number(input.min))) + '%');
-            $(key + '-output').replaceChildren(document.createTextNode(config[key]), ...(unit ? [Object.assign(document.createElement('span'), { textContent:unit })] : []));
-        }
-        if (codeVisible) delivery?.refresh();
-    }
-    ['fontSize','duration','hold','blur','threshold'].forEach(key => $(key).addEventListener('input', event => {
-        config[key] = Number(event.target.value);sync();
-    }));
-    $('words').addEventListener('input', event => {
-        const words = event.target.value.split(/[,，\n]/).map(word => word.trim().slice(0,40)).filter(Boolean).slice(0,12);
-        if (words.length) { config.words = words;sync(); }
-    });
-    $('words').addEventListener('blur', () => { $('words').value = config.words.join(', '); });
+    const { ranges, words, themes, tabs } = window.LibraryStudioControls;
+    let delivery;
+    const refresh = () => { if (view.code) delivery?.refresh(); };
+    const renderRanges = ranges([['fontSize','px'], ['duration','ms'], ['hold','ms'], ['blur','px'], ['threshold','']], config, () => sync());
+    function sync() { runtime.update(config); renderRanges(); refresh(); }
+    words($('words'), config, () => sync());
     $('reset').addEventListener('click', () => {
         Object.assign(config, defaults, { words:[...defaults.words] });$('words').value = config.words.join(', ');sync();
     });
-    document.querySelectorAll('[data-stage-theme]').forEach(button => button.addEventListener('click', () => {
-        stage.dataset.theme = root.dataset.appearance = button.dataset.stageTheme;
-        document.querySelectorAll('[data-stage-theme]').forEach(other => {
-            other.classList.toggle('selected', other === button);other.setAttribute('aria-pressed', String(other === button));
-        });
-        if (codeVisible) delivery?.refresh();
-    }));
-    function setTab(code) {
-        codeVisible = code;runtime.pause();stage.hidden = code;$('code-panel').hidden = !code;
-        [$('preview-tab'), $('code-tab')].forEach((tab, index) => {
-            const active = Boolean(index) === code;
-            tab.classList.toggle('selected', active);tab.setAttribute('aria-selected', String(active));tab.tabIndex = active ? 0 : -1;
-        });
-        if (code) delivery?.refresh();else if (!cover) runtime.play();
-    }
-    $('preview-tab').addEventListener('click', () => setTab(false));
-    $('code-tab').addEventListener('click', () => setTab(true));
-    document.querySelector('.tabs').addEventListener('keydown', event => {
-        if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
-        event.preventDefault();
-        const code = event.key === 'Home' ? false : event.key === 'End' ? true : !codeVisible;
-        setTab(code);$(code ? 'code-tab' : 'preview-tab').focus();
-    });
+    themes(stage, root, refresh);
+    const view = tabs(stage, code => { runtime.pause(); if (code) delivery?.refresh(); else if (!cover) runtime.play(); });
     if (!cover) {
         delivery = LibraryDelivery.register({
             id:'goo-morph', title:'Goo Morph · 液态文字变形',

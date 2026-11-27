@@ -9,6 +9,10 @@ window.LibraryCategories = [
     "label": "背景"
   },
   {
+    "id": "gallery",
+    "label": "画廊"
+  },
+  {
     "id": "slider",
     "label": "滑块"
   },

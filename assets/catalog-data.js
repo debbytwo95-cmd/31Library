@@ -1,6 +1,26 @@
 /* Project metadata; paths and category IDs follow the component folders. */
 window.LibraryCatalog = [
   {
+    "id": "elliptical-gallery-studio",
+    "section": "components",
+    "category": "gallery",
+    "title": "Elliptical Gallery · 椭圆环绕画廊",
+    "interactions": [
+      "hover",
+      "press",
+      "drag"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript"
+    ],
+    "description": "纯色块沿椭圆轨道自动环绕，近大远小、后景柔化；悬停减速放大，水平拖拽改变位置。",
+    "source": "https://www.melius.com/?ref=minimal.gallery",
+    "keywords": "椭圆 环绕 画廊 图片 旋转 色块 轨道 自动 纵深 Melius elliptical gallery orbit carousel",
+    "previewHeight": 320,
+    "href": "./single-web/components/gallery/elliptical-gallery-studio/index.html"
+  },
+  {
     "id": "pixel-word-swap-studio",
     "section": "components",
     "category": "text",
@@ -13,11 +33,54 @@ window.LibraryCatalog = [
       "Canvas 2D",
       "JavaScript"
     ],
-    "description": "句中关键词经像素马赛克替换，前后文字随词宽平滑让位；悬停标题循环换词，点击立即切换下一个词。",
+    "description": "句中关键词经像素马赛克自动轮换，前后文字随词宽平滑让位；悬停、点击或 Enter／空格立即切换下一个词。",
     "source": "https://www.melius.com/",
-    "keywords": "文字 像素 马赛克 换词 轮换 词组 标题 衬线 画布 pixel mosaic pixelate word swap rotate headline serif canvas",
+    "keywords": "文字 标题 像素 马赛克 换词 轮换 词组 衬线 画布 Melius pixel mosaic pixelate word swap rotate headline serif canvas",
     "previewHeight": 352,
     "href": "./single-web/components/text/pixel-word-swap-studio/index.html"
+  },
+  {
+    "id": "orbit-gallery-studio",
+    "section": "components",
+    "category": "gallery",
+    "title": "Orbit Gallery · 环绕画廊",
+    "interactions": [
+      "hover",
+      "press",
+      "drag",
+      "scroll"
+    ],
+    "technologies": [
+      "CSS",
+      "JavaScript",
+      "Web Animations API"
+    ],
+    "description": "竖幅作品散布成空间球面，真实指针视差、拖拽与键盘旋转，点击居中聚焦；初始和闲置静止。",
+    "source": "https://www.gionatannese.com/?ref=minimal.gallery",
+    "keywords": "画廊 图片 作品集 环绕 球面 空间 视差 拖拽 聚焦 orbit gallery creative space Gionatan Nese",
+    "previewHeight": 380,
+    "href": "./single-web/components/gallery/orbit-gallery-studio/index.html"
+  },
+  {
+    "id": "trail-logo",
+    "section": "lab",
+    "category": "all",
+    "href": "./single-web/motion-lab/trail-logo/index.html",
+    "title": "Trail Logo · 拖尾标志",
+    "interactions": [
+      "hover",
+      "press",
+      "drag",
+      "input"
+    ],
+    "technologies": [
+      "WebGL",
+      "Canvas 2D"
+    ],
+    "description": "31Library 字标与蓝色缎面拖尾，真实指针牵引路径，点击播放流动，支持文字、颜色与拖尾参数调整。",
+    "source": "用户提供的 secondeight_ 发布的 Sixfold 标志动效视频视觉研究",
+    "keywords": "31Library logo 拖尾 标志 字标 蓝色 流光 缎面 指针 路径 WebGL2 trail logo Sixfold",
+    "previewHeight": 240
   },
   {
     "id": "spectral-logo",
